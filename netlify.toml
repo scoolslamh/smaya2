@@ -1,25 +1,15 @@
-# 📌 إعدادات البناء الأساسية
-[build]
-  publish = "."        # الجذر عندك فيه index.html و form.html
-  command = ""         # ما عندك build command لأن المشروع HTML + CSS + JS فقط
-
-# ✅ التوجيه للصفحة الرئيسية → index.html
-[[redirects]]
-  from = "/"
-  to = "/index.html"
-  status = 302
-  force = true
-
-# ✅ تمرير /api مع query string (بدون / بعده)
+# تمرير /api بدون مسار
 [[redirects]]
   from = "/api"
   to = "https://script.google.com/macros/s/AKfycbwqd_Ze2vqdA0Fv_mWa-u7TzR_GI_qgXBXl9zqWixo4J6SgpmXxXE9kWd75kylpmA/exec"
   status = 200
   force = true
+  query = ":query"   # ✅ يضمن تمرير كل الباراميترات
 
-# ✅ تمرير /api/* (مع أي مسار أو باراميترات إضافية)
+# تمرير /api/* مع أي مسار
 [[redirects]]
   from = "/api/*"
-  to = "https://script.google.com/macros/s/AKfycbwqd_Ze2vqdA0Fv_mWa-u7TzR_GI_qgXBXl9zqWixo4J6SgpmXxXE9kWd75kylpmA/exec"
+  to = "https://script.google.com/macros/s/AKfycbwqd_Ze2vqdA0Fv_mWa-u7TzR_GI_qgXBXl9zqWixo4J6SgpmXxXE9kWd75kylpmA/exec/:splat"
   status = 200
   force = true
+  query = ":query"   # ✅ نفس الشيء هنا
