@@ -3,10 +3,10 @@
   publish = "."        # مجلد النشر (الجذر عندك فيه index.html و form.html)
   command = ""         # ما عندك build command لأن المشروع HTML + CSS + JS فقط
 
-# ✅ التوجيه للصفحة الرئيسية → index.html
+# ✅ التوجيه للصفحة الرئيسية → form.html
 [[redirects]]
   from = "/"
-  to = "/index.html"
+  to = "/form.html"
   status = 302
   force = true
 
