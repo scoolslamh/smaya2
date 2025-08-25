@@ -91,7 +91,7 @@
   <!-- ✅ التحقق من تسجيل الدخول -->
   <script>
     if (localStorage.getItem("loggedIn") !== "true") {
-      window.location.href = "index.html"; // يرجع لتسجيل الدخول
+      window.location.href = "index.html";
     }
   </script>
 
@@ -155,7 +155,6 @@
           <label>اسم المدرسة: <input type="text" name="school" id="school" readonly></label>
 
           <label>الرقم الوزاري: <input type="text" name="code" id="code" required></label>
-
           <label>اسم الحي/الشارع: <input type="text" name="street"></label>
           <label>تصنيف المدرسة: <input type="text" name="category"></label>
           <label>المرحلة التعليمية: <input type="text" name="stage"></label>
@@ -256,6 +255,8 @@
   </footer>
 
   <script>
+    const API_URL = "/api";
+
     // استخراج اليوم/الشهر/السنة من التاريخ
     document.getElementById("visit_date").addEventListener("change", function() {
       const date = new Date(this.value);
@@ -265,12 +266,11 @@
       document.getElementById("visit_year").value = date.getFullYear();
     });
 
-    // تحميل اسم المشرف
-    document.addEventListener("DOMContentLoaded", () => {
-      const fullName = localStorage.getItem("fullName") || "مشرف";
-      document.getElementById("visitor").value = fullName;
+    document.addEventListener("DOMContentLoaded", async () => {
+      // تحميل اسم المشرف
+      document.getElementById("visitor").value = localStorage.getItem("fullName") || "مشرف";
 
-      // زر تسجيل الخروج
+      // زر الخروج
       document.getElementById("logoutBtn").addEventListener("click", () => {
         localStorage.clear();
         window.location.href = "index.html";
@@ -280,59 +280,68 @@
       document.getElementById("newEntryBtn").addEventListener("click", () => {
         document.getElementById("evaluationForm").reset();
         document.getElementById("evaluationForm").style.display = "none";
-        document.getElementById("regionFilter").value = "";
-        document.getElementById("cityFilter").innerHTML = '<option value="">اختر المدينة</option>';
-        document.getElementById("cityFilter").disabled = true;
-        document.getElementById("schoolFilter").innerHTML = '<option value="">اختر المدرسة</option>';
-        document.getElementById("schoolFilter").disabled = true;
       });
-    });
 
-    // التحكم في الخطوات (مع حل مشكلة required)
-    document.addEventListener("DOMContentLoaded", () => {
-      const steps = document.querySelectorAll(".form-step");
-      const nextBtns = document.querySelectorAll(".next");
-      const prevBtns = document.querySelectorAll(".prev");
-      let currentStep = 0;
+      // ✅ جلب بيانات المدارس
+      try {
+        const res = await fetch(API_URL + "?action=getSchools");
+        const data = await res.json();
 
-      function showStep(index) {
-        steps.forEach((step, i) => {
-          step.style.display = i === index ? "block" : "none";
+        const regionSelect = document.getElementById("regionFilter");
+        const citySelect = document.getElementById("cityFilter");
+        const schoolSelect = document.getElementById("schoolFilter");
 
-          // ✅ إضافة/إزالة required فقط للحقول الظاهرة
-          const inputs = step.querySelectorAll("input, select, textarea");
-          inputs.forEach(inp => {
-            if (i === index) {
-              inp.setAttribute("required", inp.hasAttribute("data-original-required") || inp.required);
-            } else {
-              if (inp.hasAttribute("required")) {
-                inp.setAttribute("data-original-required", "true");
-                inp.removeAttribute("required");
-              }
-            }
+        // تعبئة المناطق
+        const regions = [...new Set(data.map(s => s.region))];
+        regions.forEach(r => {
+          const opt = document.createElement("option");
+          opt.value = r;
+          opt.textContent = r;
+          regionSelect.appendChild(opt);
+        });
+
+        // عند اختيار منطقة
+        regionSelect.addEventListener("change", () => {
+          const cities = [...new Set(data.filter(s => s.region === regionSelect.value).map(s => s.city))];
+          citySelect.innerHTML = "<option value=''>اختر المدينة</option>";
+          citySelect.disabled = false;
+          cities.forEach(c => {
+            const opt = document.createElement("option");
+            opt.value = c;
+            opt.textContent = c;
+            citySelect.appendChild(opt);
           });
         });
+
+        // عند اختيار مدينة
+        citySelect.addEventListener("change", () => {
+          const schools = data.filter(s => s.city === citySelect.value);
+          schoolSelect.innerHTML = "<option value=''>اختر المدرسة</option>";
+          schoolSelect.disabled = false;
+          schools.forEach(s => {
+            const opt = document.createElement("option");
+            opt.value = s.school;
+            opt.textContent = s.school;
+            schoolSelect.appendChild(opt);
+          });
+        });
+
+        // عند اختيار مدرسة
+        schoolSelect.addEventListener("change", () => {
+          const schoolData = data.find(s => s.school === schoolSelect.value);
+          if (schoolData) {
+            document.getElementById("region").value = schoolData.region;
+            document.getElementById("city").value = schoolData.city;
+            document.getElementById("school").value = schoolData.school;
+            document.getElementById("code").value = schoolData.code;
+          }
+          document.getElementById("evaluationForm").style.display = "block";
+        });
+
+      } catch (err) {
+        console.error("خطأ في تحميل المدارس:", err);
+        alert("⚠️ لم يتم تحميل بيانات المدارس من الشيت");
       }
-
-      showStep(currentStep);
-
-      nextBtns.forEach(btn => {
-        btn.addEventListener("click", () => {
-          if (currentStep < steps.length - 1) {
-            currentStep++;
-            showStep(currentStep);
-          }
-        });
-      });
-
-      prevBtns.forEach(btn => {
-        btn.addEventListener("click", () => {
-          if (currentStep > 0) {
-            currentStep--;
-            showStep(currentStep);
-          }
-        });
-      });
     });
   </script>
 </body>
