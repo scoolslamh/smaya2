@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تسجيل الدخول - نظام تقييم المباني المدرسية</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: "Tajawal", sans-serif;
+      background: #f5f7fa;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .login-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 30px 0;
+    }
+
+    .login-card {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: right;
+    }
+
+    .login-card h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #13344f;
+    }
+
+    .login-card label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    .login-card input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .login-card button {
+      width: 100%;
+      padding: 12px;
+      background: #13344f;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    .login-card button:hover {
+      background: #0e2233;
+    }
+
+    .login-card .error {
+      color: red;
+      margin-top: 10px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    header, footer {
+      background: #13344f;
+      color: white;
+      text-align: center;
+      padding: 15px 0;
+    }
+
+    header img.logo {
+      height: 50px;
+      display: block;
+      margin: 0 auto 10px;
+    }
+
+    footer {
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ✅ منع الوصول للصفحة إذا كان مسجّل دخول -->
+  <script>
+    if (localStorage.getItem("loggedIn") === "true") {
+      window.location.href = "index.html";
+    }
+  </script>
+
+  <!-- الهيدر -->
+  <header class="main-header">
+    <img src="logo.png" alt="شعار شركة سمايا" class="logo">
+    <h1>شركة سمايا</h1>
+    <h2 class="subtitle">نظام تقييم المباني المدرسية</h2>
+  </header>
+
+  <!-- بطاقة تسجيل الدخول -->
+  <main class="login-container">
+    <form id="loginForm" class="login-card">
+      <h2>تسجيل الدخول</h2>
+
+      <label>اسم المستخدم</label>
+      <input type="text" name="username" required>
+
+      <label>كلمة المرور</label>
+      <input type="password" name="password" required>
+
+      <button type="submit">دخول</button>
+      <p id="errorMsg" class="error"></p>
+    </form>
+  </main>
+
+  <!-- الفوتر -->
+  <footer class="main-footer">
+    <p>جميع الحقوق محفوظة لشركة سمايا © 2025</p>
+  </footer>
+
+  <script>
+    const API_URL = "/api"; // عبر Netlify Proxy
+
+    document.getElementById("loginForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const username = e.target.username.value.trim();
+      const password = e.target.password.value.trim();
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "login", username, password })
+        });
+
+        if (!res.ok) throw new Error("استجابة غير صالحة من الخادم");
+
+        const data = await res.json();
+
+        if (data.success) {
+          // ✅ حفظ بيانات الدخول
+          localStorage.setItem("loggedIn", "true");
+          localStorage.setItem("username", username);
+          localStorage.setItem("role", data.role || "");
+          localStorage.setItem("fullName", data.fullName || "مشرف");
+          localStorage.setItem("loginTime", Date.now());
+
+          window.location.href = "index.html";
+        } else {
+          document.getElementById("errorMsg").textContent = data.message || "❌ بيانات الدخول غير صحيحة";
+          e.target.password.value = "";
+        }
+      } catch (err) {
+        document.getElementById("errorMsg").textContent = "⚠️ خطأ في الاتصال بالخادم";
+        console.error("خطأ:", err);
+        e.target.password.value = "";
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+# 📌 إعدادات البناء الأساسية
+[build]
+  publish = "."        # مجلد النشر (الجذر عندك فيه index.html و login.html)
+  command = ""         # ما عندك build command لأن المشروع HTML + CSS + JS فقط
+
+# ✅ التوجيه للصفحة الرئيسية → صفحة الدخول
+[[redirects]]
+  from = "/"
+  to = "/login.html"
+  status = 302
+  force = true
+
+# ✅ تمرير طلبات API إلى Google Apps Script
+[[redirects]]
+  from = "/api/*"
+  to = "https://script.google.com/macros/s/AKfycbwqd_Ze2vqdA0Fv_mWa-u7TzR_GI_qgXBXl9zqWixo4J6SgpmXxXE9kWd75kylpmA/exec"
+  status = 200
+  force = true

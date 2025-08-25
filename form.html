@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>نظام تقييم المباني المدرسية</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: "Tajawal", sans-serif;
+      margin: 0;
+      background: #f5f7fa;
+    }
+
+    .filters {
+      background: #f9fbfd;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    .filters h2 {
+      margin-bottom: 15px;
+      color: #13344f;
+      text-align: center;
+    }
+    .filters label {
+      display: block;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+    .filters select,
+    .filters input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    #evaluationForm {
+      display: none;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-navigation {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .form-navigation button {
+      margin: 5px;
+      padding: 10px 25px;
+      background: #13344f;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .form-navigation button:hover {
+      background: #0e2233;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ✅ التحقق من تسجيل الدخول -->
+  <script>
+    if (localStorage.getItem("loggedIn") !== "true") {
+      window.location.href = "login.html";
+    }
+  </script>
+
+  <!-- الهيدر -->
+  <header class="main-header">
+    <img src="logo.png" alt="شعار شركة سمايا" class="logo">
+    <h1>شركة سمايا</h1>
+    <h2 class="subtitle">نظام تقييم المباني المدرسية</h2>
+  </header>
+
+  <main class="container">
+
+    <!-- قسم الفلاتر -->
+    <section class="filters">
+      <h2>اختيار المدرسة</h2>
+
+      <label>المنطقة:
+        <select id="regionFilter">
+          <option value="">اختر المنطقة</option>
+        </select>
+      </label>
+
+      <label>المدينة:
+        <select id="cityFilter" disabled>
+          <option value="">اختر المدينة</option>
+        </select>
+      </label>
+
+      <label>المدرسة:
+        <input type="text" id="schoolSearch" placeholder="🔍 ابحث عن مدرسة">
+        <select id="schoolFilter" disabled>
+          <option value="">اختر المدرسة</option>
+        </select>
+      </label>
+    </section>
+
+    <!-- شريط التقدم -->
+    <div id="progress-bar">
+      <div id="progress"></div>
+    </div>
+
+    <!-- النماذج -->
+    <form id="evaluationForm">
+
+      <!-- القسم الأول -->
+      <div class="form-step active">
+        <h2>البيانات الأساسية</h2>
+        <div class="form-grid">
+          <label>تاريخ الزيارة:
+            <input type="date" id="visit_date" name="visit_date" required>
+          </label>
+          <input type="hidden" id="visit_day" name="visit_day">
+          <input type="hidden" id="visit_month" name="visit_month">
+          <input type="hidden" id="visit_year" name="visit_year">
+
+          <label>المشرف الزائر:
+            <input type="text" name="visitor" id="visitor" readonly>
+          </label>
+          <label>المنطقة: <input type="text" name="region" id="region" readonly></label>
+          <label>المدينة: <input type="text" name="city" id="city" readonly></label>
+          <label>اسم المدرسة: <input type="text" name="school" id="school" readonly></label>
+
+          <label>الرقم الوزاري: <input type="text" name="code" id="code" required></label>
+
+          <label>اسم الحي/الشارع: <input type="text" name="street"></label>
+          <label>تصنيف المدرسة: <input type="text" name="category"></label>
+          <label>المرحلة التعليمية: <input type="text" name="stage"></label>
+          <label>المراحل الملحقة: <input type="text" name="extra_stages"></label>
+          <label>تاريخ الفحص: <input type="date" name="inspection_date"></label>
+          <label>عدد الفصول: <input type="number" name="classes"></label>
+          <label>شبكة المياه تصل للمدرسة:
+            <select name="water"><option>نعم</option><option>لا</option></select>
+          </label>
+          <label>شبكة الصرف الصحي تصل للمدرسة:
+            <select name="sewage"><option>نعم</option><option>لا</option></select>
+          </label>
+          <label>طرق الوصول للمدرسة: <input type="text" name="access"></label>
+          <label>ملكية المبنى: <input type="text" name="ownership"></label>
+        </div>
+        <div class="form-navigation">
+          <button type="button" class="next">التالي</button>
+        </div>
+      </div>
+
+      <!-- القسم الثاني -->
+      <div class="form-step">
+        <h2>الصحة والسلامة</h2>
+        <div class="form-grid">
+          <label>مخارج الطوارئ: <input type="text" name="emergency_exits"></label>
+          <label>مضخات الحريق: <input type="text" name="fire_pumps"></label>
+          <label>بكرات خرطوم الحريق: <input type="text" name="fire_hose_reels"></label>
+          <label>طفايات الحريق: <input type="text" name="fire_extinguishers"></label>
+          <label>لوحة تحكم: <input type="text" name="control_panel"></label>
+          <label>كواشف إنذار الحريق: <input type="text" name="smoke_detectors"></label>
+          <label>جرس انذار: <input type="text" name="fire_alarm"></label>
+          <label>حواجز السلامة: <input type="text" name="safety_barriers"></label>
+          <label>لوحات مخارج الطوارئ: <input type="text" name="exit_signs"></label>
+          <label>صناديق الإسعافات الأولية: <input type="text" name="first_aid"></label>
+          <label>نقاط التجمع ولوحاتها: <input type="text" name="assembly_points"></label>
+          <label>الحواف المكشوفة: <input type="text" name="edges"></label>
+          <label>وثائق السلامة: <input type="text" name="safety_docs"></label>
+          <label>وصلة الدفاع المدني: <input type="text" name="civil_defense"></label>
+          <label>البواب والمفاتيح: <input type="text" name="keys"></label>
+        </div>
+        <div class="form-navigation">
+          <button type="button" class="prev">السابق</button>
+          <button type="button" class="next">التالي</button>
+        </div>
+      </div>
+
+      <!-- القسم الثالث -->
+      <div class="form-step">
+        <h2>العناصر المدنية</h2>
+        <div class="form-grid">
+          <label>حالة الحوائط: <input type="text" name="walls_condition"></label>
+          <label>السلالم وعناصرها: <input type="text" name="stairs"></label>
+          <label>النوافذ: <input type="text" name="windows"></label>
+          <label>الأبواب: <input type="text" name="doors"></label>
+          <label>حالة الأرضيات: <input type="text" name="floors_condition"></label>
+          <label>المناور: <input type="text" name="light_wells"></label>
+          <label>عزل السطح: <input type="text" name="roof_insulation"></label>
+          <label>تصريف السطح: <input type="text" name="roof_drainage"></label>
+          <label>إطار السطح / الحواجز: <input type="text" name="roof_frame"></label>
+          <label>منحدر ذوي الاحتياجات الخاصة: <input type="text" name="accessibility_ramp"></label>
+          <label>الحالة العامة للمناطق الخارجية والطرق: <input type="text" name="external_condition"></label>
+          <label>البوابات الرئيسية: <input type="text" name="main_gates"></label>
+          <label>السور: <input type="text" name="fence"></label>
+          <label>العناصر الميكانيكية: <input type="text" name="mechanical"></label>
+          <label>لوحة التوزيع: <input type="text" name="distribution"></label>
+          <label>نظام التأريض: <input type="text" name="earthing"></label>
+          <label>أنظمة السماعات والصوت: <input type="text" name="sound"></label>
+          <label>حالة الإضاءة العامة: <input type="text" name="lighting"></label>
+          <label>إضاءة الطوارئ: <input type="text" name="emergency_lighting"></label>
+          <label>المقابس وقنوات التمديد: <input type="text" name="sockets"></label>
+          <label>مكيفات الهواء: <input type="text" name="ac"></label>
+          <label>المضخات: <input type="text" name="pumps"></label>
+          <label>مراوح الشفط: <input type="text" name="fans"></label>
+          <label>المصاعد: <input type="text" name="elevators"></label>
+          <label>سخانات المياه: <input type="text" name="heaters"></label>
+          <label>خزانات المياه الأرضية: <input type="text" name="tank_ground"></label>
+          <label>خزانات المياه العلوية: <input type="text" name="tank_top"></label>
+          <label>الحواجز والاضافات العشوائية: <input type="text" name="barriers"></label>
+          <label>التوصيلات الكهربائية العشوائية: <input type="text" name="wiring"></label>
+        </div>
+        <div class="form-navigation">
+          <button type="button" class="prev">السابق</button>
+          <button type="submit">إرسال</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- أزرار إضافية -->
+    <div class="form-navigation">
+      <button type="button" id="newEntryBtn">🔄 إدخال جديد</button>
+      <button type="button" id="logoutBtn">🚪 خروج</button>
+    </div>
+  </main>
+
+  <!-- الفوتر -->
+  <footer class="main-footer">
+    <p>جميع الحقوق محفوظة لشركة سمايا © 2025</p>
+  </footer>
+
+  <script src="script.js"></script>
+
+  <script>
+    // استخراج اليوم/الشهر/السنة من التاريخ
+    document.getElementById("visit_date").addEventListener("change", function() {
+      const date = new Date(this.value);
+      const days = ["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+      document.getElementById("visit_day").value = days[date.getDay()];
+      document.getElementById("visit_month").value = (date.getMonth() + 1).toString().padStart(2, "0");
+      document.getElementById("visit_year").value = date.getFullYear();
+    });
+
+    // تحميل اسم المشرف
+    document.addEventListener("DOMContentLoaded", () => {
+      const fullName = localStorage.getItem("fullName") || "مشرف";
+      document.getElementById("visitor").value = fullName;
+
+      document.getElementById("logoutBtn").addEventListener("click", () => {
+        localStorage.clear();
+        window.location.href = "login.html";
+      });
+
+      document.getElementById("newEntryBtn").addEventListener("click", () => {
+        document.getElementById("evaluationForm").reset();
+        document.getElementById("evaluationForm").style.display = "none";
+        document.getElementById("regionFilter").value = "";
+        document.getElementById("cityFilter").innerHTML = '<option value="">اختر المدينة</option>';
+        document.getElementById("cityFilter").disabled = true;
+        document.getElementById("schoolFilter").innerHTML = '<option value="">اختر المدرسة</option>';
+        document.getElementById("schoolFilter").disabled = true;
+      });
+    });
+
+    // التحكم في الخطوات (مع حل مشكلة required)
+    document.addEventListener("DOMContentLoaded", () => {
+      const steps = document.querySelectorAll(".form-step");
+      const nextBtns = document.querySelectorAll(".next");
+      const prevBtns = document.querySelectorAll(".prev");
+      let currentStep = 0;
+
+      function showStep(index) {
+        steps.forEach((step, i) => {
+          step.style.display = i === index ? "block" : "none";
+
+          // ✅ إضافة/إزالة required فقط للحقول الظاهرة
+          const inputs = step.querySelectorAll("input, select, textarea");
+          inputs.forEach(inp => {
+            if (i === index) {
+              inp.setAttribute("required", inp.hasAttribute("data-original-required") || inp.required);
+            } else {
+              if (inp.hasAttribute("required")) {
+                inp.setAttribute("data-original-required", "true");
+                inp.removeAttribute("required");
+              }
+            }
+          });
+        });
+      }
+
+      showStep(currentStep);
+
+      nextBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          if (currentStep < steps.length - 1) {
+            currentStep++;
+            showStep(currentStep);
+          }
+        });
+      });
+
+      prevBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          if (currentStep > 0) {
+            currentStep--;
+            showStep(currentStep);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
