@@ -176,30 +176,151 @@
       </div>
 
       <!-- القسم الثاني -->
-      <div class="form-step">
-        <h2>الصحة والسلامة</h2>
-        <div class="form-grid">
-          <label>مخارج الطوارئ: <input type="text" name="emergency_exits"></label>
-          <label>مضخات الحريق: <input type="text" name="fire_pumps"></label>
-          <label>بكرات خرطوم الحريق: <input type="text" name="fire_hose_reels"></label>
-          <label>طفايات الحريق: <input type="text" name="fire_extinguishers"></label>
-          <label>لوحة تحكم: <input type="text" name="control_panel"></label>
-          <label>كواشف إنذار الحريق: <input type="text" name="smoke_detectors"></label>
-          <label>جرس انذار: <input type="text" name="fire_alarm"></label>
-          <label>حواجز السلامة: <input type="text" name="safety_barriers"></label>
-          <label>لوحات مخارج الطوارئ: <input type="text" name="exit_signs"></label>
-          <label>صناديق الإسعافات الأولية: <input type="text" name="first_aid"></label>
-          <label>نقاط التجمع ولوحاتها: <input type="text" name="assembly_points"></label>
-          <label>الحواف المكشوفة: <input type="text" name="edges"></label>
-          <label>وثائق السلامة: <input type="text" name="safety_docs"></label>
-          <label>وصلة الدفاع المدني: <input type="text" name="civil_defense"></label>
-          <label>البواب والمفاتيح: <input type="text" name="keys"></label>
-        </div>
-        <div class="form-navigation">
-          <button type="button" class="prev">السابق</button>
-          <button type="button" class="next">التالي</button>
-        </div>
-      </div>
+<div class="form-step">
+  <h2>الصحة والسلامة</h2>
+  <div class="form-grid">
+    <label>مخارج الطوارئ:
+      <select name="emergency_exits" required>
+        <option value="">اختر</option>
+        <option value="مطابق">مطابق</option>
+        <option value="غير مطابق">غير مطابق</option>
+        <option value="يحتاج صيانة">يحتاج صيانة</option>
+      </select>
+    </label>
+
+    <label>مضخات الحريق:
+      <select name="fire_pumps" required>
+        <option value="">اختر</option>
+        <option value="مطابق">مطابق</option>
+        <option value="غير مطابق">غير مطابق</option>
+        <option value="يحتاج صيانة">يحتاج صيانة</option>
+      </select>
+    </label>
+
+    <label>بكرات خرطوم الحريق:
+      <select name="fire_hose_reels" required>
+        <option value="">اختر</option>
+        <option value="مطابق">مطابق</option>
+        <option value="غير مطابق">غير مطابق</option>
+        <option value="يحتاج صيانة">يحتاج صيانة</option>
+      </select>
+    </label>
+
+    <label>طفايات الحريق:
+      <select name="fire_extinguishers" required>
+        <option value="">اختر</option>
+        <option value="مطابق">مطابق</option>
+        <option value="غير مطابق">غير مطابق</option>
+        <option value="يحتاج صيانة">يحتاج صيانة</option>
+      </select>
+    </label>
+
+    <label>لوحة تحكم:
+      <select name="control_panel" required>
+        <option value="">اختر</option>
+        <option value="مطابق">مطابق</option>
+        <option value="غير مطابق">غير مطابق</option>
+        <option value="يحتاج صيانة">يحتاج صيانة</option>
+      </select>
+    </label>
+
+    <label>كواشف إنذار الحريق:
+      <select name="smoke_detectors" required>
+        <option value="">اختر</option>
+        <option value="مطابق">مطابق</option>
+        <option value="غير مطابق">غير مطابق</option>
+        <option value="يحتاج صيانة">يحتاج صيانة</option>
+      </select>
+    </label>
+
+    <label>جرس انذار:
+      <select name="fire_alarm" required>
+        <option value="">اختر</option>
+        <option value="مطابق">مطابق</option>
+        <option value="غير مطابق">غير مطابق</option>
+        <option value="يحتاج صيانة">يحتاج صيانة</option>
+      </select>
+    </label>
+
+    <label>حواجز السلامة:
+      <select name="safety_barriers" required>
+        <option value="">اختر</option>
+        <option value="مطابق">مطابق</option>
+        <option value="غير مطابق">غير مطابق</option>
+        <option value="يحتاج صيانة">يحتاج صيانة</option>
+      </select>
+    </label>
+
+    <label>لوحات مخارج الطوارئ:
+      <select name="exit_signs" required>
+        <option value="">اختر</option>
+        <option value="مطابق">مطابق</option>
+        <option value="غير مطابق">غير مطابق</option>
+        <option value="يحتاج صيانة">يحتاج صيانة</option>
+      </select>
+    </label>
+
+    <label>صناديق الإسعافات الأولية:
+      <select name="first_aid" required>
+        <option value="">اختر</option>
+        <option value="مطابق">مطابق</option>
+        <option value="غير مطابق">غير مطابق</option>
+        <option value="يحتاج صيانة">يحتاج صيانة</option>
+      </select>
+    </label>
+
+    <label>نقاط التجمع ولوحاتها:
+      <select name="assembly_points" required>
+        <option value="">اختر</option>
+        <option value="مطابق">مطابق</option>
+        <option value="غير مطابق">غير مطابق</option>
+        <option value="يحتاج صيانة">يحتاج صيانة</option>
+      </select>
+    </label>
+
+    <label>الحواف المكشوفة:
+      <select name="edges" required>
+        <option value="">اختر</option>
+        <option value="مطابق">مطابق</option>
+        <option value="غير مطابق">غير مطابق</option>
+        <option value="يحتاج صيانة">يحتاج صيانة</option>
+      </select>
+    </label>
+
+    <label>وثائق السلامة:
+      <select name="safety_docs" required>
+        <option value="">اختر</option>
+        <option value="مطابق">مطابق</option>
+        <option value="غير مطابق">غير مطابق</option>
+        <option value="يحتاج صيانة">يحتاج صيانة</option>
+      </select>
+    </label>
+
+    <label>وصلة الدفاع المدني:
+      <select name="civil_defense" required>
+        <option value="">اختر</option>
+        <option value="مطابق">مطابق</option>
+        <option value="غير مطابق">غير مطابق</option>
+        <option value="يحتاج صيانة">يحتاج صيانة</option>
+      </select>
+    </label>
+
+    <label>الأبواب والمفاتيح:
+      <select name="keys" required>
+        <option value="">اختر</option>
+        <option value="مطابق">مطابق</option>
+        <option value="غير مطابق">غير مطابق</option>
+        <option value="يحتاج صيانة">يحتاج صيانة</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="form-navigation">
+    <button type="button" class="prev">السابق</button>
+    <button type="button" class="next">التالي</button>
+  </div>
+</div>
+
 
       <!-- القسم الثالث -->
       <div class="form-step">
@@ -379,6 +500,62 @@ document.addEventListener("DOMContentLoaded", () => {
 // ✅ إرسال النموذج إلى Google Sheet
 document.getElementById("evaluationForm").addEventListener("submit", async (e) => {
   e.preventDefault(); // منع إعادة تحميل الصفحة
+
+  const form = e.target;
+
+  // ✅ التحقق من الحقول المطلوبة
+  const requiredFields = form.querySelectorAll("[required]");
+  let missing = [];
+
+  requiredFields.forEach(field => {
+    if (!field.value || field.value.trim() === "") {
+      missing.push(field);
+      field.style.border = "2px solid red"; // تحديد الحقل باللون الأحمر
+    } else {
+      field.style.border = ""; // إزالة اللون عند التعبئة
+    }
+  });
+
+  if (missing.length > 0) {
+    alert("⚠️ يرجى تعبئة جميع الحقول المطلوبة قبل الإرسال.");
+    missing[0].focus(); // يذهب لأول حقل ناقص
+    return; // إيقاف الإرسال
+  }
+
+  // ✅ إذا كانت كل الحقول ممتلئة → تابع الإرسال
+  const formData = new FormData(form);
+  const data = {};
+  formData.forEach((value, key) => {
+    data[key] = value;
+  });
+
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "saveEvaluation",
+        ...data
+      })
+    });
+
+    if (!res.ok) throw new Error("فشل الاتصال بالخادم");
+
+    const result = await res.json();
+
+    if (result.success) {
+      alert("✅ تم إرسال التقييم بنجاح!");
+      form.reset();
+      document.getElementById("evaluationForm").style.display = "none";
+    } else {
+      alert("⚠️ لم يتم الإرسال: " + (result.message || "خطأ غير معروف"));
+    }
+  } catch (err) {
+    console.error("خطأ:", err);
+    alert("❌ فشل الاتصال بالخادم");
+  }
+});
+
 
   const form = e.target;
   const formData = new FormData(form);
