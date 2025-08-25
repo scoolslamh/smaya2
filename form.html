@@ -469,7 +469,7 @@ schoolSelect.addEventListener("change", async () => {
 
   // ✅ جلب آخر زيارة من السكربت
   try {
-    const res = await fetch(API_URL + "?school=" + schoolData.school); // لاحظ school بدل code
+    const res = await fetch(API_URL + "?school=" + encodeURIComponent(schoolData.school));
     const result = await res.json();
     const infoBox = document.getElementById("lastVisitInfo");
 
@@ -480,7 +480,7 @@ schoolSelect.addEventListener("change", async () => {
       infoBox.innerHTML = `📅 تاريخ آخر زيارة: <b>${visitDate}</b> | 🔢 رقم الزيارة: <b>${visitId}</b>`;
       infoBox.style.display = "block";
 
-      // ✅ إذا أردت ملء البيانات الأساسية تلقائياً:
+      // ✅ ملء البيانات الأساسية من آخر زيارة
       document.getElementById("street").value = result.street || "";
       document.getElementById("category").value = result.category || "";
       document.getElementById("stage").value = result.stage || "";
@@ -500,6 +500,7 @@ schoolSelect.addEventListener("change", async () => {
     console.error("خطأ في جلب آخر زيارة:", err);
   }
 });
+
 
 
       } catch (err) {
