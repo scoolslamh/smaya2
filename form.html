@@ -502,9 +502,28 @@ document.getElementById("evaluationForm").addEventListener("submit", async (e) =
   e.preventDefault(); // منع إعادة تحميل الصفحة
 
   const form = e.target;
-  const formData = new FormData(form);
 
-  // تحويل البيانات إلى JSON
+  // التحقق من الحقول المطلوبة
+  const requiredFields = form.querySelectorAll("[required]");
+  let missing = [];
+
+  requiredFields.forEach(field => {
+    if (!field.value || field.value.trim() === "") {
+      missing.push(field);
+      field.style.border = "2px solid red"; // تحديد الحقل باللون الأحمر
+    } else {
+      field.style.border = ""; // إزالة التحديد إذا امتلأ
+    }
+  });
+
+  if (missing.length > 0) {
+    alert("⚠️ يرجى تعبئة جميع الحقول المطلوبة قبل الإرسال.");
+    missing[0].focus();
+    return; // إيقاف الإرسال
+  }
+
+  // إذا جميع الحقول ممتلئة → تجهيز البيانات
+  const formData = new FormData(form);
   const data = {};
   formData.forEach((value, key) => {
     data[key] = value;
