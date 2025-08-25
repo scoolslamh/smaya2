@@ -418,27 +418,6 @@ document.getElementById("evaluationForm").addEventListener("submit", async (e) =
   }
 });
   </script>
-  <!-- ✅ صندوق لعرض السجل -->
-<div id="logConsole" style="background:#000;color:#0f0;padding:10px;font-size:12px;height:150px;overflow:auto;"></div>
-
-<script>
-  const logDiv = document.getElementById("logConsole");
-  function log(msg) {
-    console.log(msg);
-    logDiv.innerHTML += msg + "<br>";
-  }
-
-  // استبدل console.log بـ log في الكود
-  log("📱 صفحة بدأت التحميل");
-
-  // اعتراض أخطاء fetch
-  window.addEventListener("unhandledrejection", function(event) {
-    log("❌ Promise Rejection: " + event.reason);
-  });
-  window.onerror = function(msg, url, line, col, error) {
-    log("⚠️ خطأ: " + msg + " في " + url + " سطر " + line);
-  };
-</script>
-
+  
 </body>
 </html>
