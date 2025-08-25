@@ -391,13 +391,15 @@ document.getElementById("evaluationForm").addEventListener("submit", async (e) =
 
   try {
     const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "saveEvaluation",
-        payload: data
-      })
-    });
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    action: "saveEvaluation",   // ✅ يتوافق مع السكربت
+    ...data                     // ✅ إرسال القيم مباشرة بدون payload
+  })
+});
+
+
 
     if (!res.ok) throw new Error("فشل الاتصال بالخادم");
 
