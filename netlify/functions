@@ -2,12 +2,13 @@ export async function handler(event, context) {
   const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwqd_Ze2vqdA0Fv_mWa-u7TzR_GI_qgXBXl9zqWixo4J6SgpmXxXE9kWd75kylpmA/exec";
 
   try {
-    // إذا GET أو POST
     let response;
+
     if (event.httpMethod === "GET") {
-      const url = GOOGLE_SCRIPT_URL + (event.rawQueryString ? "?" + event.rawQueryString : "");
-      response = await fetch(url);
-    } else if (event.httpMethod === "POST") {
+      const url = GOOGLE_SCRIPT_URL + (event.rawQuery ? "?" + event.rawQuery : "");
+      response = await fetch(url, { method: "GET" });
+    } 
+    else if (event.httpMethod === "POST") {
       response = await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -20,14 +21,18 @@ export async function handler(event, context) {
     return {
       statusCode: 200,
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": "*",  // علشان الجوال والكمبيوتر
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
         "Content-Type": "application/json"
       },
       body: text
     };
+
   } catch (err) {
     return {
       statusCode: 500,
+      headers: { "Access-Control-Allow-Origin": "*" },
       body: JSON.stringify({ error: "Proxy error", details: err.message })
     };
   }

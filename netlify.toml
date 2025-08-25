@@ -2,7 +2,7 @@
 [build]
   publish = "."
   command = ""
-  functions = "netlify/functions"   # ← هنا أضفنا مكان مجلد الـ Functions
+  functions = "netlify/functions"   # هذا صح
 
 # ✅ إعادة التوجيه للصفحة الرئيسية دائمًا
 [[redirects]]
@@ -11,7 +11,7 @@
   status = 200
   force = true
 
-# ✅ توجيه جميع طلبات API إلى الـ Function
+# ✅ تمرير كل طلبات API إلى Function
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"
