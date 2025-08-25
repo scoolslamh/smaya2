@@ -10,9 +10,16 @@
   status = 302
   force = true
 
-# ✅ تمرير طلبات API إلى Google Apps Script مع الحفاظ على الباراميترات
+# ✅ تمرير /api مع query string (بدون / بعده)
+[[redirects]]
+  from = "/api"
+  to = "https://script.google.com/macros/s/AKfycbwqd_Ze2vqdA0Fv_mWa-u7TzR_GI_qgXBXl9zqWixo4J6SgpmXxXE9kWd75kylpmA/exec"
+  status = 200
+  force = true
+
+# ✅ تمرير /api/* (مع أي مسار أو باراميترات إضافية)
 [[redirects]]
   from = "/api/*"
-  to = "https://script.google.com/macros/s/AKfycbwqd_Ze2vqdA0Fv_mWa-u7TzR_GI_qgXBXl9zqWixo4J6SgpmXxXE9kWd75kylpmA/exec/:splat"
+  to = "https://script.google.com/macros/s/AKfycbwqd_Ze2vqdA0Fv_mWa-u7TzR_GI_qgXBXl9zqWixo4J6SgpmXxXE9kWd75kylpmA/exec"
   status = 200
   force = true
