@@ -3,12 +3,10 @@ export async function handler(event, context) {
 
   try {
     let response;
-
     if (event.httpMethod === "GET") {
-      const url = GOOGLE_SCRIPT_URL + (event.rawQuery ? "?" + event.rawQuery : "");
-      response = await fetch(url, { method: "GET" });
-    } 
-    else if (event.httpMethod === "POST") {
+      const url = GOOGLE_SCRIPT_URL + (event.rawQueryString ? "?" + event.rawQueryString : "");
+      response = await fetch(url);
+    } else if (event.httpMethod === "POST") {
       response = await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -21,18 +19,14 @@ export async function handler(event, context) {
     return {
       statusCode: 200,
       headers: {
-        "Access-Control-Allow-Origin": "*",  // علشان الجوال والكمبيوتر
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json"
       },
       body: text
     };
-
   } catch (err) {
     return {
       statusCode: 500,
-      headers: { "Access-Control-Allow-Origin": "*" },
       body: JSON.stringify({ error: "Proxy error", details: err.message })
     };
   }
