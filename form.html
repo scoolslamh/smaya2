@@ -67,6 +67,23 @@
     .form-navigation button:hover {
       background: #0e2233;
     }
+
+    header, footer {
+      background: #13344f;
+      color: white;
+      text-align: center;
+      padding: 15px 0;
+    }
+
+    header img.logo {
+      height: 50px;
+      display: block;
+      margin: 0 auto 10px;
+    }
+
+    footer {
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
@@ -74,7 +91,7 @@
   <!-- ✅ التحقق من تسجيل الدخول -->
   <script>
     if (localStorage.getItem("loggedIn") !== "true") {
-      window.location.href = "login.html";
+      window.location.href = "index.html"; // يرجع لتسجيل الدخول
     }
   </script>
 
@@ -238,8 +255,6 @@
     <p>جميع الحقوق محفوظة لشركة سمايا © 2025</p>
   </footer>
 
-  <script src="script.js"></script>
-
   <script>
     // استخراج اليوم/الشهر/السنة من التاريخ
     document.getElementById("visit_date").addEventListener("change", function() {
@@ -255,11 +270,13 @@
       const fullName = localStorage.getItem("fullName") || "مشرف";
       document.getElementById("visitor").value = fullName;
 
+      // زر تسجيل الخروج
       document.getElementById("logoutBtn").addEventListener("click", () => {
         localStorage.clear();
-        window.location.href = "login.html";
+        window.location.href = "index.html";
       });
 
+      // زر إدخال جديد
       document.getElementById("newEntryBtn").addEventListener("click", () => {
         document.getElementById("evaluationForm").reset();
         document.getElementById("evaluationForm").style.display = "none";
