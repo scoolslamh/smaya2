@@ -2,6 +2,7 @@
 [build]
   publish = "."
   command = ""
+  functions = "netlify/functions"   # ← هنا أضفنا مكان مجلد الـ Functions
 
 # ✅ إعادة التوجيه للصفحة الرئيسية دائمًا
 [[redirects]]
@@ -10,9 +11,9 @@
   status = 200
   force = true
 
-# ✅ تمرير جميع الطلبات التي تبدأ بـ /api إلى Google Apps Script
+# ✅ توجيه جميع طلبات API إلى الـ Function
 [[redirects]]
   from = "/api/*"
-  to = "https://script.google.com/macros/s/AKfycbwqd_Ze2vqdA0Fv_mWa-u7TzR_GI_qgXBXl9zqWixo4J6SgpmXxXE9kWd75kylpmA/exec"
+  to = "/.netlify/functions/api/:splat"
   status = 200
   force = true
