@@ -376,6 +376,45 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+// ✅ إرسال النموذج إلى Google Sheet
+document.getElementById("evaluationForm").addEventListener("submit", async (e) => {
+  e.preventDefault(); // منع إعادة تحميل الصفحة
+
+  const form = e.target;
+  const formData = new FormData(form);
+
+  // تحويل البيانات إلى JSON
+  const data = {};
+  formData.forEach((value, key) => {
+    data[key] = value;
+  });
+
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "submitEvaluation",
+        payload: data
+      })
+    });
+
+    if (!res.ok) throw new Error("فشل الاتصال بالخادم");
+
+    const result = await res.json();
+
+    if (result.success) {
+      alert("✅ تم إرسال التقييم بنجاح!");
+      form.reset();
+      document.getElementById("evaluationForm").style.display = "none";
+    } else {
+      alert("⚠️ لم يتم الإرسال: " + (result.message || "خطأ غير معروف"));
+    }
+  } catch (err) {
+    console.error("خطأ:", err);
+    alert("❌ فشل الاتصال بالخادم");
+  }
+});
 
   </script>
 </body>
