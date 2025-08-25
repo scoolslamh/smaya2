@@ -417,11 +417,6 @@ document.getElementById("evaluationForm").addEventListener("submit", async (e) =
     alert("❌ فشل الاتصال بالخادم");
   }
 });
-
-<script>
-    window.onerror = function(msg, url, line, col, error) {
-      alert("⚠️ خطأ: " + msg + "\n📄 " + url + "\n➡️ السطر: " + line);
-    };
   </script>
 </body>
 </html>
