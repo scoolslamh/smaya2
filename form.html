@@ -133,9 +133,12 @@
     <div id="progress-bar">
       <div id="progress"></div>
     </div>
-
+    <!-- ✅ معلومات آخر زيارة -->
+<div id="lastVisitInfo" 
+     style="display:none; text-align:center; margin:15px 0; font-weight:bold; color:#13344f; background:#f0f4f8; padding:10px; border-radius:6px;">
+</div>
     <!-- النماذج -->
-    <<form id="evaluationForm" novalidate>
+    <form id="evaluationForm" novalidate>
 
       <!-- القسم الأول -->
       <div class="form-step active">
@@ -453,16 +456,51 @@
         });
 
         // عند اختيار مدرسة
-        schoolSelect.addEventListener("change", () => {
-          const schoolData = data.find(s => s.school === schoolSelect.value);
-          if (schoolData) {
-            document.getElementById("region").value = schoolData.region;
-            document.getElementById("city").value = schoolData.city;
-            document.getElementById("school").value = schoolData.school;
-            document.getElementById("code").value = schoolData.code;
-          }
-          document.getElementById("evaluationForm").style.display = "block";
-        });
+        // عند اختيار مدرسة
+schoolSelect.addEventListener("change", async () => {
+  const schoolData = data.find(s => s.school === schoolSelect.value);
+  if (schoolData) {
+    document.getElementById("region").value = schoolData.region;
+    document.getElementById("city").value = schoolData.city;
+    document.getElementById("school").value = schoolData.school;
+    document.getElementById("code").value = schoolData.code;
+  }
+  document.getElementById("evaluationForm").style.display = "block";
+
+  // ✅ جلب آخر زيارة من السكربت
+  try {
+    const res = await fetch(API_URL + "?school=" + schoolData.school); // لاحظ school بدل code
+    const result = await res.json();
+    const infoBox = document.getElementById("lastVisitInfo");
+
+    if (result.success) {
+      const visitId = result.visit_id;       // رقم الزيارة
+      const visitDate = result.visit_date;   // تاريخ الزيارة
+
+      infoBox.innerHTML = `📅 تاريخ آخر زيارة: <b>${visitDate}</b> | 🔢 رقم الزيارة: <b>${visitId}</b>`;
+      infoBox.style.display = "block";
+
+      // ✅ إذا أردت ملء البيانات الأساسية تلقائياً:
+      document.getElementById("street").value = result.street || "";
+      document.getElementById("category").value = result.category || "";
+      document.getElementById("stage").value = result.stage || "";
+      document.getElementById("extra_stages").value = result.extra_stages || "";
+      document.getElementById("inspection_date").value = result.inspection_date || "";
+      document.getElementById("classes").value = result.classes || "";
+      document.getElementById("water").value = result.water || "";
+      document.getElementById("sewage").value = result.sewage || "";
+      document.getElementById("access").value = result.access || "";
+      document.getElementById("ownership").value = result.ownership || "";
+
+    } else {
+      infoBox.innerHTML = "⚠️ لا يوجد زيارة سابقة للمدرسة";
+      infoBox.style.display = "block";
+    }
+  } catch (err) {
+    console.error("خطأ في جلب آخر زيارة:", err);
+  }
+});
+
 
       } catch (err) {
         console.error("خطأ في تحميل المدارس:", err);
