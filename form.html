@@ -502,62 +502,6 @@ document.getElementById("evaluationForm").addEventListener("submit", async (e) =
   e.preventDefault(); // منع إعادة تحميل الصفحة
 
   const form = e.target;
-
-  // ✅ التحقق من الحقول المطلوبة
-  const requiredFields = form.querySelectorAll("[required]");
-  let missing = [];
-
-  requiredFields.forEach(field => {
-    if (!field.value || field.value.trim() === "") {
-      missing.push(field);
-      field.style.border = "2px solid red"; // تحديد الحقل باللون الأحمر
-    } else {
-      field.style.border = ""; // إزالة اللون عند التعبئة
-    }
-  });
-
-  if (missing.length > 0) {
-    alert("⚠️ يرجى تعبئة جميع الحقول المطلوبة قبل الإرسال.");
-    missing[0].focus(); // يذهب لأول حقل ناقص
-    return; // إيقاف الإرسال
-  }
-
-  // ✅ إذا كانت كل الحقول ممتلئة → تابع الإرسال
-  const formData = new FormData(form);
-  const data = {};
-  formData.forEach((value, key) => {
-    data[key] = value;
-  });
-
-  try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "saveEvaluation",
-        ...data
-      })
-    });
-
-    if (!res.ok) throw new Error("فشل الاتصال بالخادم");
-
-    const result = await res.json();
-
-    if (result.success) {
-      alert("✅ تم إرسال التقييم بنجاح!");
-      form.reset();
-      document.getElementById("evaluationForm").style.display = "none";
-    } else {
-      alert("⚠️ لم يتم الإرسال: " + (result.message || "خطأ غير معروف"));
-    }
-  } catch (err) {
-    console.error("خطأ:", err);
-    alert("❌ فشل الاتصال بالخادم");
-  }
-});
-
-
-  const form = e.target;
   const formData = new FormData(form);
 
   // تحويل البيانات إلى JSON
