@@ -1,6 +1,6 @@
 # 📌 إعدادات البناء الأساسية
 [build]
-  publish = "."        # مجلد النشر (الجذر عندك فيه index.html و form.html)
+  publish = "."        # الجذر عندك فيه index.html و form.html
   command = ""         # ما عندك build command لأن المشروع HTML + CSS + JS فقط
 
 # ✅ التوجيه للصفحة الرئيسية → index.html
@@ -10,9 +10,9 @@
   status = 302
   force = true
 
-# ✅ تمرير طلبات API إلى Google Apps Script
+# ✅ تمرير طلبات API إلى Google Apps Script مع الحفاظ على الباراميترات
 [[redirects]]
   from = "/api/*"
-  to = "https://script.google.com/macros/s/AKfycbwqd_Ze2vqdA0Fv_mWa-u7TzR_GI_qgXBXl9zqWixo4J6SgpmXxXE9kWd75kylpmA/exec"
+  to = "https://script.google.com/macros/s/AKfycbwqd_Ze2vqdA0Fv_mWa-u7TzR_GI_qgXBXl9zqWixo4J6SgpmXxXE9kWd75kylpmA/exec/:splat"
   status = 200
   force = true
