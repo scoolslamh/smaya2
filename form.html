@@ -174,6 +174,10 @@
           <button type="button" class="next">التالي</button>
         </div>
       </div>
+<!-- ✅ صندوق الرسالة (أضفه هنا قبل القسم الثاني أو بعده) -->
+  <div id="formMessage" 
+       style="display:none; color:red; font-weight:bold; text-align:center; margin:15px 0;">
+  </div>
 
       <!-- القسم الثاني -->
 <div class="form-step">
@@ -502,27 +506,30 @@ document.getElementById("evaluationForm").addEventListener("submit", async (e) =
   e.preventDefault(); // منع إعادة تحميل الصفحة
 
   const form = e.target;
+  const messageBox = document.getElementById("formMessage");
 
-  // التحقق من الحقول المطلوبة
+  // ✅ التحقق من الحقول المطلوبة
   const requiredFields = form.querySelectorAll("[required]");
   let missing = [];
 
   requiredFields.forEach(field => {
     if (!field.value || field.value.trim() === "") {
       missing.push(field);
-      field.style.border = "2px solid red"; // تحديد الحقل باللون الأحمر
+      field.style.border = "2px solid red"; // تمييز الحقول الناقصة
     } else {
-      field.style.border = ""; // إزالة التحديد إذا امتلأ
+      field.style.border = ""; // إزالة التمييز إذا امتلأ
     }
   });
 
   if (missing.length > 0) {
-    alert("⚠️ يرجى تعبئة جميع الحقول المطلوبة قبل الإرسال.");
-    missing[0].focus();
+    messageBox.textContent = "⚠️ عليك إكمال باقي الحقول المطلوبة";
+    messageBox.style.display = "block";
     return; // إيقاف الإرسال
+  } else {
+    messageBox.style.display = "none"; // إخفاء الرسالة إذا كل شيء تمام
   }
 
-  // إذا جميع الحقول ممتلئة → تجهيز البيانات
+  // ✅ إذا جميع الحقول ممتلئة → تجهيز البيانات
   const formData = new FormData(form);
   const data = {};
   formData.forEach((value, key) => {
