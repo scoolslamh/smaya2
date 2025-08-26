@@ -5,8 +5,10 @@ export async function handler(event, context) {
     let response;
     if (event.httpMethod === "GET") {
       const url = GOOGLE_SCRIPT_URL + (event.rawQueryString ? "?" + event.rawQueryString : "");
+      console.log("🔗 Proxy forwarding GET to:", url); // ✅ طباعة الرابط النهائي
       response = await fetch(url);
     } else if (event.httpMethod === "POST") {
+      console.log("📩 Proxy forwarding POST to:", GOOGLE_SCRIPT_URL, "body:", event.body);
       response = await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -15,6 +17,7 @@ export async function handler(event, context) {
     }
 
     const text = await response.text();
+    console.log("📦 Raw response from Apps Script:", text); // ✅ طباعة الرد الخام
 
     return {
       statusCode: 200,
@@ -25,6 +28,7 @@ export async function handler(event, context) {
       body: text
     };
   } catch (err) {
+    console.error("❌ Proxy error:", err.message);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: "Proxy error", details: err.message })
