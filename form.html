@@ -99,7 +99,7 @@
   <!-- الهيدر -->
   <header class="main-header">
     <img src="logo.png" alt="شعار شركة سمايا" class="logo">
-    <h1>شركة سمايا</h1>
+    <h1>شركـــة سمايا</h1>
     <h2 class="subtitle">نظام تقييم المباني المدرسية</h2>
   </header>
 
@@ -141,43 +141,68 @@
     <form id="evaluationForm" novalidate>
 
       <!-- القسم الأول -->
-      <div class="form-step active">
-        <h2>البيانات الأساسية</h2>
-        <div class="form-grid">
-          <label>تاريخ الزيارة:
-            <input type="date" id="visit_date" name="visit_date" required>
-          </label>
-          <input type="hidden" id="visit_day" name="visit_day">
-          <input type="hidden" id="visit_month" name="visit_month">
-          <input type="hidden" id="visit_year" name="visit_year">
+<div class="form-step active">
+  <h2>البيانات الأساسية</h2>
+  <div class="form-grid">
+    <label>تاريخ الزيارة:
+      <input type="date" id="visit_date" name="visit_date" required>
+    </label>
+    <input type="hidden" id="visit_day" name="visit_day">
+    <input type="hidden" id="visit_month" name="visit_month">
+    <input type="hidden" id="visit_year" name="visit_year">
 
-          <label>المشرف الزائر:
-            <input type="text" name="visitor" id="visitor" readonly>
-          </label>
-          <label>المنطقة: <input type="text" name="region" id="region" readonly></label>
-          <label>المدينة: <input type="text" name="city" id="city" readonly></label>
-          <label>اسم المدرسة: <input type="text" name="school" id="school" readonly></label>
+    <label>المشرف الزائر:
+      <input type="text" name="visitor" id="visitor" readonly>
+    </label>
+    <label>المنطقة: <input type="text" name="region" id="region" readonly></label>
+    <label>المدينة: <input type="text" name="city" id="city" readonly></label>
+    <label>اسم المدرسة: <input type="text" name="school" id="school" readonly></label>
 
-          <label>الرقم الوزاري: <input type="text" name="code" id="code" required></label>
-          <label>اسم الحي/الشارع: <input type="text" name="street"></label>
-          <label>تصنيف المدرسة: <input type="text" name="category"></label>
-          <label>المرحلة التعليمية: <input type="text" name="stage"></label>
-          <label>المراحل الملحقة: <input type="text" name="extra_stages"></label>
-          <label>تاريخ الفحص: <input type="date" name="inspection_date"></label>
-          <label>عدد الفصول: <input type="number" name="classes"></label>
-          <label>شبكة المياه تصل للمدرسة:
-            <select name="water"><option>نعم</option><option>لا</option></select>
-          </label>
-          <label>شبكة الصرف الصحي تصل للمدرسة:
-            <select name="sewage"><option>نعم</option><option>لا</option></select>
-          </label>
-          <label>طرق الوصول للمدرسة: <input type="text" name="access"></label>
-          <label>ملكية المبنى: <input type="text" name="ownership"></label>
-        </div>
-        <div class="form-navigation">
-          <button type="button" class="next">التالي</button>
-        </div>
-      </div>
+    <label>الرقم الوزاري: 
+      <input type="text" name="code" id="code" required>
+    </label>
+    <label>اسم الحي/الشارع: 
+      <input type="text" name="street" id="street">
+    </label>
+    <label>تصنيف المدرسة: 
+      <input type="text" name="category" id="category">
+    </label>
+    <label>المرحلة التعليمية: 
+      <input type="text" name="stage" id="stage">
+    </label>
+    <label>المراحل الملحقة: 
+      <input type="text" name="extra_stages" id="extra_stages">
+    </label>
+    <label>تاريخ الفحص: 
+      <input type="date" name="inspection_date" id="inspection_date">
+    </label>
+    <label>عدد الفصول: 
+      <input type="number" name="classes" id="classes">
+    </label>
+    <label>شبكة المياه تصل للمدرسة:
+      <select name="water" id="water">
+        <option>نعم</option>
+        <option>لا</option>
+      </select>
+    </label>
+    <label>شبكة الصرف الصحي تصل للمدرسة:
+      <select name="sewage" id="sewage">
+        <option>نعم</option>
+        <option>لا</option>
+      </select>
+    </label>
+    <label>طرق الوصول للمدرسة: 
+      <input type="text" name="access" id="access">
+    </label>
+    <label>ملكية المبنى: 
+      <input type="text" name="ownership" id="ownership">
+    </label>
+  </div>
+  <div class="form-navigation">
+    <button type="button" class="next">التالي</button>
+  </div>
+</div>
+
 <!-- ✅ صندوق الرسالة (أضفه هنا قبل القسم الثاني أو بعده) -->
   <div id="formMessage" 
        style="display:none; color:red; font-weight:bold; text-align:center; margin:15px 0;">
