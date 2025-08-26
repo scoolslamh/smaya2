@@ -498,16 +498,12 @@ schoolSelect.addEventListener("change", async () => {
     const result = await res.json();
     const infoBox = document.getElementById("lastVisitInfo");
 
-    if (result.success === true || result.success === "true") {
-  const visitId = result.visit_id; // رقم الزيارة
-  const visitDate = new Date(result.visit_date).toLocaleDateString("ar-SA");
+    if (result.success) {
+      const visitId = result.visit_id;       // رقم الزيارة
+      const visitDate = result.visit_date;   // تاريخ الزيارة
 
-  infoBox.innerHTML = `📅 تاريخ آخر زيارة: <b>${visitDate}</b> | 🔢 رقم الزيارة: <b>${visitId}</b>`;
-  infoBox.style.display = "block";
-} else {
-  infoBox.innerHTML = "⚠️ لا يوجد زيارة سابقة للمدرسة";
-  infoBox.style.display = "block";
-}
+      infoBox.innerHTML = `📅 تاريخ آخر زيارة: <b>${visitDate}</b> | 🔢 رقم الزيارة: <b>${visitId}</b>`;
+      infoBox.style.display = "block";
 
       // ✅ ملء البيانات الأساسية من آخر زيارة
       document.getElementById("street").value = result.street || "";
