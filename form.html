@@ -498,7 +498,7 @@ schoolSelect.addEventListener("change", async () => {
     const result = await res.json();
     const infoBox = document.getElementById("lastVisitInfo");
 
-    if (result.success === true || result.success === "true") {
+    if (result.success) {
       const visitId = result.visit_id;       // رقم الزيارة
       const visitDate = result.visit_date;   // تاريخ الزيارة
 
