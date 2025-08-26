@@ -134,7 +134,7 @@
       <div id="progress"></div>
     </div>
     <!-- ✅ معلومات آخر زيارة -->
-<div id="lastVisitInfo" 
+<div id="lastVisitInfo"></div> 
      style="display:none; text-align:center; margin:15px 0; font-weight:bold; color:#13344f; background:#f0f4f8; padding:10px; border-radius:6px;">
 </div>
     <!-- النماذج -->
@@ -498,7 +498,7 @@ schoolSelect.addEventListener("change", async () => {
     const result = await res.json();
     const infoBox = document.getElementById("lastVisitInfo");
 
-    if (result.success) {
+    if (result.success === true || result.success === "true") {
       const visitId = result.visit_id;       // رقم الزيارة
       const visitDate = result.visit_date;   // تاريخ الزيارة
 
