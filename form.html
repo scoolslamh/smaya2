@@ -495,35 +495,39 @@ schoolSelect.addEventListener("change", async () => {
   // ✅ جلب آخر زيارة من السكربت
   try {
     const res = await fetch(API_URL + "?school=" + encodeURIComponent(schoolData.school));
-    const result = await res.json();
-    const infoBox = document.getElementById("lastVisitInfo");
+  
+  let result;
+  try {
+    // محاولة التحويل مباشرة
+    result = await res.json();
+  } catch (jsonErr) {
+    // إذا فشل، نجرب كـ نص ونطبع
+    const text = await res.text();
+    console.warn("⚠️ الرد ليس JSON مباشر، هذا هو النص:", text);
 
-    if (result.success) {
-      const visitId = result.visit_id;       // رقم الزيارة
-      const visitDate = result.visit_date;   // تاريخ الزيارة
-
-      infoBox.innerHTML = `📅 تاريخ آخر زيارة: <b>${visitDate}</b> | 🔢 رقم الزيارة: <b>${visitId}</b>`;
-      infoBox.style.display = "block";
-
-      // ✅ ملء البيانات الأساسية من آخر زيارة
-      document.getElementById("street").value = result.street || "";
-      document.getElementById("category").value = result.category || "";
-      document.getElementById("stage").value = result.stage || "";
-      document.getElementById("extra_stages").value = result.extra_stages || "";
-      document.getElementById("inspection_date").value = result.inspection_date || "";
-      document.getElementById("classes").value = result.classes || "";
-      document.getElementById("water").value = result.water || "";
-      document.getElementById("sewage").value = result.sewage || "";
-      document.getElementById("access").value = result.access || "";
-      document.getElementById("ownership").value = result.ownership || "";
-
-    } else {
-      infoBox.innerHTML = "⚠️ لا يوجد زيارة سابقة للمدرسة";
-      infoBox.style.display = "block";
+    try {
+      result = JSON.parse(text);
+    } catch (parseErr) {
+      console.error("❌ فشل تحويل النص إلى JSON:", parseErr);
+      result = null;
     }
-  } catch (err) {
-    console.error("خطأ في جلب آخر زيارة:", err);
   }
+
+  const infoBox = document.getElementById("lastVisitInfo");
+
+  if (result && result.success) {
+    const visitId = result.visit_id;
+    const visitDate = result.visit_date;
+
+    infoBox.innerHTML = `📅 تاريخ آخر زيارة: <b>${visitDate}</b> | 🔢 رقم الزيارة: <b>${visitId}</b>`;
+    infoBox.style.display = "block";
+  } else {
+    infoBox.innerHTML = "⚠️ لا يوجد زيارة سابقة للمدرسة";
+    infoBox.style.display = "block";
+  }
+} catch (err) {
+  console.error("خطأ في جلب آخر زيارة:", err);
+}
 });
 
 
