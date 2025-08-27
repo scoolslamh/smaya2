@@ -553,39 +553,69 @@ document.getElementById("evaluationForm").style.display = "block";
     // عند تحميل الصفحة عرض القسم الأول فقط
     showStep(currentStep);
   });
-// ✅ إرسال البيانات للشيت
-  document.getElementById("evaluationForm").addEventListener("submit", async function(e) {
-    e.preventDefault(); // منع إعادة تحميل الصفحة
+// ✅ إرسال النموذج إلى Google Sheet
+document.getElementById("evaluationForm").addEventListener("submit", async (e) => {
+  e.preventDefault(); // منع إعادة تحميل الصفحة
 
-    const formData = new FormData(this);
-    const jsonData = {};
-    formData.forEach((value, key) => {
-      jsonData[key] = value;
-    });
+  const form = e.target;
+  const messageBox = document.getElementById("formMessage");
 
-    try {
-      const res = await fetch("https://script.google.com/macros/s/AKfycbysHJFrlFxk1UdDjwgX8-NWi2Ko1pJ5jckU9sK2ve0-fmROcI14MTZbiuJzyeQii_CZ/exec", {
-        method: "POST",
-        body: JSON.stringify(jsonData),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
+  // ✅ التحقق من الحقول المطلوبة
+  const requiredFields = form.querySelectorAll("[required]");
+  let missing = [];
 
-      const result = await res.json();
-
-      if (result.success) {
-        alert("✅ تم إرسال البيانات بنجاح");
-        this.reset();
-        document.getElementById("evaluationForm").style.display = "none";
-      } else {
-        alert("⚠️ حدث خطأ أثناء الإرسال");
-      }
-    } catch (err) {
-      console.error("خطأ في الإرسال:", err);
-      alert("❌ لم يتم الإرسال، تحقق من الاتصال أو من رابط Google Apps Script");
+  requiredFields.forEach(field => {
+    if (!field.value || field.value.trim() === "") {
+      missing.push(field);
+      field.style.border = "2px solid red"; // تمييز الحقول الناقصة
+    } else {
+      field.style.border = ""; // إزالة التمييز إذا امتلأ
     }
   });
+
+  if (missing.length > 0) {
+    messageBox.textContent = "⚠️ عليك إكمال باقي الحقول المطلوبة";
+    messageBox.style.display = "block";
+    return; // إيقاف الإرسال
+  } else {
+    messageBox.style.display = "none"; // إخفاء الرسالة إذا كل شيء تمام
+  }
+
+  // ✅ إذا جميع الحقول ممتلئة → تجهيز البيانات
+  const formData = new FormData(form);
+  const data = {};
+  formData.forEach((value, key) => {
+    data[key] = value;
+  });
+
+  try {
+    const res = await fetch(API_URL, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    action: "saveEvaluation",   // ✅ يتوافق مع السكربت
+    ...data                     // ✅ إرسال القيم مباشرة بدون payload
+  })
+});
+
+
+
+    if (!res.ok) throw new Error("فشل الاتصال بالخادم");
+
+    const result = await res.json();
+
+    if (result.success) {
+      alert("✅ تم إرسال التقييم بنجاح!");
+      form.reset();
+      document.getElementById("evaluationForm").style.display = "none";
+    } else {
+      alert("⚠️ لم يتم الإرسال: " + (result.message || "خطأ غير معروف"));
+    }
+  } catch (err) {
+    console.error("خطأ:", err);
+    alert("❌ فشل الاتصال بالخادم");
+  }
+});
   
   </script>
 
