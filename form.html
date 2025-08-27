@@ -481,16 +481,30 @@
           });
         });
 
-        // 🟢 عند اختيار مدرسة
-schoolSelect.addEventListener("change", async () => {
+       // 🟢 عند اختيار مدرسة
+schoolSelect.addEventListener("change", () => {
   const schoolData = data.find(s => s.school === schoolSelect.value);
   if (schoolData) {
     document.getElementById("region").value = schoolData.region;
     document.getElementById("city").value = schoolData.city;
     document.getElementById("school").value = schoolData.school;
     document.getElementById("code").value = schoolData.code;
+
+    // ✅ عرض آخر زيارة وعدد الزيارات من نفس البيانات
+    const infoBox = document.getElementById("lastVisitInfo");
+    infoBox.innerHTML = `
+      📅 آخر زيارة: <b>${schoolData.last_visit || "لا يوجد"}</b> |
+      🔢 عدد الزيارات: <b>${schoolData.visits || 0}</b>
+    `;
+    infoBox.style.display = "block";
+  } else {
+    document.getElementById("lastVisitInfo").innerHTML =
+      "⚠️ لم يتم العثور على بيانات لهذه المدرسة";
   }
+
   document.getElementById("evaluationForm").style.display = "block";
+});
+
 
   // ✅ جلب آخر زيارة من السكربت
   try {
