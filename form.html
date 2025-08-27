@@ -480,8 +480,7 @@
           });
         });
 
-        // عند اختيار مدرسة
-        // عند اختيار مدرسة
+        // 🟢 عند اختيار مدرسة
 schoolSelect.addEventListener("change", async () => {
   const schoolData = data.find(s => s.school === schoolSelect.value);
   if (schoolData) {
@@ -494,39 +493,33 @@ schoolSelect.addEventListener("change", async () => {
 
   // ✅ جلب آخر زيارة من السكربت
   try {
-     console.log("🚀 بدء طلب آخر زيارة للمدرسة:", schoolData.school);
+    console.log("🚀 بدء طلب آخر زيارة للمدرسة:", schoolData.school);
+    const res = await fetch(API_URL + "?school=" + encodeURIComponent(schoolData.school));
+    console.log("🔗 الرابط المستخدم:", API_URL + "?school=" + encodeURIComponent(schoolData.school));
 
-  const url = API_URL + "?school=" + encodeURIComponent(schoolData.school);
-  console.log("🔗 الرابط المستخدم:", url);
+    const result = await res.json();
+    console.log("📦 الرد الخام:", result);
 
-  const res = await fetch(url);
-  console.log("📡 حالة الاستجابة:", res.status);
+    const infoBox = document.getElementById("lastVisitInfo");
 
-  let text = await res.text();
-  console.log("📦 الرد الخام:", text);
+    if (result.success) {
+      const visitId = result.visit_id;       // رقم الزيارة
+      const visitDate = new Date(result.visit_date); // تحويل النص إلى كائن تاريخ
+      const formattedDate = visitDate.toLocaleDateString("ar-EG", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      });
 
-  let result;
-  try {
-    result = JSON.parse(text);
-  } catch (parseErr) {
-    console.error("❌ فشل تحويل النص إلى JSON:", parseErr);
+      infoBox.innerHTML = `📅 تاريخ آخر زيارة: <b>${formattedDate}</b> | 🔢 رقم الزيارة: <b>${visitId}</b>`;
+      infoBox.style.display = "block";
+    } else {
+      infoBox.innerHTML = "⚠️ لا يوجد زيارة سابقة لهذه المدرسة";
+      infoBox.style.display = "block";
+    }
+  } catch (err) {
+    console.error("خطأ في جلب آخر زيارة:", err);
   }
-
-  const infoBox = document.getElementById("lastVisitInfo");
-
-  if (result && result.success) {
-    console.log("✅ تم العثور على آخر زيارة:", result);
-
-    infoBox.innerHTML = `📅 تاريخ آخر زيارة: <b>${result.visit_date}</b> | 🔢 رقم الزيارة: <b>${result.visit_id}</b>`;
-    infoBox.style.display = "block";
-  } else {
-    console.warn("⚠️ لا يوجد زيارة سابقة لهذه المدرسة");
-    infoBox.innerHTML = "⚠️ لا يوجد زيارة سابقة للمدرسة";
-    infoBox.style.display = "block";
-  }
-} catch (err) {
-  console.error("💥 خطأ عام أثناء جلب آخر زيارة:", err);
-}
 });
 
 
