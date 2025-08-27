@@ -494,16 +494,18 @@ schoolSelect.addEventListener("change", async () => {
 
   // ✅ جلب آخر زيارة من السكربت
   try {
-    console.log("🚀 بدء طلب آخر زيارة للمدرسة:", schoolData.school);
-    const res = await fetch(API_URL + "?school=" + encodeURIComponent(schoolData.school));
-    console.log("🔗 الرابط المستخدم:", API_URL + "?school=" + encodeURIComponent(schoolData.school));
+    // ✅ عرض آخر زيارة وعدد الزيارات من بيانات المدرسة مباشرة
+const infoBox = document.getElementById("lastVisitInfo");
 
-    const result = await res.json();
-    console.log("📦 الرد القادم من السكربت:", result);
-
-    const infoBox = document.getElementById("lastVisitInfo");
-
-    if (result && result.success) {
+if (schoolData) {
+  infoBox.innerHTML = `
+    📅 آخر زيارة: <b>${schoolData.last_visit || "—"}</b> |
+    🔢 عدد الزيارات: <b>${schoolData.visits || 0}</b>
+  `;
+  infoBox.style.display = "block";
+} else {
+  infoBox.innerHTML = "⚠️ لم يتم العثور على بيانات لهذه المدرسة";
+}
       console.log("✅ تم العثور على زيارة سابقة");
 
       const visitId = result.visit_id;       // رقم الزيارة
