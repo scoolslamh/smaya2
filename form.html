@@ -498,13 +498,15 @@ schoolSelect.addEventListener("change", async () => {
     console.log("🔗 الرابط المستخدم:", API_URL + "?school=" + encodeURIComponent(schoolData.school));
 
     const result = await res.json();
-    console.log("📦 الرد الخام:", result);
+    console.log("📦 الرد القادم من السكربت:", result);
 
     const infoBox = document.getElementById("lastVisitInfo");
 
-    if (result.success) {
+    if (result && result.success) {
+      console.log("✅ تم العثور على زيارة سابقة");
+
       const visitId = result.visit_id;       // رقم الزيارة
-      const visitDate = new Date(result.visit_date); // تحويل النص إلى كائن تاريخ
+      const visitDate = new Date(result.visit_date); // تحويل النص إلى تاريخ
       const formattedDate = visitDate.toLocaleDateString("ar-EG", {
         year: "numeric",
         month: "2-digit",
@@ -514,11 +516,12 @@ schoolSelect.addEventListener("change", async () => {
       infoBox.innerHTML = `📅 تاريخ آخر زيارة: <b>${formattedDate}</b> | 🔢 رقم الزيارة: <b>${visitId}</b>`;
       infoBox.style.display = "block";
     } else {
+      console.warn("⚠️ لم يتم العثور على زيارة سابقة");
       infoBox.innerHTML = "⚠️ لا يوجد زيارة سابقة لهذه المدرسة";
       infoBox.style.display = "block";
     }
   } catch (err) {
-    console.error("خطأ في جلب آخر زيارة:", err);
+    console.error("❌ خطأ في جلب آخر زيارة:", err);
   }
 });
 
