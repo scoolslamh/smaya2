@@ -628,6 +628,24 @@ document.getElementById("evaluationForm").addEventListener("submit", async (e) =
     alert("❌ فشل الاتصال بالخادم");
   }
 });
+// ✅ عند اختيار مدرسة من القائمة
+schoolSelect.addEventListener("change", () => {
+  const selectedSchool = schoolSelect.value;
+  const schoolInfo = data.find(s => s.school === selectedSchool);
+
+  if (schoolInfo) {
+    const infoBox = document.getElementById("lastVisitInfo");
+    infoBox.innerHTML = `
+      🗓️ آخر زيارة: <b>${schoolInfo.last_visit || "لا يوجد"}</b> |
+      🔢 عدد الزيارات: <b>${schoolInfo.visits || 0}</b>
+    `;
+    infoBox.style.display = "block";
+  } else {
+    document.getElementById("lastVisitInfo").innerHTML =
+      "⚠️ لم يتم العثور على بيانات لهذه المدرسة";
+  }
+});
+
   </script>
   
 </body>
