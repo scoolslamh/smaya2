@@ -428,8 +428,11 @@
 
       document.getElementById("newEntryBtn").addEventListener("click", () => {
         document.getElementById("evaluationForm").reset();
-        document.getElementById("evaluationForm").style.display = "none";
-      });
+        const formEl = document.getElementById("evaluationForm");
+if (formEl) {
+  formEl.style.display = "none";
+}
+
 
       // ✅ جلب بيانات المدارس
       try {
