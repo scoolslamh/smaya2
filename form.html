@@ -607,9 +607,12 @@ document.getElementById("evaluationForm").addEventListener("submit", async (e) =
 
     if (result.success) {
       alert("✅ تم إرسال التقييم بنجاح!");
-      form.reset();
-      document.getElementById("evaluationForm").style.display = "none";
-    } else {
+      form.reset();const formEl = document.getElementById("evaluationForm");
+if (formEl) {
+  formEl.style.display = "none";
+}
+
+          } else {
       alert("⚠️ لم يتم الإرسال: " + (result.message || "خطأ غير معروف"));
     }
   } catch (err) {
