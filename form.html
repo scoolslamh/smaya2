@@ -438,7 +438,7 @@
       // ✅ جلب بيانات المدارس
       try {
         const res = await fetch(API_URL);
-        data = await res.json(); // ✅ نخزنها في المتغير العام
+        data = await res.json();   // بدون const
 
         const regionSelect = document.getElementById("regionFilter");
         const citySelect = document.getElementById("cityFilter");
