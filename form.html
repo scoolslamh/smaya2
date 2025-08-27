@@ -141,261 +141,257 @@
 
     <!-- النماذج -->
     <form id="evaluationForm" novalidate>
-      <!-- القسم الأول -->
-      <div class="form-step active">
-        <h2>البيانات الأساسية</h2>
-        <div class="form-grid">
-          <label>تاريخ الزيارة:
-            <input type="date" id="visit_date" name="visit_date" required>
-          </label>
-          <input type="hidden" id="visit_day" name="visit_day">
-          <input type="hidden" id="visit_month" name="visit_month">
-          <input type="hidden" id="visit_year" name="visit_year">
 
-          <label>المشرف الزائر:
-            <input type="text" name="visitor" id="visitor" readonly>
-          </label>
-          <label>المنطقة: <input type="text" name="region" id="region" readonly></label>
-          <label>المدينة: <input type="text" name="city" id="city" readonly></label>
-          <label>اسم المدرسة: <input type="text" name="school" id="school" readonly></label>
+  <!-- القسم الأول -->
+  <div class="form-step active">
+    <h2>البيانات الأساسية</h2>
+    <div class="form-grid">
+      <label>تاريخ الزيارة:
+        <input type="date" id="visit_date" name="visit_date" required>
+      </label>
+      <input type="hidden" id="visit_day" name="visit_day">
+      <input type="hidden" id="visit_month" name="visit_month">
+      <input type="hidden" id="visit_year" name="visit_year">
 
-          <label>الرقم الوزاري: 
-            <input type="text" name="code" id="code" required>
-          </label>
-          <label>اسم الحي/الشارع: 
-            <input type="text" name="street" id="street">
-          </label>
-          <label>تصنيف المدرسة: 
-            <input type="text" name="category" id="category">
-          </label>
-          <label>المرحلة التعليمية: 
-            <input type="text" name="stage" id="stage">
-          </label>
-          <label>المراحل الملحقة: 
-            <input type="text" name="extra_stages" id="extra_stages">
-          </label>
-          <label>تاريخ الفحص: 
-            <input type="date" name="inspection_date" id="inspection_date">
-          </label>
-          <label>عدد الفصول: 
-            <input type="number" name="classes" id="classes">
-          </label>
-          <label>شبكة المياه تصل للمدرسة:
-            <select name="water" id="water">
-              <option>نعم</option>
-              <option>لا</option>
-            </select>
-          </label>
-          <label>شبكة الصرف الصحي تصل للمدرسة:
-            <select name="sewage" id="sewage">
-              <option>نعم</option>
-              <option>لا</option>
-            </select>
-          </label>
-          <label>طرق الوصول للمدرسة: 
-            <input type="text" name="access" id="access">
-          </label>
-          <label>ملكية المبنى: 
-            <input type="text" name="ownership" id="ownership">
-          </label>
-        </div>
-        <div class="form-navigation">
-          <button type="button" class="next">التالي</button>
-        </div>
-      </div>
+      <label>المشرف الزائر:
+        <input type="text" name="visitor" id="visitor" readonly>
+      </label>
+      <label>المنطقة: <input type="text" name="region" id="region" readonly></label>
+      <label>المدينة: <input type="text" name="city" id="city" readonly></label>
+      <label>اسم المدرسة: <input type="text" name="school" id="school" readonly></label>
 
-      <!-- ✅ صندوق الرسالة -->
-      <div id="formMessage" 
-           style="display:none; color:red; font-weight:bold; text-align:center; margin:15px 0;">
-      </div>
-
-       <!-- القسم الثاني -->
-<div class="form-step">
-  <h2>الصحة والسلامة</h2>
-  <div class="form-grid">
-    <label>مخارج الطوارئ:
-      <select name="emergency_exits" required>
-        <option value="">اختر</option>
-        <option value="مطابق">مطابق</option>
-        <option value="غير مطابق">غير مطابق</option>
-        <option value="يحتاج صيانة">يحتاج صيانة</option>
-      </select>
-    </label>
-
-    <label>مضخات الحريق:
-      <select name="fire_pumps" required>
-        <option value="">اختر</option>
-        <option value="مطابق">مطابق</option>
-        <option value="غير مطابق">غير مطابق</option>
-        <option value="يحتاج صيانة">يحتاج صيانة</option>
-      </select>
-    </label>
-
-    <label>بكرات خرطوم الحريق:
-      <select name="fire_hose_reels" required>
-        <option value="">اختر</option>
-        <option value="مطابق">مطابق</option>
-        <option value="غير مطابق">غير مطابق</option>
-        <option value="يحتاج صيانة">يحتاج صيانة</option>
-      </select>
-    </label>
-
-    <label>طفايات الحريق:
-      <select name="fire_extinguishers" required>
-        <option value="">اختر</option>
-        <option value="مطابق">مطابق</option>
-        <option value="غير مطابق">غير مطابق</option>
-        <option value="يحتاج صيانة">يحتاج صيانة</option>
-      </select>
-    </label>
-
-    <label>لوحة تحكم:
-      <select name="control_panel" required>
-        <option value="">اختر</option>
-        <option value="مطابق">مطابق</option>
-        <option value="غير مطابق">غير مطابق</option>
-        <option value="يحتاج صيانة">يحتاج صيانة</option>
-      </select>
-    </label>
-
-    <label>كواشف إنذار الحريق:
-      <select name="smoke_detectors" required>
-        <option value="">اختر</option>
-        <option value="مطابق">مطابق</option>
-        <option value="غير مطابق">غير مطابق</option>
-        <option value="يحتاج صيانة">يحتاج صيانة</option>
-      </select>
-    </label>
-
-    <label>جرس انذار:
-      <select name="fire_alarm" required>
-        <option value="">اختر</option>
-        <option value="مطابق">مطابق</option>
-        <option value="غير مطابق">غير مطابق</option>
-        <option value="يحتاج صيانة">يحتاج صيانة</option>
-      </select>
-    </label>
-
-    <label>حواجز السلامة:
-      <select name="safety_barriers" required>
-        <option value="">اختر</option>
-        <option value="مطابق">مطابق</option>
-        <option value="غير مطابق">غير مطابق</option>
-        <option value="يحتاج صيانة">يحتاج صيانة</option>
-      </select>
-    </label>
-
-    <label>لوحات مخارج الطوارئ:
-      <select name="exit_signs" required>
-        <option value="">اختر</option>
-        <option value="مطابق">مطابق</option>
-        <option value="غير مطابق">غير مطابق</option>
-        <option value="يحتاج صيانة">يحتاج صيانة</option>
-      </select>
-    </label>
-
-    <label>صناديق الإسعافات الأولية:
-      <select name="first_aid" required>
-        <option value="">اختر</option>
-        <option value="مطابق">مطابق</option>
-        <option value="غير مطابق">غير مطابق</option>
-        <option value="يحتاج صيانة">يحتاج صيانة</option>
-      </select>
-    </label>
-
-    <label>نقاط التجمع ولوحاتها:
-      <select name="assembly_points" required>
-        <option value="">اختر</option>
-        <option value="مطابق">مطابق</option>
-        <option value="غير مطابق">غير مطابق</option>
-        <option value="يحتاج صيانة">يحتاج صيانة</option>
-      </select>
-    </label>
-
-    <label>الحواف المكشوفة:
-      <select name="edges" required>
-        <option value="">اختر</option>
-        <option value="مطابق">مطابق</option>
-        <option value="غير مطابق">غير مطابق</option>
-        <option value="يحتاج صيانة">يحتاج صيانة</option>
-      </select>
-    </label>
-
-    <label>وثائق السلامة:
-      <select name="safety_docs" required>
-        <option value="">اختر</option>
-        <option value="مطابق">مطابق</option>
-        <option value="غير مطابق">غير مطابق</option>
-        <option value="يحتاج صيانة">يحتاج صيانة</option>
-      </select>
-    </label>
-
-    <label>وصلة الدفاع المدني:
-      <select name="civil_defense" required>
-        <option value="">اختر</option>
-        <option value="مطابق">مطابق</option>
-        <option value="غير مطابق">غير مطابق</option>
-        <option value="يحتاج صيانة">يحتاج صيانة</option>
-      </select>
-    </label>
-
-    <label>الأبواب والمفاتيح:
-      <select name="keys" required>
-        <option value="">اختر</option>
-        <option value="مطابق">مطابق</option>
-        <option value="غير مطابق">غير مطابق</option>
-        <option value="يحتاج صيانة">يحتاج صيانة</option>
-      </select>
-    </label>
+      <label>الرقم الوزاري: 
+        <input type="text" name="code" id="code" required>
+      </label>
+      <label>اسم الحي/الشارع: 
+        <input type="text" name="street" id="street">
+      </label>
+      <label>تصنيف المدرسة: 
+        <input type="text" name="category" id="category">
+      </label>
+      <label>المرحلة التعليمية: 
+        <input type="text" name="stage" id="stage">
+      </label>
+      <label>المراحل الملحقة: 
+        <input type="text" name="extra_stages" id="extra_stages">
+      </label>
+      <label>تاريخ الفحص: 
+        <input type="date" name="inspection_date" id="inspection_date">
+      </label>
+      <label>عدد الفصول: 
+        <input type="number" name="classes" id="classes">
+      </label>
+      <label>شبكة المياه تصل للمدرسة:
+        <select name="water" id="water">
+          <option>نعم</option>
+          <option>لا</option>
+        </select>
+      </label>
+      <label>شبكة الصرف الصحي تصل للمدرسة:
+        <select name="sewage" id="sewage">
+          <option>نعم</option>
+          <option>لا</option>
+        </select>
+      </label>
+      <label>طرق الوصول للمدرسة: 
+        <input type="text" name="access" id="access">
+      </label>
+      <label>ملكية المبنى: 
+        <input type="text" name="ownership" id="ownership">
+      </label>
+    </div>
+    <div class="form-navigation">
+      <button type="button" class="next">التالي</button>
+    </div>
   </div>
 
-  <div class="form-navigation">
-    <button type="button" class="prev">السابق</button>
-    <button type="button" class="next">التالي</button>
+  <!-- القسم الثاني -->
+  <div class="form-step">
+    <h2>الصحة والسلامة</h2>
+    <div class="form-grid">
+      <label>مخارج الطوارئ:
+        <select name="emergency_exits" required>
+          <option value="">اختر</option>
+          <option value="مطابق">مطابق</option>
+          <option value="غير مطابق">غير مطابق</option>
+          <option value="يحتاج صيانة">يحتاج صيانة</option>
+        </select>
+      </label>
+
+      <label>مضخات الحريق:
+        <select name="fire_pumps" required>
+          <option value="">اختر</option>
+          <option value="مطابق">مطابق</option>
+          <option value="غير مطابق">غير مطابق</option>
+          <option value="يحتاج صيانة">يحتاج صيانة</option>
+        </select>
+      </label>
+
+      <label>بكرات خرطوم الحريق:
+        <select name="fire_hose_reels" required>
+          <option value="">اختر</option>
+          <option value="مطابق">مطابق</option>
+          <option value="غير مطابق">غير مطابق</option>
+          <option value="يحتاج صيانة">يحتاج صيانة</option>
+        </select>
+      </label>
+
+      <label>طفايات الحريق:
+        <select name="fire_extinguishers" required>
+          <option value="">اختر</option>
+          <option value="مطابق">مطابق</option>
+          <option value="غير مطابق">غير مطابق</option>
+          <option value="يحتاج صيانة">يحتاج صيانة</option>
+        </select>
+      </label>
+
+      <label>لوحة تحكم:
+        <select name="control_panel" required>
+          <option value="">اختر</option>
+          <option value="مطابق">مطابق</option>
+          <option value="غير مطابق">غير مطابق</option>
+          <option value="يحتاج صيانة">يحتاج صيانة</option>
+        </select>
+      </label>
+
+      <label>كواشف إنذار الحريق:
+        <select name="smoke_detectors" required>
+          <option value="">اختر</option>
+          <option value="مطابق">مطابق</option>
+          <option value="غير مطابق">غير مطابق</option>
+          <option value="يحتاج صيانة">يحتاج صيانة</option>
+        </select>
+      </label>
+
+      <label>جرس انذار:
+        <select name="fire_alarm" required>
+          <option value="">اختر</option>
+          <option value="مطابق">مطابق</option>
+          <option value="غير مطابق">غير مطابق</option>
+          <option value="يحتاج صيانة">يحتاج صيانة</option>
+        </select>
+      </label>
+
+      <label>حواجز السلامة:
+        <select name="safety_barriers" required>
+          <option value="">اختر</option>
+          <option value="مطابق">مطابق</option>
+          <option value="غير مطابق">غير مطابق</option>
+          <option value="يحتاج صيانة">يحتاج صيانة</option>
+        </select>
+      </label>
+
+      <label>لوحات مخارج الطوارئ:
+        <select name="exit_signs" required>
+          <option value="">اختر</option>
+          <option value="مطابق">مطابق</option>
+          <option value="غير مطابق">غير مطابق</option>
+          <option value="يحتاج صيانة">يحتاج صيانة</option>
+        </select>
+      </label>
+
+      <label>صناديق الإسعافات الأولية:
+        <select name="first_aid" required>
+          <option value="">اختر</option>
+          <option value="مطابق">مطابق</option>
+          <option value="غير مطابق">غير مطابق</option>
+          <option value="يحتاج صيانة">يحتاج صيانة</option>
+        </select>
+      </label>
+
+      <label>نقاط التجمع ولوحاتها:
+        <select name="assembly_points" required>
+          <option value="">اختر</option>
+          <option value="مطابق">مطابق</option>
+          <option value="غير مطابق">غير مطابق</option>
+          <option value="يحتاج صيانة">يحتاج صيانة</option>
+        </select>
+      </label>
+
+      <label>الحواف المكشوفة:
+        <select name="edges" required>
+          <option value="">اختر</option>
+          <option value="مطابق">مطابق</option>
+          <option value="غير مطابق">غير مطابق</option>
+          <option value="يحتاج صيانة">يحتاج صيانة</option>
+        </select>
+      </label>
+
+      <label>وثائق السلامة:
+        <select name="safety_docs" required>
+          <option value="">اختر</option>
+          <option value="مطابق">مطابق</option>
+          <option value="غير مطابق">غير مطابق</option>
+          <option value="يحتاج صيانة">يحتاج صيانة</option>
+        </select>
+      </label>
+
+      <label>وصلة الدفاع المدني:
+        <select name="civil_defense" required>
+          <option value="">اختر</option>
+          <option value="مطابق">مطابق</option>
+          <option value="غير مطابق">غير مطابق</option>
+          <option value="يحتاج صيانة">يحتاج صيانة</option>
+        </select>
+      </label>
+
+      <label>الأبواب والمفاتيح:
+        <select name="keys" required>
+          <option value="">اختر</option>
+          <option value="مطابق">مطابق</option>
+          <option value="غير مطابق">غير مطابق</option>
+          <option value="يحتاج صيانة">يحتاج صيانة</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="form-navigation">
+      <button type="button" class="prev">السابق</button>
+      <button type="button" class="next">التالي</button>
+    </div>
   </div>
-</div>
 
+  <!-- القسم الثالث -->
+  <div class="form-step">
+    <h2>العناصر المدنية</h2>
+    <div class="form-grid">
+      <label>حالة الحوائط: <input type="text" name="walls_condition"></label>
+      <label>السلالم وعناصرها: <input type="text" name="stairs"></label>
+      <label>النوافذ: <input type="text" name="windows"></label>
+      <label>الأبواب: <input type="text" name="doors"></label>
+      <label>حالة الأرضيات: <input type="text" name="floors_condition"></label>
+      <label>المناور: <input type="text" name="light_wells"></label>
+      <label>عزل السطح: <input type="text" name="roof_insulation"></label>
+      <label>تصريف السطح: <input type="text" name="roof_drainage"></label>
+      <label>إطار السطح / الحواجز: <input type="text" name="roof_frame"></label>
+      <label>منحدر ذوي الاحتياجات الخاصة: <input type="text" name="accessibility_ramp"></label>
+      <label>الحالة العامة للمناطق الخارجية والطرق: <input type="text" name="external_condition"></label>
+      <label>البوابات الرئيسية: <input type="text" name="main_gates"></label>
+      <label>السور: <input type="text" name="fence"></label>
+      <label>العناصر الميكانيكية: <input type="text" name="mechanical"></label>
+      <label>لوحة التوزيع: <input type="text" name="distribution"></label>
+      <label>نظام التأريض: <input type="text" name="earthing"></label>
+      <label>أنظمة السماعات والصوت: <input type="text" name="sound"></label>
+      <label>حالة الإضاءة العامة: <input type="text" name="lighting"></label>
+      <label>إضاءة الطوارئ: <input type="text" name="emergency_lighting"></label>
+      <label>المقابس وقنوات التمديد: <input type="text" name="sockets"></label>
+      <label>مكيفات الهواء: <input type="text" name="ac"></label>
+      <label>المضخات: <input type="text" name="pumps"></label>
+      <label>مراوح الشفط: <input type="text" name="fans"></label>
+      <label>المصاعد: <input type="text" name="elevators"></label>
+      <label>سخانات المياه: <input type="text" name="heaters"></label>
+      <label>خزانات المياه الأرضية: <input type="text" name="tank_ground"></label>
+      <label>خزانات المياه العلوية: <input type="text" name="tank_top"></label>
+      <label>الحواجز والاضافات العشوائية: <input type="text" name="barriers"></label>
+      <label>التوصيلات الكهربائية العشوائية: <input type="text" name="wiring"></label>
+    </div>
+    <div class="form-navigation">
+      <button type="button" class="prev">السابق</button>
+      <button type="submit">إرسال</button>
+    </div>
+  </div>
 
-      <!-- القسم الثالث -->
-      <div class="form-step">
-        <h2>العناصر المدنية</h2>
-        <div class="form-grid">
-          <label>حالة الحوائط: <input type="text" name="walls_condition"></label>
-          <label>السلالم وعناصرها: <input type="text" name="stairs"></label>
-          <label>النوافذ: <input type="text" name="windows"></label>
-          <label>الأبواب: <input type="text" name="doors"></label>
-          <label>حالة الأرضيات: <input type="text" name="floors_condition"></label>
-          <label>المناور: <input type="text" name="light_wells"></label>
-          <label>عزل السطح: <input type="text" name="roof_insulation"></label>
-          <label>تصريف السطح: <input type="text" name="roof_drainage"></label>
-          <label>إطار السطح / الحواجز: <input type="text" name="roof_frame"></label>
-          <label>منحدر ذوي الاحتياجات الخاصة: <input type="text" name="accessibility_ramp"></label>
-          <label>الحالة العامة للمناطق الخارجية والطرق: <input type="text" name="external_condition"></label>
-          <label>البوابات الرئيسية: <input type="text" name="main_gates"></label>
-          <label>السور: <input type="text" name="fence"></label>
-          <label>العناصر الميكانيكية: <input type="text" name="mechanical"></label>
-          <label>لوحة التوزيع: <input type="text" name="distribution"></label>
-          <label>نظام التأريض: <input type="text" name="earthing"></label>
-          <label>أنظمة السماعات والصوت: <input type="text" name="sound"></label>
-          <label>حالة الإضاءة العامة: <input type="text" name="lighting"></label>
-          <label>إضاءة الطوارئ: <input type="text" name="emergency_lighting"></label>
-          <label>المقابس وقنوات التمديد: <input type="text" name="sockets"></label>
-          <label>مكيفات الهواء: <input type="text" name="ac"></label>
-          <label>المضخات: <input type="text" name="pumps"></label>
-          <label>مراوح الشفط: <input type="text" name="fans"></label>
-          <label>المصاعد: <input type="text" name="elevators"></label>
-          <label>سخانات المياه: <input type="text" name="heaters"></label>
-          <label>خزانات المياه الأرضية: <input type="text" name="tank_ground"></label>
-          <label>خزانات المياه العلوية: <input type="text" name="tank_top"></label>
-          <label>الحواجز والاضافات العشوائية: <input type="text" name="barriers"></label>
-          <label>التوصيلات الكهربائية العشوائية: <input type="text" name="wiring"></label>
-        </div>
-        <div class="form-navigation">
-          <button type="button" class="prev">السابق</button>
-          <button type="submit">إرسال</button>
-        </div>
-      </div>
-    </form>
+</form>
 
     <!-- أزرار إضافية -->
     <div class="form-navigation">
