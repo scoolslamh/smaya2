@@ -133,82 +133,83 @@
     <div id="progress-bar">
       <div id="progress"></div>
     </div>
+
     <!-- ✅ معلومات آخر زيارة -->
-<div id="lastVisitInfo" 
-     style="display:none; text-align:center; margin:15px 0; font-weight:bold; color:#13344f; background:#f0f4f8; padding:10px; border-radius:6px;">
-</div>
+    <div id="lastVisitInfo" 
+         style="display:none; text-align:center; margin:15px 0; font-weight:bold; color:#13344f; background:#f0f4f8; padding:10px; border-radius:6px;">
+    </div>
+
     <!-- النماذج -->
     <form id="evaluationForm" novalidate>
-
       <!-- القسم الأول -->
-<div class="form-step active">
-  <h2>البيانات الأساسية</h2>
-  <div class="form-grid">
-    <label>تاريخ الزيارة:
-      <input type="date" id="visit_date" name="visit_date" required>
-    </label>
-    <input type="hidden" id="visit_day" name="visit_day">
-    <input type="hidden" id="visit_month" name="visit_month">
-    <input type="hidden" id="visit_year" name="visit_year">
+      <div class="form-step active">
+        <h2>البيانات الأساسية</h2>
+        <div class="form-grid">
+          <label>تاريخ الزيارة:
+            <input type="date" id="visit_date" name="visit_date" required>
+          </label>
+          <input type="hidden" id="visit_day" name="visit_day">
+          <input type="hidden" id="visit_month" name="visit_month">
+          <input type="hidden" id="visit_year" name="visit_year">
 
-    <label>المشرف الزائر:
-      <input type="text" name="visitor" id="visitor" readonly>
-    </label>
-    <label>المنطقة: <input type="text" name="region" id="region" readonly></label>
-    <label>المدينة: <input type="text" name="city" id="city" readonly></label>
-    <label>اسم المدرسة: <input type="text" name="school" id="school" readonly></label>
+          <label>المشرف الزائر:
+            <input type="text" name="visitor" id="visitor" readonly>
+          </label>
+          <label>المنطقة: <input type="text" name="region" id="region" readonly></label>
+          <label>المدينة: <input type="text" name="city" id="city" readonly></label>
+          <label>اسم المدرسة: <input type="text" name="school" id="school" readonly></label>
 
-    <label>الرقم الوزاري: 
-      <input type="text" name="code" id="code" required>
-    </label>
-    <label>اسم الحي/الشارع: 
-      <input type="text" name="street" id="street">
-    </label>
-    <label>تصنيف المدرسة: 
-      <input type="text" name="category" id="category">
-    </label>
-    <label>المرحلة التعليمية: 
-      <input type="text" name="stage" id="stage">
-    </label>
-    <label>المراحل الملحقة: 
-      <input type="text" name="extra_stages" id="extra_stages">
-    </label>
-    <label>تاريخ الفحص: 
-      <input type="date" name="inspection_date" id="inspection_date">
-    </label>
-    <label>عدد الفصول: 
-      <input type="number" name="classes" id="classes">
-    </label>
-    <label>شبكة المياه تصل للمدرسة:
-      <select name="water" id="water">
-        <option>نعم</option>
-        <option>لا</option>
-      </select>
-    </label>
-    <label>شبكة الصرف الصحي تصل للمدرسة:
-      <select name="sewage" id="sewage">
-        <option>نعم</option>
-        <option>لا</option>
-      </select>
-    </label>
-    <label>طرق الوصول للمدرسة: 
-      <input type="text" name="access" id="access">
-    </label>
-    <label>ملكية المبنى: 
-      <input type="text" name="ownership" id="ownership">
-    </label>
-  </div>
-  <div class="form-navigation">
-    <button type="button" class="next">التالي</button>
-  </div>
-</div>
+          <label>الرقم الوزاري: 
+            <input type="text" name="code" id="code" required>
+          </label>
+          <label>اسم الحي/الشارع: 
+            <input type="text" name="street" id="street">
+          </label>
+          <label>تصنيف المدرسة: 
+            <input type="text" name="category" id="category">
+          </label>
+          <label>المرحلة التعليمية: 
+            <input type="text" name="stage" id="stage">
+          </label>
+          <label>المراحل الملحقة: 
+            <input type="text" name="extra_stages" id="extra_stages">
+          </label>
+          <label>تاريخ الفحص: 
+            <input type="date" name="inspection_date" id="inspection_date">
+          </label>
+          <label>عدد الفصول: 
+            <input type="number" name="classes" id="classes">
+          </label>
+          <label>شبكة المياه تصل للمدرسة:
+            <select name="water" id="water">
+              <option>نعم</option>
+              <option>لا</option>
+            </select>
+          </label>
+          <label>شبكة الصرف الصحي تصل للمدرسة:
+            <select name="sewage" id="sewage">
+              <option>نعم</option>
+              <option>لا</option>
+            </select>
+          </label>
+          <label>طرق الوصول للمدرسة: 
+            <input type="text" name="access" id="access">
+          </label>
+          <label>ملكية المبنى: 
+            <input type="text" name="ownership" id="ownership">
+          </label>
+        </div>
+        <div class="form-navigation">
+          <button type="button" class="next">التالي</button>
+        </div>
+      </div>
 
-<!-- ✅ صندوق الرسالة (أضفه هنا قبل القسم الثاني أو بعده) -->
-  <div id="formMessage" 
-       style="display:none; color:red; font-weight:bold; text-align:center; margin:15px 0;">
-  </div>
+      <!-- ✅ صندوق الرسالة -->
+      <div id="formMessage" 
+           style="display:none; color:red; font-weight:bold; text-align:center; margin:15px 0;">
+      </div>
 
-      <!-- القسم الثاني -->
+       <!-- القسم الثاني -->
 <div class="form-step">
   <h2>الصحة والسلامة</h2>
   <div class="form-grid">
@@ -409,7 +410,7 @@
   </footer>
 
   <script>
-     let data = []; // ✅ تعريف المتغير في البداية
+    let data = []; // نخزن بيانات المدارس هنا
     const API_URL = "/api";
 
     // استخراج اليوم/الشهر/السنة من التاريخ
@@ -422,16 +423,13 @@
     });
 
     document.addEventListener("DOMContentLoaded", async () => {
-      // تحميل اسم المشرف
       document.getElementById("visitor").value = localStorage.getItem("fullName") || "مشرف";
 
-      // زر الخروج
       document.getElementById("logoutBtn").addEventListener("click", () => {
         localStorage.clear();
         window.location.href = "index.html";
       });
 
-      // زر إدخال جديد
       document.getElementById("newEntryBtn").addEventListener("click", () => {
         document.getElementById("evaluationForm").reset();
         document.getElementById("evaluationForm").style.display = "none";
@@ -440,7 +438,7 @@
       // ✅ جلب بيانات المدارس
       try {
         const res = await fetch(API_URL);
-        const data = await res.json();
+        data = await res.json(); // ✅ نخزنها في المتغير العام
 
         const regionSelect = document.getElementById("regionFilter");
         const citySelect = document.getElementById("cityFilter");
@@ -481,174 +479,34 @@
           });
         });
 
-        // 🟢 عند اختيار مدرسة
-schoolSelect.addEventListener("change", async () => {
-  const schoolData = data.find(s => s.school === schoolSelect.value);
-  if (schoolData) {
-    document.getElementById("region").value = schoolData.region;
-    document.getElementById("city").value = schoolData.city;
-    document.getElementById("school").value = schoolData.school;
-    document.getElementById("code").value = schoolData.code;
-  }
-  document.getElementById("evaluationForm").style.display = "block";
+        // ✅ عند اختيار مدرسة
+        schoolSelect.addEventListener("change", () => {
+          const selectedSchool = schoolSelect.value;
+          const schoolInfo = data.find(s => s.school === selectedSchool);
 
-  // ✅ جلب آخر زيارة من السكربت
-  try {
-    console.log("🚀 بدء طلب آخر زيارة للمدرسة:", schoolData.school);
-    const res = await fetch(API_URL + "?school=" + encodeURIComponent(schoolData.school));
-    console.log("🔗 الرابط المستخدم:", API_URL + "?school=" + encodeURIComponent(schoolData.school));
+          if (schoolInfo) {
+            document.getElementById("region").value = schoolInfo.region;
+            document.getElementById("city").value = schoolInfo.city;
+            document.getElementById("school").value = schoolInfo.school;
+            document.getElementById("code").value = schoolInfo.code;
 
-    const result = await res.json();
-    console.log("📦 الرد القادم من السكربت:", result);
+            // ✅ إظهار آخر زيارة وعدد الزيارات من الأعمدة الجديدة
+            const infoBox = document.getElementById("lastVisitInfo");
+            infoBox.innerHTML = `
+              🗓️ آخر زيارة: <b>${schoolInfo.last_visit || "لا يوجد"}</b> |
+              🔢 عدد الزيارات: <b>${schoolInfo.visits || 0}</b>
+            `;
+            infoBox.style.display = "block";
 
-    const infoBox = document.getElementById("lastVisitInfo");
-
-    if (result && result.success) {
-      console.log("✅ تم العثور على زيارة سابقة");
-
-      const visitId = result.visit_id;       // رقم الزيارة
-      const visitDate = new Date(result.visit_date); // تحويل النص إلى تاريخ
-      const formattedDate = visitDate.toLocaleDateString("ar-EG", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit"
-      });
-
-      infoBox.innerHTML = `📅 تاريخ آخر زيارة: <b>${formattedDate}</b> | 🔢 رقم الزيارة: <b>${visitId}</b>`;
-      infoBox.style.display = "block";
-    } else {
-      console.warn("⚠️ لم يتم العثور على زيارة سابقة");
-      infoBox.innerHTML = "⚠️ لا يوجد زيارة سابقة لهذه المدرسة";
-      infoBox.style.display = "block";
-    }
-  } catch (err) {
-    console.error("❌ خطأ في جلب آخر زيارة:", err);
-  }
-});
-
-
+            document.getElementById("evaluationForm").style.display = "block";
+          }
+        });
 
       } catch (err) {
         console.error("خطأ في تحميل المدارس:", err);
         alert("⚠️ لم يتم تحميل بيانات المدارس من الشيت");
       }
     });
-    // ✅ التحكم في الخطوات (التالي/السابق)
-document.addEventListener("DOMContentLoaded", () => {
-  const steps = document.querySelectorAll(".form-step");
-  const nextBtns = document.querySelectorAll(".next");
-  const prevBtns = document.querySelectorAll(".prev");
-  let currentStep = 0;
-
-  function showStep(index) {
-    steps.forEach((step, i) => {
-      step.style.display = i === index ? "block" : "none";
-    });
-  }
-
-  showStep(currentStep);
-
-  nextBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
-      if (currentStep < steps.length - 1) {
-        currentStep++;
-        showStep(currentStep);
-      }
-    });
-  });
-
-  prevBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
-      if (currentStep > 0) {
-        currentStep--;
-        showStep(currentStep);
-      }
-    });
-  });
-});
-// ✅ إرسال النموذج إلى Google Sheet
-document.getElementById("evaluationForm").addEventListener("submit", async (e) => {
-  e.preventDefault(); // منع إعادة تحميل الصفحة
-
-  const form = e.target;
-  const messageBox = document.getElementById("formMessage");
-
-  // ✅ التحقق من الحقول المطلوبة
-  const requiredFields = form.querySelectorAll("[required]");
-  let missing = [];
-
-  requiredFields.forEach(field => {
-    if (!field.value || field.value.trim() === "") {
-      missing.push(field);
-      field.style.border = "2px solid red"; // تمييز الحقول الناقصة
-    } else {
-      field.style.border = ""; // إزالة التمييز إذا امتلأ
-    }
-  });
-
-  if (missing.length > 0) {
-    messageBox.textContent = "⚠️ عليك إكمال باقي الحقول المطلوبة";
-    messageBox.style.display = "block";
-    return; // إيقاف الإرسال
-  } else {
-    messageBox.style.display = "none"; // إخفاء الرسالة إذا كل شيء تمام
-  }
-
-  // ✅ إذا جميع الحقول ممتلئة → تجهيز البيانات
-  const formData = new FormData(form);
-  const data = {};
-  formData.forEach((value, key) => {
-    data[key] = value;
-  });
-
-  try {
-    const res = await fetch(API_URL, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    action: "saveEvaluation",   // ✅ يتوافق مع السكربت
-    ...data                     // ✅ إرسال القيم مباشرة بدون payload
-  })
-});
-
-
-
-    if (!res.ok) throw new Error("فشل الاتصال بالخادم");
-
-    const result = await res.json();
-
-    if (result.success) {
-      alert("✅ تم إرسال التقييم بنجاح!");
-      form.reset();
-      document.getElementById("evaluationForm").style.display = "none";
-    } else {
-      alert("⚠️ لم يتم الإرسال: " + (result.message || "خطأ غير معروف"));
-    }
-  } catch (err) {
-    console.error("خطأ:", err);
-    alert("❌ فشل الاتصال بالخادم");
-  }
-});
-// ✅ تعريف عناصر HTML
-const schoolSelect = document.getElementById("schoolFilter");
-const infoBox = document.getElementById("lastVisitInfo");
-
-// ✅ عند اختيار مدرسة من القائمة
-schoolSelect.addEventListener("change", () => {
-  const selectedSchool = schoolSelect.value;
-  const schoolInfo = data.find(s => s.school === selectedSchool);
-
-  if (schoolInfo) {
-    infoBox.innerHTML = `
-      🗓️ آخر زيارة: <b>${schoolInfo.last_visit || "لا يوجد"}</b> |
-      🔢 عدد الزيارات: <b>${schoolInfo.visits || 0}</b>
-    `;
-    infoBox.style.display = "block";
-  } else {
-    infoBox.innerHTML = "⚠️ لم يتم العثور على بيانات لهذه المدرسة";
-    infoBox.style.display = "block";
-  }
-});
   </script>
   
 </body>
