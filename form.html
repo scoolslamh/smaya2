@@ -492,9 +492,22 @@
 
             // ✅ إظهار آخر زيارة وعدد الزيارات من الأعمدة الجديدة
             const infoBox = document.getElementById("lastVisitInfo");
-            infoBox.innerHTML = `
-              🗓️ آخر زيارة: <b>${schoolInfo.last_visit || "لا يوجد"}</b> |
-              🔢 عدد الزيارات: <b>${schoolInfo.visits || 0}</b>
+           let formattedDate = "لا يوجد";
+if (schoolInfo.last_visit) {
+  const visitDate = new Date(schoolInfo.last_visit);
+  formattedDate = visitDate.toLocaleDateString("ar-EG", {
+    weekday: "long",   // يعرض اسم اليوم (الخميس)
+    year: "numeric",
+    month: "long",     // اسم الشهر بالعربي (أغسطس)
+    day: "numeric"
+  });
+}
+
+infoBox.innerHTML = `
+  🗓️ آخر زيارة: <b>${formattedDate}</b> |
+  🔢 عدد الزيارات: <b>${schoolInfo.visits || 0}</b>
+`;
+
             `;
             infoBox.style.display = "block";
 
