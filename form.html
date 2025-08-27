@@ -427,11 +427,13 @@
       });
 
       document.getElementById("newEntryBtn").addEventListener("click", () => {
-        document.getElementById("evaluationForm").reset();
-        const formEl = document.getElementById("evaluationForm");
-if (formEl) {
-  formEl.style.display = "none";
-}
+  const formEl = document.getElementById("evaluationForm");
+  if (formEl) {
+    formEl.reset();                 // إعادة تهيئة الحقول
+    formEl.style.display = "block"; // ✅ نخلي الفورم ظاهر
+  }
+});
+
 
 
       // ✅ جلب بيانات المدارس
