@@ -553,7 +553,42 @@ document.getElementById("evaluationForm").style.display = "block";
     // عند تحميل الصفحة عرض القسم الأول فقط
     showStep(currentStep);
   });
+// ✅ إرسال البيانات للشيت
+  document.getElementById("evaluationForm").addEventListener("submit", async function(e) {
+    e.preventDefault(); // منع إعادة تحميل الصفحة
+
+    const formData = new FormData(this);
+    const jsonData = {};
+    formData.forEach((value, key) => {
+      jsonData[key] = value;
+    });
+
+    try {
+      const res = await fetch("https://script.google.com/macros/s/AKfycbxOE6Yy7L0sFXipm5GHRCnsvaD2H1UjFEKFPbY7rJqeWQ4p2GeG5LGBszxz-YWJlTPN/exec", {
+        method: "POST",
+        body: JSON.stringify(jsonData),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
+      const result = await res.json();
+
+      if (result.success) {
+        alert("✅ تم إرسال البيانات بنجاح");
+        this.reset();
+        document.getElementById("evaluationForm").style.display = "none";
+      } else {
+        alert("⚠️ حدث خطأ أثناء الإرسال");
+      }
+    } catch (err) {
+      console.error("خطأ في الإرسال:", err);
+      alert("❌ لم يتم الإرسال، تحقق من الاتصال أو من رابط Google Apps Script");
+    }
+  });
+  
   </script>
+
   
 </body>
 </html>
