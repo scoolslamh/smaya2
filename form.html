@@ -469,42 +469,66 @@
         });
 
         // عند اختيار منطقة
-        regionSelect.addEventListener("change", () => {
-          const cities = [...new Set(data.filter(s => s.region === regionSelect.value).map(s => s.city))];
-          citySelect.innerHTML = "<option value=''>اختر المدينة</option>";
-          citySelect.disabled = false;
-          cities.forEach(c => {
-            const opt = document.createElement("option");
-            opt.value = c;
-            opt.textContent = c;
-            citySelect.appendChild(opt);
-          });
-        });
+regionSelect.addEventListener("change", () => {
+  const cities = [...new Set(data.filter(s => s.region === regionSelect.value).map(s => s.city))];
+  citySelect.innerHTML = "<option value=''>اختر المدينة</option>";
+  citySelect.disabled = false;
 
-        // عند اختيار مدينة
-        citySelect.addEventListener("change", () => {
-          const schools = data.filter(s => s.city === citySelect.value);
-          schoolSelect.innerHTML = "<option value=''>اختر المدرسة</option>";
-          schoolSelect.disabled = false;
-          schools.forEach(s => {
-            const opt = document.createElement("option");
-            opt.value = s.school;
-            opt.textContent = s.school;
-            schoolSelect.appendChild(opt);
-          });
-        });
+  // ✅ تصفير البحث والمدارس عند تغيير المنطقة
+  document.getElementById("schoolSearch").value = "";
+  schoolSelect.innerHTML = "<option value=''>اختر المدرسة</option>";
+  schoolSelect.disabled = true;
 
-        // ✅ عند اختيار مدرسة
-        schoolSelect.addEventListener("change", () => {
-          const selectedSchool = schoolSelect.value;
-          const schoolInfo = data.find(s => s.school === selectedSchool);
+  cities.forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c;
+    opt.textContent = c;
+    citySelect.appendChild(opt);
+  });
+});
 
-          if (schoolInfo) {
-            document.getElementById("region").value = schoolInfo.region;
-            document.getElementById("city").value = schoolInfo.city;
-            document.getElementById("school").value = schoolInfo.school;
-            document.getElementById("code").value = schoolInfo.code;
+// عند اختيار مدينة
+citySelect.addEventListener("change", () => {
+  const schools = data.filter(s => s.city === citySelect.value);
+  schoolSelect.innerHTML = "<option value=''>اختر المدرسة</option>";
+  schoolSelect.disabled = false;
 
+  // ✅ تصفير البحث عند تغيير المدينة
+  document.getElementById("schoolSearch").value = "";
+
+  schools.forEach(s => {
+    const opt = document.createElement("option");
+    opt.value = s.school;
+    opt.textContent = s.school;
+    schoolSelect.appendChild(opt);
+  });
+});
+
+// ✅ البحث داخل المدارس بعد اختيار المدينة
+document.getElementById("schoolSearch").addEventListener("input", () => {
+  const query = document.getElementById("schoolSearch").value.toLowerCase();
+
+  Array.from(schoolSelect.options).forEach(opt => {
+    if (opt.value.toLowerCase().includes(query) || opt.textContent.toLowerCase().includes(query)) {
+      opt.style.display = "";
+    } else {
+      opt.style.display = "none";
+    }
+  });
+});
+
+// ✅ عند اختيار مدرسة
+schoolSelect.addEventListener("change", () => {
+  const selectedSchool = schoolSelect.value;
+  const schoolInfo = data.find(s => s.school === selectedSchool);
+
+  if (schoolInfo) {
+    document.getElementById("region").value = schoolInfo.region;
+    document.getElementById("city").value = schoolInfo.city;
+    document.getElementById("school").value = schoolInfo.school;
+    document.getElementById("code").value = schoolInfo.code;
+  }
+});
             // ✅ إظهار آخر زيارة وعدد الزيارات من الأعمدة الجديدة
 const infoBox = document.getElementById("lastVisitInfo");
 
