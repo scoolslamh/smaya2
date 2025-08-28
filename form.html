@@ -90,8 +90,8 @@
 <body>
 <!-- ✅ الهيدر للصفحات الداخلية -->
 <header class="main-header">
-  <!-- يسار: الترحيب + زر الخروج -->
-  <div class="header-left">
+  <!-- يسار: الترحيب + زر الخروج (مخفي افتراضياً) -->
+  <div class="header-left" id="userHeader" style="display:none;">
     <span id="welcomeMsg"></span>
     <button id="logoutBtn">تسجيل الخروج</button>
   </div>
@@ -151,276 +151,260 @@
 
     <!-- النماذج -->
     <form id="evaluationForm" novalidate>
+      <!-- القسم الأول -->
+      <div class="form-step active">
+        <h2>البيانات الأساسية</h2>
+        <div class="form-grid">
+          <label>تاريخ الزيارة:
+            <input type="date" id="visit_date" name="visit_date" required>
+          </label>
+          <input type="hidden" id="visit_day" name="visit_day">
+          <input type="hidden" id="visit_month" name="visit_month">
+          <input type="hidden" id="visit_year" name="visit_year">
 
-  <!-- القسم الأول -->
-  <div class="form-step active">
-    <h2>البيانات الأساسية</h2>
-    <div class="form-grid">
-      <label>تاريخ الزيارة:
-        <input type="date" id="visit_date" name="visit_date" required>
-      </label>
-      <input type="hidden" id="visit_day" name="visit_day">
-      <input type="hidden" id="visit_month" name="visit_month">
-      <input type="hidden" id="visit_year" name="visit_year">
+          <label>المشرف الزائر:
+            <input type="text" name="visitor" id="visitor" readonly>
+          </label>
+          <label>المنطقة: <input type="text" name="region" id="region" readonly></label>
+          <label>المدينة: <input type="text" name="city" id="city" readonly></label>
+          <label>اسم المدرسة: <input type="text" name="school" id="school" readonly></label>
 
-      <label>المشرف الزائر:
-        <input type="text" name="visitor" id="visitor" readonly>
-      </label>
-      <label>المنطقة: <input type="text" name="region" id="region" readonly></label>
-      <label>المدينة: <input type="text" name="city" id="city" readonly></label>
-      <label>اسم المدرسة: <input type="text" name="school" id="school" readonly></label>
+          <label>الرقم الوزاري: 
+            <input type="text" name="code" id="code" required>
+          </label>
+          <label>اسم الحي/الشارع: 
+            <input type="text" name="street" id="street">
+          </label>
+          <label>تصنيف المدرسة: 
+            <input type="text" name="category" id="category">
+          </label>
+          <label>المرحلة التعليمية: 
+            <input type="text" name="stage" id="stage">
+          </label>
+          <label>المراحل الملحقة: 
+            <input type="text" name="extra_stages" id="extra_stages">
+          </label>
+          <label>تاريخ الفحص: 
+            <input type="date" name="inspection_date" id="inspection_date">
+          </label>
+          <label>عدد الفصول: 
+            <input type="number" name="classes" id="classes">
+          </label>
+          <label>شبكة المياه تصل للمدرسة:
+            <select name="water" id="water">
+              <option>نعم</option>
+              <option>لا</option>
+            </select>
+          </label>
+          <label>شبكة الصرف الصحي تصل للمدرسة:
+            <select name="sewage" id="sewage">
+              <option>نعم</option>
+              <option>لا</option>
+            </select>
+          </label>
+          <label>طرق الوصول للمدرسة: 
+            <input type="text" name="access" id="access">
+          </label>
+          <label>ملكية المبنى: 
+            <select name="ownership" id="ownership" required>
+              <option value="">اختر</option>
+              <option value="حكومي">حكومي</option>
+              <option value="مستأجر">مستأجر</option>
+            </select>
+          </label>
+        </div>
+        <div class="form-navigation">
+          <button type="button" class="next">التالي</button>
+        </div>
+      </div>
 
-      <label>الرقم الوزاري: 
-        <input type="text" name="code" id="code" required>
-      </label>
-      <label>اسم الحي/الشارع: 
-        <input type="text" name="street" id="street">
-      </label>
-      <label>تصنيف المدرسة: 
-        <input type="text" name="category" id="category">
-      </label>
-      <label>المرحلة التعليمية: 
-        <input type="text" name="stage" id="stage">
-      </label>
-      <label>المراحل الملحقة: 
-        <input type="text" name="extra_stages" id="extra_stages">
-      </label>
-      <label>تاريخ الفحص: 
-        <input type="date" name="inspection_date" id="inspection_date">
-      </label>
-      <label>عدد الفصول: 
-        <input type="number" name="classes" id="classes">
-      </label>
-      <label>شبكة المياه تصل للمدرسة:
-        <select name="water" id="water">
-          <option>نعم</option>
-          <option>لا</option>
-        </select>
-      </label>
-      <label>شبكة الصرف الصحي تصل للمدرسة:
-        <select name="sewage" id="sewage">
-          <option>نعم</option>
-          <option>لا</option>
-        </select>
-      </label>
-      <label>طرق الوصول للمدرسة: 
-        <input type="text" name="access" id="access">
-      </label>
-      <label>ملكية المبنى: 
-  <select name="ownership" id="ownership" required>
-    <option value="">اختر</option>
-    <option value="حكومي">حكومي</option>
-    <option value="مستأجر">مستأجر</option>
-  </select>
-</label>
+      <!-- القسم الثاني -->
+      <div class="form-step">
+        <h2>الصحة والسلامة</h2>
+        <div class="form-grid">
+          <label>مخارج الطوارئ:
+            <select name="emergency_exits" required>
+              <option value="">اختر</option>
+              <option value="مطابق">مطابق</option>
+              <option value="غير مطابق">غير مطابق</option>
+              <option value="يحتاج صيانة">يحتاج صيانة</option>
+            </select>
+          </label>
+          <label>مضخات الحريق:
+            <select name="fire_pumps" required>
+              <option value="">اختر</option>
+              <option value="مطابق">مطابق</option>
+              <option value="غير مطابق">غير مطابق</option>
+              <option value="يحتاج صيانة">يحتاج صيانة</option>
+            </select>
+          </label>
+          <label>بكرات خرطوم الحريق:
+            <select name="fire_hose_reels" required>
+              <option value="">اختر</option>
+              <option value="مطابق">مطابق</option>
+              <option value="غير مطابق">غير مطابق</option>
+              <option value="يحتاج صيانة">يحتاج صيانة</option>
+            </select>
+          </label>
+          <label>طفايات الحريق:
+            <select name="fire_extinguishers" required>
+              <option value="">اختر</option>
+              <option value="مطابق">مطابق</option>
+              <option value="غير مطابق">غير مطابق</option>
+              <option value="يحتاج صيانة">يحتاج صيانة</option>
+            </select>
+          </label>
+          <label>لوحة تحكم:
+            <select name="control_panel" required>
+              <option value="">اختر</option>
+              <option value="مطابق">مطابق</option>
+              <option value="غير مطابق">غير مطابق</option>
+              <option value="يحتاج صيانة">يحتاج صيانة</option>
+            </select>
+          </label>
+          <label>كواشف إنذار الحريق:
+            <select name="smoke_detectors" required>
+              <option value="">اختر</option>
+              <option value="مطابق">مطابق</option>
+              <option value="غير مطابق">غير مطابق</option>
+              <option value="يحتاج صيانة">يحتاج صيانة</option>
+            </select>
+          </label>
+          <label>جرس انذار:
+            <select name="fire_alarm" required>
+              <option value="">اختر</option>
+              <option value="مطابق">مطابق</option>
+              <option value="غير مطابق">غير مطابق</option>
+              <option value="يحتاج صيانة">يحتاج صيانة</option>
+            </select>
+          </label>
+          <label>حواجز السلامة:
+            <select name="safety_barriers" required>
+              <option value="">اختر</option>
+              <option value="مطابق">مطابق</option>
+              <option value="غير مطابق">غير مطابق</option>
+              <option value="يحتاج صيانة">يحتاج صيانة</option>
+            </select>
+          </label>
+          <label>لوحات مخارج الطوارئ:
+            <select name="exit_signs" required>
+              <option value="">اختر</option>
+              <option value="مطابق">مطابق</option>
+              <option value="غير مطابق">غير مطابق</option>
+              <option value="يحتاج صيانة">يحتاج صيانة</option>
+            </select>
+          </label>
+          <label>صناديق الإسعافات الأولية:
+            <select name="first_aid" required>
+              <option value="">اختر</option>
+              <option value="مطابق">مطابق</option>
+              <option value="غير مطابق">غير مطابق</option>
+              <option value="يحتاج صيانة">يحتاج صيانة</option>
+            </select>
+          </label>
+          <label>نقاط التجمع ولوحاتها:
+            <select name="assembly_points" required>
+              <option value="">اختر</option>
+              <option value="مطابق">مطابق</option>
+              <option value="غير مطابق">غير مطابق</option>
+              <option value="يحتاج صيانة">يحتاج صيانة</option>
+            </select>
+          </label>
+          <label>الحواف المكشوفة:
+            <select name="edges" required>
+              <option value="">اختر</option>
+              <option value="مطابق">مطابق</option>
+              <option value="غير مطابق">غير مطابق</option>
+              <option value="يحتاج صيانة">يحتاج صيانة</option>
+            </select>
+          </label>
+          <label>وثائق السلامة:
+            <select name="safety_docs" required>
+              <option value="">اختر</option>
+              <option value="مطابق">مطابق</option>
+              <option value="غير مطابق">غير مطابق</option>
+              <option value="يحتاج صيانة">يحتاج صيانة</option>
+            </select>
+          </label>
+          <label>وصلة الدفاع المدني:
+            <select name="civil_defense" required>
+              <option value="">اختر</option>
+              <option value="مطابق">مطابق</option>
+              <option value="غير مطابق">غير مطابق</option>
+              <option value="يحتاج صيانة">يحتاج صيانة</option>
+            </select>
+          </label>
+          <label>الأبواب والمفاتيح:
+            <select name="keys" required>
+              <option value="">اختر</option>
+              <option value="مطابق">مطابق</option>
+              <option value="غير مطابق">غير مطابق</option>
+              <option value="يحتاج صيانة">يحتاج صيانة</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="form-navigation">
+          <button type="button" class="prev">السابق</button>
+          <button type="button" class="next">التالي</button>
+        </div>
+      </div>
+
+      <!-- القسم الثالث -->
+      <div class="form-step">
+        <h2>العناصر المدنية</h2>
+        <div class="form-grid">
+          <label>حالة الحوائط: <input type="text" name="walls_condition"></label>
+          <label>السلالم وعناصرها: <input type="text" name="stairs"></label>
+          <label>النوافذ: <input type="text" name="windows"></label>
+          <label>الأبواب: <input type="text" name="doors"></label>
+          <label>حالة الأرضيات: <input type="text" name="floors_condition"></label>
+          <label>المناور: <input type="text" name="light_wells"></label>
+          <label>عزل السطح: <input type="text" name="roof_insulation"></label>
+          <label>تصريف السطح: <input type="text" name="roof_drainage"></label>
+          <label>إطار السطح / الحواجز: <input type="text" name="roof_frame"></label>
+          <label>منحدر ذوي الاحتياجات الخاصة: <input type="text" name="accessibility_ramp"></label>
+          <label>الحالة العامة للمناطق الخارجية والطرق: <input type="text" name="external_condition"></label>
+          <label>البوابات الرئيسية: <input type="text" name="main_gates"></label>
+          <label>السور: <input type="text" name="fence"></label>
+          <label>العناصر الميكانيكية: <input type="text" name="mechanical"></label>
+          <label>لوحة التوزيع: <input type="text" name="distribution"></label>
+          <label>نظام التأريض: <input type="text" name="earthing"></label>
+          <label>أنظمة السماعات والصوت: <input type="text" name="sound"></label>
+          <label>حالة الإضاءة العامة: <input type="text" name="lighting"></label>
+          <label>إضاءة الطوارئ: <input type="text" name="emergency_lighting"></label>
+          <label>المقابس وقنوات التمديد: <input type="text" name="sockets"></label>
+          <label>مكيفات الهواء: <input type="text" name="ac"></label>
+          <label>المضخات: <input type="text" name="pumps"></label>
+          <label>مراوح الشفط: <input type="text" name="fans"></label>
+          <label>المصاعد: <input type="text" name="elevators"></label>
+          <label>سخانات المياه: <input type="text" name="heaters"></label>
+          <label>خزانات المياه الأرضية: <input type="text" name="tank_ground"></label>
+          <label>خزانات المياه العلوية: <input type="text" name="tank_top"></label>
+          <label>الحواجز والاضافات العشوائية: <input type="text" name="barriers"></label>
+          <label>التوصيلات الكهربائية العشوائية: <input type="text" name="wiring"></label>
+        </div>
+
+        <div class="form-navigation">
+          <button type="button" class="prev">السابق</button>
+          <button type="submit">إرسال</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- ✅ صندوق رسائل التنبيه -->
+    <div id="formMessage" 
+         style="display:none; 
+                color:red; 
+                font-weight:bold; 
+                text-align:center; 
+                margin:15px 0;">
     </div>
-    <div class="form-navigation">
-      <button type="button" class="next">التالي</button>
-    </div>
-  </div>
-
-  <!-- القسم الثاني -->
-  <div class="form-step">
-    <h2>الصحة والسلامة</h2>
-    <div class="form-grid">
-      <label>مخارج الطوارئ:
-        <select name="emergency_exits" required>
-          <option value="">اختر</option>
-          <option value="مطابق">مطابق</option>
-          <option value="غير مطابق">غير مطابق</option>
-          <option value="يحتاج صيانة">يحتاج صيانة</option>
-        </select>
-      </label>
-
-      <label>مضخات الحريق:
-        <select name="fire_pumps" required>
-          <option value="">اختر</option>
-          <option value="مطابق">مطابق</option>
-          <option value="غير مطابق">غير مطابق</option>
-          <option value="يحتاج صيانة">يحتاج صيانة</option>
-        </select>
-      </label>
-
-      <label>بكرات خرطوم الحريق:
-        <select name="fire_hose_reels" required>
-          <option value="">اختر</option>
-          <option value="مطابق">مطابق</option>
-          <option value="غير مطابق">غير مطابق</option>
-          <option value="يحتاج صيانة">يحتاج صيانة</option>
-        </select>
-      </label>
-
-      <label>طفايات الحريق:
-        <select name="fire_extinguishers" required>
-          <option value="">اختر</option>
-          <option value="مطابق">مطابق</option>
-          <option value="غير مطابق">غير مطابق</option>
-          <option value="يحتاج صيانة">يحتاج صيانة</option>
-        </select>
-      </label>
-
-      <label>لوحة تحكم:
-        <select name="control_panel" required>
-          <option value="">اختر</option>
-          <option value="مطابق">مطابق</option>
-          <option value="غير مطابق">غير مطابق</option>
-          <option value="يحتاج صيانة">يحتاج صيانة</option>
-        </select>
-      </label>
-
-      <label>كواشف إنذار الحريق:
-        <select name="smoke_detectors" required>
-          <option value="">اختر</option>
-          <option value="مطابق">مطابق</option>
-          <option value="غير مطابق">غير مطابق</option>
-          <option value="يحتاج صيانة">يحتاج صيانة</option>
-        </select>
-      </label>
-
-      <label>جرس انذار:
-        <select name="fire_alarm" required>
-          <option value="">اختر</option>
-          <option value="مطابق">مطابق</option>
-          <option value="غير مطابق">غير مطابق</option>
-          <option value="يحتاج صيانة">يحتاج صيانة</option>
-        </select>
-      </label>
-
-      <label>حواجز السلامة:
-        <select name="safety_barriers" required>
-          <option value="">اختر</option>
-          <option value="مطابق">مطابق</option>
-          <option value="غير مطابق">غير مطابق</option>
-          <option value="يحتاج صيانة">يحتاج صيانة</option>
-        </select>
-      </label>
-
-      <label>لوحات مخارج الطوارئ:
-        <select name="exit_signs" required>
-          <option value="">اختر</option>
-          <option value="مطابق">مطابق</option>
-          <option value="غير مطابق">غير مطابق</option>
-          <option value="يحتاج صيانة">يحتاج صيانة</option>
-        </select>
-      </label>
-
-      <label>صناديق الإسعافات الأولية:
-        <select name="first_aid" required>
-          <option value="">اختر</option>
-          <option value="مطابق">مطابق</option>
-          <option value="غير مطابق">غير مطابق</option>
-          <option value="يحتاج صيانة">يحتاج صيانة</option>
-        </select>
-      </label>
-
-      <label>نقاط التجمع ولوحاتها:
-        <select name="assembly_points" required>
-          <option value="">اختر</option>
-          <option value="مطابق">مطابق</option>
-          <option value="غير مطابق">غير مطابق</option>
-          <option value="يحتاج صيانة">يحتاج صيانة</option>
-        </select>
-      </label>
-
-      <label>الحواف المكشوفة:
-        <select name="edges" required>
-          <option value="">اختر</option>
-          <option value="مطابق">مطابق</option>
-          <option value="غير مطابق">غير مطابق</option>
-          <option value="يحتاج صيانة">يحتاج صيانة</option>
-        </select>
-      </label>
-
-      <label>وثائق السلامة:
-        <select name="safety_docs" required>
-          <option value="">اختر</option>
-          <option value="مطابق">مطابق</option>
-          <option value="غير مطابق">غير مطابق</option>
-          <option value="يحتاج صيانة">يحتاج صيانة</option>
-        </select>
-      </label>
-
-      <label>وصلة الدفاع المدني:
-        <select name="civil_defense" required>
-          <option value="">اختر</option>
-          <option value="مطابق">مطابق</option>
-          <option value="غير مطابق">غير مطابق</option>
-          <option value="يحتاج صيانة">يحتاج صيانة</option>
-        </select>
-      </label>
-
-      <label>الأبواب والمفاتيح:
-        <select name="keys" required>
-          <option value="">اختر</option>
-          <option value="مطابق">مطابق</option>
-          <option value="غير مطابق">غير مطابق</option>
-          <option value="يحتاج صيانة">يحتاج صيانة</option>
-        </select>
-      </label>
-    </div>
-
-    <div class="form-navigation">
-      <button type="button" class="prev">السابق</button>
-      <button type="button" class="next">التالي</button>
-    </div>
-  </div>
-
-  <!-- القسم الثالث -->
-  <div class="form-step">
-    <h2>العناصر المدنية</h2>
-    <div class="form-grid">
-      <label>حالة الحوائط: <input type="text" name="walls_condition"></label>
-      <label>السلالم وعناصرها: <input type="text" name="stairs"></label>
-      <label>النوافذ: <input type="text" name="windows"></label>
-      <label>الأبواب: <input type="text" name="doors"></label>
-      <label>حالة الأرضيات: <input type="text" name="floors_condition"></label>
-      <label>المناور: <input type="text" name="light_wells"></label>
-      <label>عزل السطح: <input type="text" name="roof_insulation"></label>
-      <label>تصريف السطح: <input type="text" name="roof_drainage"></label>
-      <label>إطار السطح / الحواجز: <input type="text" name="roof_frame"></label>
-      <label>منحدر ذوي الاحتياجات الخاصة: <input type="text" name="accessibility_ramp"></label>
-      <label>الحالة العامة للمناطق الخارجية والطرق: <input type="text" name="external_condition"></label>
-      <label>البوابات الرئيسية: <input type="text" name="main_gates"></label>
-      <label>السور: <input type="text" name="fence"></label>
-      <label>العناصر الميكانيكية: <input type="text" name="mechanical"></label>
-      <label>لوحة التوزيع: <input type="text" name="distribution"></label>
-      <label>نظام التأريض: <input type="text" name="earthing"></label>
-      <label>أنظمة السماعات والصوت: <input type="text" name="sound"></label>
-      <label>حالة الإضاءة العامة: <input type="text" name="lighting"></label>
-      <label>إضاءة الطوارئ: <input type="text" name="emergency_lighting"></label>
-      <label>المقابس وقنوات التمديد: <input type="text" name="sockets"></label>
-      <label>مكيفات الهواء: <input type="text" name="ac"></label>
-      <label>المضخات: <input type="text" name="pumps"></label>
-      <label>مراوح الشفط: <input type="text" name="fans"></label>
-      <label>المصاعد: <input type="text" name="elevators"></label>
-      <label>سخانات المياه: <input type="text" name="heaters"></label>
-      <label>خزانات المياه الأرضية: <input type="text" name="tank_ground"></label>
-      <label>خزانات المياه العلوية: <input type="text" name="tank_top"></label>
-      <label>الحواجز والاضافات العشوائية: <input type="text" name="barriers"></label>
-      <label>التوصيلات الكهربائية العشوائية: <input type="text" name="wiring"></label>
-    </div>
-
-    <div class="form-navigation">
-      <button type="button" class="prev">السابق</button>
-      <button type="submit">إرسال</button>
-    </div>
-  </div>
-</form>
-
-<!-- ✅ صندوق رسائل التنبيه -->
-<div id="formMessage" 
-     style="display:none; 
-            color:red; 
-            font-weight:bold; 
-            text-align:center; 
-            margin:15px 0;">
-</div>
-
 
     <!-- أزرار إضافية -->
     <div class="form-navigation">
       <button type="button" id="newEntryBtn">🔄 إدخال جديد</button>
-          </div>
+    </div>
   </main>
 
   <!-- الفوتر -->
@@ -443,33 +427,41 @@
 
     document.addEventListener("DOMContentLoaded", async () => {
       document.getElementById("visitor").value = localStorage.getItem("fullName") || "مشرف";
-      // ✅ عرض رسالة الترحيب بالاسم والدور
-const role = localStorage.getItem("role") || "المشرف";
-const fullName = localStorage.getItem("fullName") || "مستخدم";
-const welcomeMsg = document.getElementById("welcomeMsg");
-if (welcomeMsg) {
-  welcomeMsg.textContent = `👋 مرحباً، ${role} ${fullName}`;
-}
 
-      document.getElementById("logoutBtn").addEventListener("click", () => {
-        localStorage.clear();
-        window.location.href = "index.html";
-      });
+      // ✅ عرض رسالة الترحيب بالاسم والدور فقط عند تسجيل الدخول
+      const isLoggedIn = localStorage.getItem("loggedIn") === "true";
+      const role = localStorage.getItem("role") || "المشرف";
+      const fullName = localStorage.getItem("fullName") || "مستخدم";
+      const welcomeMsg = document.getElementById("welcomeMsg");
+      const userHeader = document.getElementById("userHeader");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      if (isLoggedIn) {
+        if (welcomeMsg) welcomeMsg.textContent = `👋 مرحباً، ${role} ${fullName}`;
+        if (userHeader) userHeader.style.display = "block";
+      } else {
+        if (userHeader) userHeader.style.display = "none";
+      }
+
+      if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+          localStorage.clear();
+          window.location.href = "index.html";
+        });
+      }
 
       document.getElementById("newEntryBtn").addEventListener("click", () => {
-  const formEl = document.getElementById("evaluationForm");
-  if (formEl) {
-    formEl.reset();                 // إعادة تهيئة الحقول
-    formEl.style.display = "block"; // ✅ نخلي الفورم ظاهر
-  }
-});
-
-
+        const formEl = document.getElementById("evaluationForm");
+        if (formEl) {
+          formEl.reset();                 
+          formEl.style.display = "block"; 
+        }
+      });
 
       // ✅ جلب بيانات المدارس
       try {
         const res = await fetch(API_URL);
-        data = await res.json(); // ✅ نخزنها في المتغير العام
+        data = await res.json(); 
 
         const regionSelect = document.getElementById("regionFilter");
         const citySelect = document.getElementById("cityFilter");
@@ -498,38 +490,37 @@ if (welcomeMsg) {
         });
 
         // ✅ عند اختيار مدينة
-citySelect.addEventListener("change", () => {
-  const schools = data.filter(s => s.city === citySelect.value);
-  schoolSelect.innerHTML = "<option value=''>اختر المدرسة</option>";
-  schoolSelect.disabled = false;
-  schools.forEach(s => {
-    const opt = document.createElement("option");
-    opt.value = s.school;
-    opt.textContent = s.school;
-    schoolSelect.appendChild(opt);
-  });
-});
+        citySelect.addEventListener("change", () => {
+          const schools = data.filter(s => s.city === citySelect.value);
+          schoolSelect.innerHTML = "<option value=''>اختر المدرسة</option>";
+          schoolSelect.disabled = false;
+          schools.forEach(s => {
+            const opt = document.createElement("option");
+            opt.value = s.school;
+            opt.textContent = s.school;
+            schoolSelect.appendChild(opt);
+          });
+        });
 
-// ✅ البحث عن مدرسة
-document.getElementById("schoolSearch").addEventListener("input", (e) => {
-  const searchTerm = e.target.value.trim().toLowerCase();
-  const filteredSchools = data.filter(s => {
-    const matchCity = !citySelect.value || s.city === citySelect.value;
-    const matchRegion = !regionSelect.value || s.region === regionSelect.value;
-    const matchName = s.school.toLowerCase().includes(searchTerm);
-    return matchCity && matchRegion && matchName;
-  });
+        // ✅ البحث عن مدرسة
+        document.getElementById("schoolSearch").addEventListener("input", (e) => {
+          const searchTerm = e.target.value.trim().toLowerCase();
+          const filteredSchools = data.filter(s => {
+            const matchCity = !citySelect.value || s.city === citySelect.value;
+            const matchRegion = !regionSelect.value || s.region === regionSelect.value;
+            const matchName = s.school.toLowerCase().includes(searchTerm);
+            return matchCity && matchRegion && matchName;
+          });
 
-  schoolSelect.innerHTML = "<option value=''>اختر المدرسة</option>";
-  schoolSelect.disabled = false;
-  filteredSchools.forEach(s => {
-    const opt = document.createElement("option");
-    opt.value = s.school;
-    opt.textContent = s.school;
-    schoolSelect.appendChild(opt);
-  });
-});
-
+          schoolSelect.innerHTML = "<option value=''>اختر المدرسة</option>";
+          schoolSelect.disabled = false;
+          filteredSchools.forEach(s => {
+            const opt = document.createElement("option");
+            opt.value = s.school;
+            opt.textContent = s.school;
+            schoolSelect.appendChild(opt);
+          });
+        });
 
         // ✅ عند اختيار مدرسة
         schoolSelect.addEventListener("change", () => {
@@ -542,28 +533,25 @@ document.getElementById("schoolSearch").addEventListener("input", (e) => {
             document.getElementById("school").value = schoolInfo.school;
             document.getElementById("code").value = schoolInfo.code;
 
-            // ✅ إظهار آخر زيارة وعدد الزيارات من الأعمدة الجديدة
-const infoBox = document.getElementById("lastVisitInfo");
+            // ✅ إظهار آخر زيارة وعدد الزيارات
+            const infoBox = document.getElementById("lastVisitInfo");
+            let formattedDate = "لا يوجد";
+            if (schoolInfo.last_visit) {
+              const visitDate = new Date(schoolInfo.last_visit);
+              formattedDate = visitDate.toLocaleDateString("ar-EG", {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+              });
+            }
+            infoBox.innerHTML = `
+              🗓️ آخر زيارة: <b>${formattedDate}</b> |
+              🔢 عدد الزيارات: <b>${schoolInfo.visits || 0}</b>
+            `;
+            infoBox.style.display = "block";
 
-let formattedDate = "لا يوجد";
-if (schoolInfo.last_visit) {
-  const visitDate = new Date(schoolInfo.last_visit);
-  formattedDate = visitDate.toLocaleDateString("ar-EG", {
-    weekday: "long",   // الخميس
-    day: "numeric",    // 14
-    month: "long",     // أغسطس
-    year: "numeric"    // 2025
-  });
-}
-
-infoBox.innerHTML = `
-  🗓️ آخر زيارة: <b>${formattedDate}</b> |
-  🔢 عدد الزيارات: <b>${schoolInfo.visits || 0}</b>
-`;
-infoBox.style.display = "block";
-
-document.getElementById("evaluationForm").style.display = "block";
-
+            document.getElementById("evaluationForm").style.display = "block";
           }
         });
 
@@ -572,107 +560,98 @@ document.getElementById("evaluationForm").style.display = "block";
         alert("⚠️ لم يتم تحميل بيانات المدارس من الشيت");
       }
     });
+
     document.addEventListener("DOMContentLoaded", () => {
-    const steps = document.querySelectorAll(".form-step");
-    const nextBtns = document.querySelectorAll(".next");
-    const prevBtns = document.querySelectorAll(".prev");
-    let currentStep = 0;
+      const steps = document.querySelectorAll(".form-step");
+      const nextBtns = document.querySelectorAll(".next");
+      const prevBtns = document.querySelectorAll(".prev");
+      let currentStep = 0;
 
-    function showStep(index) {
-      steps.forEach((step, i) => {
-        step.style.display = i === index ? "block" : "none";
-      });
-    }
+      function showStep(index) {
+        steps.forEach((step, i) => {
+          step.style.display = i === index ? "block" : "none";
+        });
+      }
 
-    nextBtns.forEach(btn => {
-      btn.addEventListener("click", () => {
-        if (currentStep < steps.length - 1) {
-          currentStep++;
-          showStep(currentStep);
-        }
+      nextBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          if (currentStep < steps.length - 1) {
+            currentStep++;
+            showStep(currentStep);
+          }
+        });
       });
+
+      prevBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          if (currentStep > 0) {
+            currentStep--;
+            showStep(currentStep);
+          }
+        });
+      });
+
+      showStep(currentStep);
     });
 
-    prevBtns.forEach(btn => {
-      btn.addEventListener("click", () => {
-        if (currentStep > 0) {
-          currentStep--;
-          showStep(currentStep);
+    // ✅ إرسال النموذج إلى Google Sheet
+    document.getElementById("evaluationForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const form = e.target;
+      const messageBox = document.getElementById("formMessage");
+
+      const requiredFields = form.querySelectorAll("[required]");
+      let missing = [];
+      requiredFields.forEach(field => {
+        if (!field.value || field.value.trim() === "") {
+          missing.push(field);
+          field.style.border = "2px solid red";
+        } else {
+          field.style.border = "";
         }
       });
+
+      if (missing.length > 0) {
+        messageBox.textContent = "⚠️ عليك إكمال باقي الحقول المطلوبة";
+        messageBox.style.display = "block";
+        return;
+      } else {
+        messageBox.style.display = "none";
+      }
+
+      const formData = new FormData(form);
+      const data = {};
+      formData.forEach((value, key) => {
+        data[key] = value;
+      });
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "saveEvaluation",
+            ...data
+          })
+        });
+
+        if (!res.ok) throw new Error("فشل الاتصال بالخادم");
+
+        const result = await res.json();
+        if (result.success) {
+          alert("✅ تم إرسال التقييم بنجاح!");
+          form.reset();
+          const formEl = document.getElementById("evaluationForm");
+          if (formEl) formEl.style.display = "none";
+        } else {
+          alert("⚠️ لم يتم الإرسال: " + (result.message || "خطأ غير معروف"));
+        }
+      } catch (err) {
+        console.error("خطأ:", err);
+        alert("❌ فشل الاتصال بالخادم");
+      }
     });
-    // عند تحميل الصفحة عرض القسم الأول فقط
-    showStep(currentStep);
-  });
-// ✅ إرسال النموذج إلى Google Sheet
-document.getElementById("evaluationForm").addEventListener("submit", async (e) => {
-  e.preventDefault(); // منع إعادة تحميل الصفحة
-
-  const form = e.target;
-  const messageBox = document.getElementById("formMessage");
-
-  // ✅ التحقق من الحقول المطلوبة
-  const requiredFields = form.querySelectorAll("[required]");
-  let missing = [];
-
-  requiredFields.forEach(field => {
-    if (!field.value || field.value.trim() === "") {
-      missing.push(field);
-      field.style.border = "2px solid red"; // تمييز الحقول الناقصة
-    } else {
-      field.style.border = ""; // إزالة التمييز إذا امتلأ
-    }
-  });
-
-  if (missing.length > 0) {
-    messageBox.textContent = "⚠️ عليك إكمال باقي الحقول المطلوبة";
-    messageBox.style.display = "block";
-    return; // إيقاف الإرسال
-  } else {
-    messageBox.style.display = "none"; // إخفاء الرسالة إذا كل شيء تمام
-  }
-
-  // ✅ إذا جميع الحقول ممتلئة → تجهيز البيانات
-  const formData = new FormData(form);
-  const data = {};
-  formData.forEach((value, key) => {
-    data[key] = value;
-  });
-
-  try {
-    const res = await fetch(API_URL, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    action: "saveEvaluation",   // ✅ يتوافق مع السكربت
-    ...data                     // ✅ إرسال القيم مباشرة بدون payload
-  })
-});
-
-
-
-    if (!res.ok) throw new Error("فشل الاتصال بالخادم");
-
-    const result = await res.json();
-
-    if (result.success) {
-      alert("✅ تم إرسال التقييم بنجاح!");
-      form.reset();const formEl = document.getElementById("evaluationForm");
-if (formEl) {
-  formEl.style.display = "none";
-}
-
-          } else {
-      alert("⚠️ لم يتم الإرسال: " + (result.message || "خطأ غير معروف"));
-    }
-  } catch (err) {
-    console.error("خطأ:", err);
-    alert("❌ فشل الاتصال بالخادم");
-  }
-});
-  
   </script>
-
-  
 </body>
 </html>
