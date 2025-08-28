@@ -101,25 +101,19 @@
   <!-- ✅ منع الوصول للصفحة إذا كان مسجّل دخول -->
   <script>
     if (localStorage.getItem("loggedIn") === "true") {
-      window.location.href = "form.html"; // ✅ التوجيه للصفحة التالية
+      window.location.href = "form.html"; // التوجيه للصفحة التالية
     }
   </script>
 
   <!-- الهيدر -->
   <header class="main-header">
-  <!-- ✅ الترحيب + زر الخروج -->
-  <div class="header-left">
-    <span id="welcomeMsg">مرحباً، المشرف علي الشهري</span>
-    <button id="logoutBtn">تسجيل الخروج</button>
-  </div>
-
-  <!-- ✅ الشعار والنصوص في الوسط -->
-  <div class="header-center">
-    <img src="logo.png" alt="شعار الشركة" class="logo" />
-    <h1>شركة سمايا</h1>
-    <div class="subtitle">نظام متابعة الصيانة في المدارس</div>
-  </div>
-</header>
+    <!-- ✅ فقط الشعار والعناوين -->
+    <div class="header-center">
+      <img src="logo.png" alt="شعار الشركة" class="logo" />
+      <h1>شركة سمايا</h1>
+      <div class="subtitle">نظام متابعة الصيانة في المدارس</div>
+    </div>
+  </header>
 
   <!-- بطاقة تسجيل الدخول -->
   <main class="login-container">
@@ -165,8 +159,8 @@
           // ✅ حفظ بيانات الدخول
           localStorage.setItem("loggedIn", "true");
           localStorage.setItem("username", username);
-          localStorage.setItem("role", data.role || "");
-          localStorage.setItem("fullName", data.fullName || "مشرف");
+          localStorage.setItem("role", data.role || "المشرف");
+          localStorage.setItem("fullName", data.fullName || username);
           localStorage.setItem("loginTime", Date.now());
 
           // ✅ التوجيه للصفحة التالية بعد الدخول
