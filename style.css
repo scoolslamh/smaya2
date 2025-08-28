@@ -22,29 +22,59 @@ body {
   overflow-x: auto; /* ✅ يحافظ على التوافق مع الشاشات الصغيرة */
 }
 
-/* ✅ الهيدر */
+/* الهيدر */
 .main-header {
   background: #13344f;
   color: white;
-  padding: 20px;
+  padding: 15px 20px;
   display: flex;
-  justify-content: space-between; /* الوسط = الشعار + النصوص | اليسار = الترحيب والخروج */
   align-items: center;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  position: relative;
 }
 
-/* الوسط: الشعار + النصوص */
+/* الترحيب + زر الخروج (يمين/يسار) */
+.header-left {
+  position: absolute;
+  top: 20px;
+  right: 20px; /* لو تبغاه يسار استبدل بـ left */
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-left span {
+  font-size: 15px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.header-left button {
+  padding: 6px 14px;
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.3s;
+}
+.header-left button:hover {
+  background: #c0392b;
+}
+
+/* الشعار والنصوص بالوسط */
 .header-center {
-  flex: 1;
+  margin: 0 auto;
   text-align: center;
 }
 
 .header-center .logo {
-  height: 80px;
+  height: 70px;
   width: auto;
   display: block;
-  margin: 0 auto 10px;
-  filter: brightness(0) invert(1); /* ✅ يظهر الشعار باللون الأبيض */
+  margin: 0 auto 8px;
+  filter: brightness(0) invert(1); /* ✅ يطلع الشعار أبيض */
 }
 
 .header-center h1 {
@@ -53,9 +83,8 @@ body {
 }
 
 .header-center .subtitle {
-  margin: 5px 0 0;
-  font-size: 18px;
-  font-weight: normal;
+  margin: 4px 0 0;
+  font-size: 16px;
   color: #ddd;
 }
 

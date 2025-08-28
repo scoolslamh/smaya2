@@ -107,10 +107,19 @@
 
   <!-- الهيدر -->
   <header class="main-header">
-    <img src="logo.png" alt="شعار شركة سمايا" class="logo">
+  <!-- ✅ الترحيب + زر الخروج -->
+  <div class="header-left">
+    <span id="welcomeMsg">مرحباً، المشرف علي الشهري</span>
+    <button id="logoutBtn">تسجيل الخروج</button>
+  </div>
+
+  <!-- ✅ الشعار والنصوص في الوسط -->
+  <div class="header-center">
+    <img src="logo.png" alt="شعار الشركة" class="logo" />
     <h1>شركة سمايا</h1>
-    <h2 class="subtitle">نظام تقييم المباني المدرسية</h2>
-  </header>
+    <div class="subtitle">نظام متابعة الصيانة في المدارس</div>
+  </div>
+</header>
 
   <!-- بطاقة تسجيل الدخول -->
   <main class="login-container">

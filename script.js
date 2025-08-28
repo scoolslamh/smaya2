@@ -85,7 +85,7 @@ async function loadSchools() {
 
         if (data.status === "found") {
           const record = data.data;
-          // تعبية الحقول من آخر بيانات محفوظة (ما عدا الحقول المقفلة)
+          // ✅ تعبئة الحقول من آخر بيانات محفوظة (ما عدا الحقول المقفلة)
           for (let key in record) {
             const input = document.querySelector(`[name="${key}"]`);
             if (input && !["region", "city", "school", "code"].includes(key)) {
@@ -147,6 +147,7 @@ document.getElementById("evaluationForm").addEventListener("submit", async funct
 window.addEventListener("DOMContentLoaded", () => {
   loadSchools();
 
+  // ✅ استرجاع بيانات المستخدم من localStorage
   const role = localStorage.getItem("role") || "المشرف";
   const fullName = localStorage.getItem("fullName") || "مستخدم";
   const welcomeMsg = document.getElementById("welcomeMsg");
