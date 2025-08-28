@@ -10,13 +10,17 @@ async function loadSchools() {
 
     const schools = await res.json();
 
-    // استخراج المناطق
-    const regions = [...new Set(schools.map(s => s.region))];
     const regionSelect = document.getElementById("regionFilter");
+    const citySelect = document.getElementById("cityFilter");
+    const schoolSelect = document.getElementById("schoolFilter");
 
     // تفريغ القوائم القديمة
     regionSelect.innerHTML = '<option value="">اختر المنطقة</option>';
+    citySelect.innerHTML = '<option value="">اختر المدينة</option>';
+    schoolSelect.innerHTML = '<option value="">اختر المدرسة</option>';
 
+    // استخراج المناطق
+    const regions = [...new Set(schools.map(s => s.region))];
     regions.forEach(r => {
       const opt = document.createElement("option");
       opt.value = r;
@@ -26,7 +30,6 @@ async function loadSchools() {
 
     // ✅ عند اختيار المنطقة
     regionSelect.addEventListener("change", () => {
-      const citySelect = document.getElementById("cityFilter");
       citySelect.innerHTML = '<option value="">اختر المدينة</option>';
       citySelect.disabled = false;
 
@@ -43,13 +46,12 @@ async function loadSchools() {
     });
 
     // ✅ عند اختيار المدينة
-    document.getElementById("cityFilter").addEventListener("change", () => {
-      const schoolSelect = document.getElementById("schoolFilter");
+    citySelect.addEventListener("change", () => {
       schoolSelect.innerHTML = '<option value="">اختر المدرسة</option>';
       schoolSelect.disabled = false;
 
       const filteredSchools = schools.filter(
-        s => s.region === regionSelect.value && s.city === document.getElementById("cityFilter").value
+        s => s.region === regionSelect.value && s.city === citySelect.value
       );
 
       filteredSchools.forEach(sch => {
@@ -64,8 +66,7 @@ async function loadSchools() {
     });
 
     // ✅ عند اختيار مدرسة
-    document.getElementById("schoolFilter").addEventListener("change", async () => {
-      const schoolSelect = document.getElementById("schoolFilter");
+    schoolSelect.addEventListener("change", async () => {
       const selectedOption = schoolSelect.options[schoolSelect.selectedIndex];
       if (!selectedOption.value) return;
 
@@ -87,7 +88,7 @@ async function loadSchools() {
           // تعبية الحقول من آخر بيانات محفوظة (ما عدا الحقول المقفلة)
           for (let key in record) {
             const input = document.querySelector(`[name="${key}"]`);
-            if (input && !["region","city","school","code"].includes(key)) {
+            if (input && !["region", "city", "school", "code"].includes(key)) {
               input.value = record[key];
             }
           }
@@ -107,7 +108,7 @@ async function loadSchools() {
 }
 
 // ✅ إرسال التقييم إلى السيرفر
-document.getElementById("evaluationForm").addEventListener("submit", async function(e) {
+document.getElementById("evaluationForm").addEventListener("submit", async function (e) {
   e.preventDefault();
 
   const formData = new FormData(this);
@@ -142,15 +143,21 @@ document.getElementById("evaluationForm").addEventListener("submit", async funct
   }
 });
 
-// ✅ تحميل المدارس عند فتح الصفحة
-window.addEventListener("DOMContentLoaded", loadSchools);
+// ✅ تحميل المدارس وعرض رسالة الترحيب عند فتح الصفحة
+window.addEventListener("DOMContentLoaded", () => {
+  loadSchools();
 
-document.addEventListener("DOMContentLoaded", () => {
   const fullName = localStorage.getItem("fullName") || "مشرف";
-  document.getElementById("welcomeMsg").textContent = `مرحباً، ${fullName}`;
+  const welcomeMsg = document.getElementById("welcomeMsg");
+  if (welcomeMsg) {
+    welcomeMsg.textContent = `👋 مرحباً، ${fullName}`;
+  }
 
-  document.getElementById("logoutBtn").addEventListener("click", () => {
-    localStorage.clear();
-    window.location.href = "index.html";
-  });
+  const logoutBtn = document.getElementById("logoutBtn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      localStorage.clear();
+      window.location.href = "index.html";
+    });
+  }
 });

@@ -26,50 +26,59 @@ body {
 .main-header {
   background: #13344f;
   color: white;
-  text-align: center;
-  padding: 20px;
+  padding: 15px 25px;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between; /* يمين - يسار */
+}
+
+.main-header .logo {
+  height: 60px;
+  width: auto;
+  filter: brightness(0) invert(1);
+  margin-left: 15px;
+}
+
+.header-content {
+  flex: 1;
+  display: flex;
+  justify-content: space-between; /* العنوان يمين + الترحيب يسار */
   align-items: center;
 }
-.main-header .logo {
-  height: 80px;
-  width: auto;
-  margin-bottom: 10px;
-  filter: brightness(0) invert(1); /* يظهر الشعار باللون الأبيض */
-}
-.main-header h1 {
+
+.header-content h1 {
   margin: 0;
-  font-size: 28px;
+  font-size: 24px;
 }
-.main-header .subtitle {
+
+.header-content .subtitle {
   margin: 5px 0 0;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: normal;
   color: #ddd;
 }
+
+/* ✅ رسالة الترحيب + زر الخروج */
 .user-info {
-  margin-top: 15px;
   display: flex;
   align-items: center;
-  gap: 15px;
-  justify-content: center;
+  gap: 12px;
 }
 
 .user-info span {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: bold;
   color: #fff;
 }
 
 .user-info button {
-  padding: 6px 15px;
+  padding: 6px 14px;
   background: #e74c3c;
   color: #fff;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   transition: background 0.3s;
 }
 
