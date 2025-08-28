@@ -493,6 +493,15 @@
             schoolSelect.appendChild(opt);
           });
         });
+        // ✅ البحث عن مدرسة
+  document.getElementById("schoolSearch").addEventListener("input", (e) => {
+    const searchTerm = e.target.value.trim().toLowerCase();
+    const filteredSchools = data.filter(s => {
+      const matchCity = !citySelect.value || s.city === citySelect.value;
+      const matchRegion = !regionSelect.value || s.region === regionSelect.value;
+      const matchName = s.school.toLowerCase().includes(searchTerm);
+      return matchCity && matchRegion && matchName;
+    });
 
         // ✅ عند اختيار مدرسة
         schoolSelect.addEventListener("change", () => {
