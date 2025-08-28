@@ -143,14 +143,16 @@ document.getElementById("evaluationForm").addEventListener("submit", async funct
   }
 });
 
-// ✅ تحميل المدارس وعرض رسالة الترحيب عند فتح الصفحة
+// ✅ تحميل المدارس + رسالة الترحيب عند فتح الصفحة
 window.addEventListener("DOMContentLoaded", () => {
   loadSchools();
 
-  const fullName = localStorage.getItem("fullName") || "مشرف";
+  const role = localStorage.getItem("role") || "المشرف";
+  const fullName = localStorage.getItem("fullName") || "مستخدم";
   const welcomeMsg = document.getElementById("welcomeMsg");
+
   if (welcomeMsg) {
-    welcomeMsg.textContent = `👋 مرحباً، ${fullName}`;
+    welcomeMsg.textContent = `👋 مرحباً، ${role} ${fullName}`;
   }
 
   const logoutBtn = document.getElementById("logoutBtn");

@@ -22,56 +22,55 @@ body {
   overflow-x: auto; /* ✅ يحافظ على التوافق مع الشاشات الصغيرة */
 }
 
-/* الهيدر */
+/* ✅ الهيدر */
 .main-header {
   background: #13344f;
   color: white;
-  padding: 15px 25px;
+  padding: 15px 20px;
   display: flex;
   align-items: center;
-  justify-content: space-between; /* يمين - يسار */
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
-.main-header .logo {
-  height: 60px;
-  width: auto;
-  filter: brightness(0) invert(1);
-  margin-left: 15px;
-}
-
-.header-content {
+.header-center {
   flex: 1;
-  display: flex;
-  justify-content: space-between; /* العنوان يمين + الترحيب يسار */
-  align-items: center;
+  text-align: center;
 }
 
-.header-content h1 {
+.header-center .logo {
+  height: 70px;
+  width: auto;
+  display: block;
+  margin: 0 auto 8px;
+  filter: brightness(0) invert(1);
+}
+
+.header-center h1 {
   margin: 0;
-  font-size: 24px;
+  font-size: 26px;
 }
 
-.header-content .subtitle {
-  margin: 5px 0 0;
+.header-center .subtitle {
+  margin: 4px 0 0;
   font-size: 16px;
-  font-weight: normal;
   color: #ddd;
 }
 
 /* ✅ رسالة الترحيب + زر الخروج */
-.user-info {
+.header-left {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.user-info span {
+.header-left span {
   font-size: 15px;
   font-weight: bold;
   color: #fff;
 }
 
-.user-info button {
+.header-left button {
   padding: 6px 14px;
   background: #e74c3c;
   color: #fff;
@@ -81,8 +80,7 @@ body {
   font-size: 13px;
   transition: background 0.3s;
 }
-
-.user-info button:hover {
+.header-left button:hover {
   background: #c0392b;
 }
 
@@ -196,5 +194,13 @@ input:focus, select:focus, textarea:focus {
   #schoolSearch {
     min-width: 100%;
     font-size: 16px;
+  }
+  .main-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  .header-left {
+    margin-top: 10px;
+    justify-content: center;
   }
 }
