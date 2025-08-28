@@ -48,6 +48,34 @@ body {
   font-weight: normal;
   color: #ddd;
 }
+.user-info {
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  justify-content: center;
+}
+
+.user-info span {
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.user-info button {
+  padding: 6px 15px;
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+.user-info button:hover {
+  background: #c0392b;
+}
 
 /* الفوتر */
 .main-footer {

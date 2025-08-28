@@ -144,3 +144,13 @@ document.getElementById("evaluationForm").addEventListener("submit", async funct
 
 // ✅ تحميل المدارس عند فتح الصفحة
 window.addEventListener("DOMContentLoaded", loadSchools);
+
+document.addEventListener("DOMContentLoaded", () => {
+  const fullName = localStorage.getItem("fullName") || "مشرف";
+  document.getElementById("welcomeMsg").textContent = `مرحباً، ${fullName}`;
+
+  document.getElementById("logoutBtn").addEventListener("click", () => {
+    localStorage.clear();
+    window.location.href = "index.html";
+  });
+});
