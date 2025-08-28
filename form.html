@@ -442,6 +442,13 @@
 
     document.addEventListener("DOMContentLoaded", async () => {
       document.getElementById("visitor").value = localStorage.getItem("fullName") || "مشرف";
+      // ✅ عرض رسالة الترحيب بالاسم والدور
+const role = localStorage.getItem("role") || "المشرف";
+const fullName = localStorage.getItem("fullName") || "مستخدم";
+const welcomeMsg = document.getElementById("welcomeMsg");
+if (welcomeMsg) {
+  welcomeMsg.textContent = `👋 مرحباً، ${role} ${fullName}`;
+}
 
       document.getElementById("logoutBtn").addEventListener("click", () => {
         localStorage.clear();

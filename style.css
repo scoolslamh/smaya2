@@ -37,7 +37,7 @@ body {
 .header-left {
   position: absolute;
   top: 20px;
-  right: 20px; /* لو تبغاه يسار استبدل بـ left */
+  left: 20px; /* لو تبغاه يسار استبدل بـ left */
   display: flex;
   align-items: center;
   gap: 12px;
