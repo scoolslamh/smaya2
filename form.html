@@ -197,8 +197,12 @@
         <input type="text" name="access" id="access">
       </label>
       <label>ملكية المبنى: 
-        <input type="text" name="ownership" id="ownership">
-      </label>
+  <select name="ownership" id="ownership" required>
+    <option value="">اختر</option>
+    <option value="حكومي">حكومي</option>
+    <option value="مستأجر">مستأجر</option>
+  </select>
+</label>
     </div>
     <div class="form-navigation">
       <button type="button" class="next">التالي</button>
