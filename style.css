@@ -241,11 +241,11 @@ input:focus, select:focus, textarea:focus {
 }
 /* ✅ شريط الترحيب تحت الهيدر */
 .welcome-bar {
-  background: #f0f4f8;       /* لون خلفية فاتح */
+  background: #f0f4f8;       /* خلفية فاتحة */
   color: #13344f;            /* لون النص */
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start; /* ✅ يبدأ من اليسار */
   padding: 10px 20px;
   font-size: 15px;
   font-weight: bold;
@@ -253,7 +253,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .welcome-bar span {
-  flex: 1;
+  margin-right: 15px; /* مسافة بين النص والزر */
 }
 
 .welcome-bar button {
@@ -270,3 +270,4 @@ input:focus, select:focus, textarea:focus {
 .welcome-bar button:hover {
   background: #c0392b;
 }
+
