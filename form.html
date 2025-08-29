@@ -438,7 +438,7 @@
       const logoutBtn = document.getElementById("logoutBtn");
 
       if (isLoggedIn) {
-        if (welcomeMsg) welcomeMsg.textContent = `👋 مرحباً، ${role} ${fullName}`;
+        if (welcomeMsg) welcomeMsg.textContent = `👋 مرحباً، ${role} : ${fullName}`;
         if (userHeader) userHeader.style.display = "block";
       } else {
         if (userHeader) userHeader.style.display = "none";
