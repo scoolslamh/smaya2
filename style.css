@@ -239,3 +239,34 @@ input:focus, select:focus, textarea:focus {
     font-size: 16px;
   }
 }
+/* ✅ شريط الترحيب تحت الهيدر */
+.welcome-bar {
+  background: #f0f4f8;       /* لون خلفية فاتح */
+  color: #13344f;            /* لون النص */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  font-size: 15px;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+}
+
+.welcome-bar span {
+  flex: 1;
+}
+
+.welcome-bar button {
+  padding: 6px 14px;
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.3s;
+}
+
+.welcome-bar button:hover {
+  background: #c0392b;
+}
