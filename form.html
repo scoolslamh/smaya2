@@ -821,26 +821,41 @@
             document.getElementById("code").value = schoolInfo.code;
 
             // ✅ إظهار آخر زيارة وعدد الزيارات
-            const infoBox = document.getElementById("lastVisitInfo");
-            let formattedDate = "لا يوجد";
-            if (schoolInfo.last_visit) {
-              const visitDate = new Date(schoolInfo.last_visit);
-              formattedDate = visitDate.toLocaleDateString("ar-EG", {
-                weekday: "long",
-                day: "numeric",
-                month: "long",
-                year: "numeric"
-              });
-            }
-            infoBox.innerHTML = `
-              🗓️ آخر زيارة: <b>${formattedDate}</b> |
-              🔢 عدد الزيارات: <b>${schoolInfo.visits || 0}</b>
-            `;
-            infoBox.style.display = "block";
+const infoBox = document.getElementById("lastVisitInfo");
+let formattedDate = "لا يوجد";
+if (schoolInfo.last_visit) {
+  const visitDate = new Date(schoolInfo.last_visit);
+  formattedDate = visitDate.toLocaleDateString("ar-EG", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+}
+infoBox.innerHTML = `
+  🗓️ آخر زيارة: <b>${formattedDate}</b> |
+  🔢 عدد الزيارات: <b>${schoolInfo.visits || 0}</b>
+  <br>
+  <button id="viewVisitsBtn" 
+          style="margin-top:10px; padding:8px 15px; 
+                 background:#007BFF; color:white; 
+                 border:none; border-radius:5px; cursor:pointer;">
+    📋 استعراض الزيارات السابقة
+  </button>
+`;
+infoBox.style.display = "block";
 
-            document.getElementById("evaluationForm").style.display = "block";
-          }
-        });
+document.getElementById("evaluationForm").style.display = "block";
+
+// ✅ إضافة حدث للزر بعد إنشائه
+const viewBtn = document.getElementById("viewVisitsBtn");
+if (viewBtn) {
+  viewBtn.addEventListener("click", () => {
+    alert("📋 سيتم عرض قائمة الزيارات السابقة هنا لاحقًا");
+    // 🔹 لاحقًا نربطه بالكود اللي يجلب الزيارات ويعرضها في نافذة أو صفحة
+  });
+}
+
 
       } catch (err) {
         console.error("خطأ في تحميل المدارس:", err);
