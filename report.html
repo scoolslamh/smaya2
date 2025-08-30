@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>تقرير زيارة مدرسة</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: "Tajawal", sans-serif;
+      background: #f5f7fa;
+      margin: 20px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    header img {
+      height: 60px;
+    }
+    .report-box {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #13344f;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 10px;
+      text-align: right;
+    }
+    .print-btn {
+      background: #13344f;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      display: block;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="logo.png" alt="شعار الشركة">
+  <h1>شركة سمايا</h1>
+  <h3>تقرير زيارة المدرسة</h3>
+</header>
+
+<div class="report-box">
+  <h2 id="reportTitle">جارٍ تحميل التقرير...</h2>
+  <table id="reportTable"></table>
+  <button class="print-btn" onclick="window.print()">🖨️ طباعة / حفظ PDF</button>
+</div>
+
+<script>
+const API_URL = "/.netlify/functions/api";
+
+// ✅ استخراج باراميترات الرابط (school & visit)
+const urlParams = new URLSearchParams(window.location.search);
+const school = urlParams.get("school");
+const visitNumber = urlParams.get("visit");
+
+// ✅ جلب بيانات التقرير
+async function loadReport() {
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "getVisitReport",
+        school,
+        visit: visitNumber
+      })
+    });
+
+    const result = await res.json();
+    if (result.success) {
+      document.getElementById("reportTitle").textContent = 
+        `📑 تقرير زيارة رقم ${visitNumber} - ${school}`;
+
+      const table = document.getElementById("reportTable");
+      table.innerHTML = "";
+
+      // عرض كل الحقول كجدول
+      Object.entries(result.data).forEach(([key, value]) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `<th>${key}</th><td>${value || "-"}</td>`;
+        table.appendChild(row);
+      });
+    } else {
+      document.getElementById("reportTitle").textContent = "⚠️ لم يتم العثور على التقرير";
+    }
+  } catch (err) {
+    console.error("خطأ في جلب التقرير:", err);
+    document.getElementById("reportTitle").textContent = "❌ خطأ في تحميل التقرير";
+  }
+}
+
+loadReport();
+</script>
+
+</body>
+</html>
