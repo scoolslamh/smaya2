@@ -62,12 +62,12 @@
       border-collapse: collapse;
     }
     .report-table th, 
-    .report-table td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: right;
-      font-size: 14px;
-    }
+    /* ✅ القيم داخل الحقول */
+.report-table td {
+  font-weight: bold;   /* غامق */
+  color: #000;         /* أسود صريح */
+  font-size: 15px;     /* أوضح */
+}
     .report-table th {
       background: #f0f4f8;
       color: #13344f;
