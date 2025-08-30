@@ -919,9 +919,9 @@ if (viewBtn) {
         result.visits.forEach(v => {
           const li = document.createElement("li");
           li.style.marginBottom = "8px";
-          li.innerHTML = `<a href="report.html?school=${encodeURIComponent(v.school)}&visit=${v.number}" target="_blank">
-                            🗓️ ${v.date} - زيارة رقم ${v.number}
-                          </a>`;
+          li.innerHTML = `<a href="report.html?school=${encodeURIComponent(v.school)}&visit=${v.visit_number}" target="_blank">
+                  🗓️ ${v.visit_date} - زيارة رقم ${v.visit_number}
+                </a>`;
           list.appendChild(li);
         });
 
