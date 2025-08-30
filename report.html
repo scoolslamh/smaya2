@@ -2,116 +2,202 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>تقرير زيارة مدرسة</title>
-  <link rel="stylesheet" href="style.css">
+  <title>تقرير زيارة المدرسة</title>
   <style>
     body {
       font-family: "Tajawal", sans-serif;
       background: #f5f7fa;
-      margin: 20px;
+      margin: 0;
+      padding: 20px;
     }
-    header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    header img {
-      height: 60px;
-    }
-    .report-box {
-      background: white;
+
+    .report-container {
+      background: #fff;
       padding: 20px;
       border-radius: 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin: 20px auto;
+      max-width: 1200px;
     }
-    h2 {
+
+    .report-container h2 {
       text-align: center;
       color: #13344f;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
-    table {
+
+    .section-title {
+      margin: 25px 0 10px;
+      padding: 10px;
+      background: #13344f;
+      color: #fff;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    .report-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 20px;
     }
-    table, th, td {
+
+    .report-table th, 
+    .report-table td {
       border: 1px solid #ddd;
-    }
-    th, td {
-      padding: 10px;
+      padding: 8px;
       text-align: right;
+      font-size: 14px;
     }
+
+    .report-table th {
+      background: #f0f4f8;
+      color: #13344f;
+      width: 15%;
+    }
+
+    .report-table td {
+      width: 18%;
+    }
+
     .print-btn {
-      background: #13344f;
-      color: white;
+      display: block;
+      margin: 25px auto 0;
       padding: 10px 20px;
+      background: #13344f;
+      color: #fff;
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      display: block;
-      margin: auto;
+    }
+    .print-btn:hover {
+      background: #0e2233;
     }
   </style>
 </head>
 <body>
+  <div class="report-container">
+    <h2>📑 تقرير زيارة المدرسة</h2>
 
-<header>
-  <img src="logo.png" alt="شعار الشركة">
-  <h1>شركة سمايا</h1>
-  <h3>تقرير زيارة المدرسة</h3>
-</header>
+    <!-- ✅ البيانات الأساسية -->
+    <div class="section-title">📌 البيانات الأساسية</div>
+    <table class="report-table">
+      <tr>
+        <th>📅 التاريخ</th><td id="visit_date"></td>
+        <th>📌 اليوم</th><td id="visit_day"></td>
+        <th>📆 الشهر</th><td id="visit_month"></td>
+      </tr>
+      <tr>
+        <th>📆 السنة</th><td id="visit_year"></td>
+        <th>👤 المشرف الزائر</th><td id="visitor"></td>
+        <th>🏫 المدرسة</th><td id="school"></td>
+      </tr>
+      <tr>
+        <th>🏢 المنطقة</th><td id="region"></td>
+        <th>🏙️ المدينة</th><td id="city"></td>
+        <th>🔖 الرقم الوزاري</th><td id="code"></td>
+      </tr>
+      <tr>
+        <th>📍 الحي / الشارع</th><td id="street"></td>
+        <th>📊 تصنيف المدرسة</th><td id="category"></td>
+        <th>🏷️ المرحلة التعليمية</th><td id="stage"></td>
+      </tr>
+      <tr>
+        <th>➕ مراحل ملحقة</th><td id="extra_stages"></td>
+        <th>📅 تاريخ الفحص</th><td id="inspection_date"></td>
+        <th>🏫 عدد الفصول</th><td id="classes"></td>
+      </tr>
+    </table>
 
-<div class="report-box">
-  <h2 id="reportTitle">جارٍ تحميل التقرير...</h2>
-  <table id="reportTable"></table>
-  <button class="print-btn" onclick="window.print()">🖨️ طباعة / حفظ PDF</button>
-</div>
+    <!-- ✅ الصحة والسلامة -->
+    <div class="section-title">🚨 الصحة والسلامة</div>
+    <table class="report-table">
+      <tr>
+        <th>🚪 مخارج الطوارئ</th><td id="emergency_exits"></td>
+        <th>🔢 عددها</th><td id="emergency_exits_count"></td>
+        <th>🧯 طفايات الحريق</th><td id="fire_extinguishers"></td>
+      </tr>
+      <tr>
+        <th>🔢 عدد الطفايات</th><td id="fire_extinguishers_count"></td>
+        <th>🧵 بكرات الحريق</th><td id="fire_hose_reels"></td>
+        <th>🔢 عدد البكرات</th><td id="fire_hose_reels_count"></td>
+      </tr>
+      <tr>
+        <th>📢 جرس الإنذار</th><td id="fire_alarm"></td>
+        <th>🔢 عدد الأجراس</th><td id="fire_alarm_count"></td>
+        <th>🚨 كواشف الدخان</th><td id="smoke_detectors"></td>
+      </tr>
+      <tr>
+        <th>🔢 عدد الكواشف</th><td id="smoke_detectors_count"></td>
+        <th>🚧 حواجز السلامة</th><td id="safety_barriers"></td>
+        <th>🚪 لوحات المخارج</th><td id="exit_signs"></td>
+      </tr>
+      <tr>
+        <th>⛑️ إسعافات أولية</th><td id="first_aid"></td>
+        <th>📍 نقاط التجمع</th><td id="assembly_points"></td>
+        <th>🔢 عددها</th><td id="assembly_points_count"></td>
+      </tr>
+      <tr>
+        <th>📄 وثائق السلامة</th><td id="safety_docs"></td>
+        <th>📡 وصلة الدفاع المدني</th><td id="civil_defense"></td>
+        <th>🔑 الأبواب والمفاتيح</th><td id="keys"></td>
+      </tr>
+    </table>
 
-<script>
-const API_URL = "/.netlify/functions/api";
+    <!-- ✅ العناصر المدنية -->
+    <div class="section-title">🏗️ العناصر المدنية</div>
+    <table class="report-table">
+      <tr>
+        <th>🧱 الحوائط</th><td id="walls_condition"></td>
+        <th>🪜 السلالم</th><td id="stairs"></td>
+        <th>🪟 النوافذ</th><td id="windows"></td>
+      </tr>
+      <tr>
+        <th>🚪 الأبواب</th><td id="doors"></td>
+        <th>🪵 الأرضيات</th><td id="floors_condition"></td>
+        <th>🌤️ المناور</th><td id="light_wells"></td>
+      </tr>
+      <tr>
+        <th>🏠 عزل السطح</th><td id="roof_insulation"></td>
+        <th>💧 تصريف السطح</th><td id="roof_drainage"></td>
+        <th>🧱 إطار السطح</th><td id="roof_frame"></td>
+      </tr>
+      <tr>
+        <th>♿ منحدر</th><td id="accessibility_ramp"></td>
+        <th>🌳 الحالة الخارجية</th><td id="external_condition"></td>
+        <th>🚪 البوابات</th><td id="main_gates"></td>
+      </tr>
+      <tr>
+        <th>🧱 السور</th><td id="fence"></td>
+        <th>⚙️ العناصر الميكانيكية</th><td id="mechanical"></td>
+        <th>🔌 لوحة التوزيع</th><td id="distribution"></td>
+      </tr>
+      <tr>
+        <th>⚡ التأريض</th><td id="earthing"></td>
+        <th>🔊 الصوت</th><td id="sound"></td>
+        <th>💡 الإضاءة</th><td id="lighting"></td>
+      </tr>
+      <tr>
+        <th>🚨 إضاءة الطوارئ</th><td id="emergency_lighting"></td>
+        <th>🔌 المقابس</th><td id="sockets"></td>
+        <th>❄️ المكيفات</th><td id="ac"></td>
+      </tr>
+      <tr>
+        <th>💧 المضخات</th><td id="pumps"></td>
+        <th>🌬️ مراوح الشفط</th><td id="fans"></td>
+        <th>🛗 المصاعد</th><td id="elevators"></td>
+      </tr>
+      <tr>
+        <th>🔥 سخانات المياه</th><td id="heaters"></td>
+        <th>🚰 خزان أرضي</th><td id="tank_ground"></td>
+        <th>🚰 خزان علوي</th><td id="tank_top"></td>
+      </tr>
+      <tr>
+        <th>🚧 الحواجز</th><td id="barriers"></td>
+        <th>⚡ توصيلات عشوائية</th><td id="wiring"></td>
+        <td colspan="2"></td>
+      </tr>
+    </table>
 
-// ✅ استخراج باراميترات الرابط (school & visit)
-const urlParams = new URLSearchParams(window.location.search);
-const school = urlParams.get("school");
-const visitNumber = urlParams.get("visit");
-
-// ✅ جلب بيانات التقرير
-async function loadReport() {
-  try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "getVisitReport",
-        school,
-        visit: visitNumber
-      })
-    });
-
-    const result = await res.json();
-    if (result.success) {
-      document.getElementById("reportTitle").textContent = 
-        `📑 تقرير زيارة رقم ${visitNumber} - ${school}`;
-
-      const table = document.getElementById("reportTable");
-      table.innerHTML = "";
-
-      // عرض كل الحقول كجدول
-      Object.entries(result.data).forEach(([key, value]) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `<th>${key}</th><td>${value || "-"}</td>`;
-        table.appendChild(row);
-      });
-    } else {
-      document.getElementById("reportTitle").textContent = "⚠️ لم يتم العثور على التقرير";
-    }
-  } catch (err) {
-    console.error("خطأ في جلب التقرير:", err);
-    document.getElementById("reportTitle").textContent = "❌ خطأ في تحميل التقرير";
-  }
-}
-
-loadReport();
-</script>
-
+    <button onclick="window.print()" class="print-btn">🖨️ طباعة / حفظ PDF</button>
+  </div>
 </body>
 </html>
