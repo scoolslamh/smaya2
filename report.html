@@ -18,6 +18,7 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       margin: 20px auto;
       max-width: 1200px;
+      display: none; /* ✅ نخفيه حتى يتم تحميل البيانات */
     }
 
     .report-container h2 {
@@ -71,10 +72,42 @@
     .print-btn:hover {
       background: #0e2233;
     }
+
+    /* ✅ شاشة التحميل */
+    .loader {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #13344f;
+      font-size: 18px;
+    }
+    .spinner {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #13344f;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 15px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
-  <div class="report-container">
+
+  <!-- ✅ شاشة التحميل -->
+  <div class="loader" id="loader">
+    <div class="spinner"></div>
+    <div>جاري تحميل التقرير...</div>
+  </div>
+
+  <!-- ✅ محتوى التقرير -->
+  <div class="report-container" id="reportContainer">
     <h2>📑 تقرير زيارة المدرسة</h2>
 
     <!-- ✅ البيانات الأساسية -->
@@ -201,21 +234,25 @@
   </div>
 
   <script>
-    const API_URL = "/.netlify/functions/api"; // غيره برابط الويب أب عندك
+    const API_URL = "/.netlify/functions/api"; 
 
-    // ✅ قراءة بارامترات الرابط
     const urlParams = new URLSearchParams(window.location.search);
     const schoolName = urlParams.get("school");
     const visitNumber = urlParams.get("visit");
 
-    // ✅ جلب تقرير الزيارة الواحد
     async function loadReport() {
+      const loader = document.getElementById("loader");
+      const reportContainer = document.getElementById("reportContainer");
+
       try {
+        loader.style.display = "flex";
+        reportContainer.style.display = "none";
+
         const res = await fetch(API_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            action: "getVisitReport", // ✅ استدعاء الدالة الجديدة
+            action: "getVisitReport",
             school: schoolName,
             visit: visitNumber
           })
@@ -228,10 +265,14 @@
             const el = document.getElementById(key);
             if (el) el.textContent = report[key] || "-";
           }
+          loader.style.display = "none";
+          reportContainer.style.display = "block";
         } else {
+          loader.style.display = "none";
           alert("⚠️ " + (result.message || "لم يتم العثور على التقرير"));
         }
       } catch (err) {
+        loader.style.display = "none";
         console.error("خطأ:", err);
         alert("❌ فشل الاتصال بالخادم");
       }
