@@ -820,48 +820,46 @@
             document.getElementById("school").value = schoolInfo.school;
             document.getElementById("code").value = schoolInfo.code;
 
-            // ✅ إظهار آخر زيارة وعدد الزيارات + زر استعراض الزيارات
-const infoBox = document.getElementById("lastVisitInfo");
-let formattedDate = "لا يوجد";
+           // ✅ إظهار آخر زيارة وعدد الزيارات
+    const infoBox = document.getElementById("lastVisitInfo");
+    let formattedDate = "لا يوجد";
+    if (schoolInfo.last_visit) {
+      const visitDate = new Date(schoolInfo.last_visit);
+      formattedDate = visitDate.toLocaleDateString("ar-EG", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      });
+    }
 
-if (schoolInfo.last_visit) {
-  const visitDate = new Date(schoolInfo.last_visit);
-  formattedDate = visitDate.toLocaleDateString("ar-EG", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric"
-  });
-}
+    // ✅ إضافة النص + زر الاستعراض
+    infoBox.innerHTML = `
+      🗓️ آخر زيارة: <b>${formattedDate}</b> |
+      🔢 عدد الزيارات: <b>${schoolInfo.visits || 0}</b>
+      <br>
+      <button id="viewVisitsBtn"
+              style="margin-top:10px; padding:8px 15px;
+                     background:#007BFF; color:white;
+                     border:none; border-radius:5px; cursor:pointer;">
+        استعراض الزيارات السابقة
+      </button>
+    `;
+    infoBox.style.display = "block";
 
-infoBox.innerHTML = `
-  🗓️ آخر زيارة: <b>${formattedDate}</b> |
-  🔢 عدد الزيارات: <b>${schoolInfo.visits || 0}</b>
-  <br>
-  <button id="viewVisitsBtn"
-          style="margin-top:10px; padding:8px 15px;
-                 background:#007BFF; color:white;
-                 border:none; border-radius:5px; cursor:pointer;">
-    استعراض الزيارات السابقة
-  </button>
-`;
+    // ✅ ربط حدث الضغط على الزر
+    const viewBtn = document.getElementById("viewVisitsBtn");
+    if (viewBtn) {
+      viewBtn.addEventListener("click", () => {
+        alert("📑 هنا سيتم عرض قائمة الزيارات السابقة للمدرسة");
+        // ⚡ لاحقاً: هنا نضيف استدعاء دالة تجلب الزيارات وتعرضها في نافذة أو صفحة جديدة
+      });
+    }
 
-infoBox.style.display = "block";
-
-// ✅ هنا فقط نربط الحدث بعد ما يتولد الزر
-setTimeout(() => {
-  const viewBtn = document.getElementById("viewVisitsBtn");
-  if (viewBtn) {
-    viewBtn.addEventListener("click", () => {
-      alert("📑 هنا ستُعرض قائمة الزيارات السابقة لهذه المدرسة");
-      // لاحقاً: هنا نستدعي كود يجلب بيانات الزيارات ويعرضها في نافذة أو صفحة جديدة
-    });
+    // ✅ إظهار النموذج
+    document.getElementById("evaluationForm").style.display = "block";
   }
-}, 0);
-
-// ✅ لا نلمس الفلاتر أو كود تحميل المدارس
-document.getElementById("evaluationForm").style.display = "block";
-
+});
 
       } catch (err) {
         console.error("خطأ في تحميل المدارس:", err);
