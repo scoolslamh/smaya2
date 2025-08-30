@@ -199,50 +199,45 @@
 
     <button onclick="window.print()" class="print-btn">🖨️ طباعة / حفظ PDF</button>
   </div>
+
   <script>
-  const API_URL = "/.netlify/functions/api"; // غيّرها إلى رابطك الفعلي إذا لزم
+    const API_URL = "/.netlify/functions/api"; // غيره برابط الويب أب عندك
 
-  // ✅ قراءة البارامترات من الرابط
-  const urlParams = new URLSearchParams(window.location.search);
-  const schoolName = urlParams.get("school");
-  const visitNumber = urlParams.get("visit");
+    // ✅ قراءة بارامترات الرابط
+    const urlParams = new URLSearchParams(window.location.search);
+    const schoolName = urlParams.get("school");
+    const visitNumber = urlParams.get("visit");
 
-  // ✅ جلب بيانات الزيارة
-  async function loadReport() {
-    try {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "getVisits",
-          school: schoolName
-        })
-      });
+    // ✅ جلب تقرير الزيارة الواحد
+    async function loadReport() {
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "getVisitReport", // ✅ استدعاء الدالة الجديدة
+            school: schoolName,
+            visit: visitNumber
+          })
+        });
 
-      const result = await res.json();
-      if (result.success) {
-        const visit = result.visits.find(v => v.visit_number == visitNumber);
-        if (!visit) {
-          alert("⚠️ لم يتم العثور على هذه الزيارة");
-          return;
+        const result = await res.json();
+        if (result.success) {
+          const report = result.data;
+          for (const key in report) {
+            const el = document.getElementById(key);
+            if (el) el.textContent = report[key] || "-";
+          }
+        } else {
+          alert("⚠️ " + (result.message || "لم يتم العثور على التقرير"));
         }
-
-        // ✅ تعبئة الحقول في الصفحة
-        for (const key in visit) {
-          const el = document.getElementById(key);
-          if (el) el.textContent = visit[key] || "-";
-        }
-      } else {
-        alert("❌ خطأ في جلب التقرير");
+      } catch (err) {
+        console.error("خطأ:", err);
+        alert("❌ فشل الاتصال بالخادم");
       }
-    } catch (err) {
-      console.error("خطأ:", err);
-      alert("⚠️ فشل الاتصال بالخادم");
     }
-  }
 
-  loadReport();
-</script>
-
+    loadReport();
+  </script>
 </body>
 </html>
