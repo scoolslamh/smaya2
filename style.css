@@ -271,4 +271,32 @@ input:focus, select:focus, textarea:focus {
   background: #c0392b;
 }
 
-    
+/* تنسيقات الهيدر */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #13344f;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+}
+
+.header .title {
+  text-align: right;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.header p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.header img {
+  height: 40px;
+} 
