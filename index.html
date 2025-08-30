@@ -98,16 +98,29 @@
 </head>
 <body>
 
-  <!-- ✅ منع الوصول للصفحة إذا كان مسجّل دخول -->
+  <!-- ✅ تجاوز الدخول محليًا -->
   <script>
+    if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+      console.log("🔓 Localhost detected - auto login");
+
+      localStorage.setItem("loggedIn", "true");
+      localStorage.setItem("username", "LocalUser");
+      localStorage.setItem("role", "المشرف");
+      localStorage.setItem("fullName", "Local Admin");
+      localStorage.setItem("loginTime", Date.now());
+
+      // ✅ التحويل مباشرة للصفحة التالية
+      window.location.href = "form.html";
+    }
+
+    // ✅ منع الوصول للصفحة إذا كان مسجّل دخول بالفعل
     if (localStorage.getItem("loggedIn") === "true") {
-      window.location.href = "form.html"; // التوجيه للصفحة التالية
+      window.location.href = "form.html"; 
     }
   </script>
 
   <!-- الهيدر -->
   <header class="main-header">
-    <!-- ✅ فقط الشعار والعناوين -->
     <div class="header-center">
       <img src="logo.png" alt="شعار الشركة" class="logo" />
       <h1>شركة سمايا</h1>

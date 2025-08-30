@@ -164,3 +164,23 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+// ✅ كود تجاوز تسجيل الدخول محليًا (localhost)
+if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+  console.log("🔓 Localhost detected - auto login as Admin");
+
+  // جلسة وهمية
+  localStorage.setItem("isLoggedIn", "true");
+  localStorage.setItem("role", "المشرف");
+  localStorage.setItem("fullName", "Local Admin");
+
+  // إذا عندك login-section و dashboard داخل نفس الصفحة
+  document.addEventListener("DOMContentLoaded", () => {
+    const loginSection = document.getElementById("login-section");
+    const dashboardSection = document.getElementById("dashboard");
+
+    if (loginSection && dashboardSection) {
+      loginSection.style.display = "none";
+      dashboardSection.style.display = "block";
+    }
+  });
+}
