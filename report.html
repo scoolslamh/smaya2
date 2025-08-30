@@ -307,9 +307,22 @@
         if (result.success) {
           const report = result.data;
           for (const key in report) {
-            const el = document.getElementById(key);
-            if (el) el.textContent = report[key] || "-";
-          }
+  const el = document.getElementById(key);
+  if (el) {
+    let value = report[key] || "-";
+
+    // ✅ تنسيق التاريخ (dd-mm-yyyy)
+    if (key === "visit_date" && value && value !== "-") {
+      const dateObj = new Date(value);
+      const day = ("0" + dateObj.getDate()).slice(-2);
+      const month = ("0" + (dateObj.getMonth() + 1)).slice(-2);
+      const year = dateObj.getFullYear();
+      value = `${day}-${month}-${year}`;
+    }
+
+    el.textContent = value;
+  }
+}
           loader.style.display = "none";
           reportContainer.style.display = "block";
         } else {
