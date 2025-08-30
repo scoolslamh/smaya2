@@ -693,6 +693,17 @@
       <button type="button" id="newEntryBtn">🔄 إدخال جديد</button>
     </div>
   </main>
+  <!-- ✅ نافذة منبثقة لاستعراض الزيارات السابقة -->
+<div id="visitsModal" style="display:none;
+            position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,0.5); z-index:1000;
+            justify-content:center; align-items:center;">
+  <div style="background:#fff; padding:20px; border-radius:10px; max-width:600px; width:90%; max-height:80%; overflow:auto;">
+    <h3 style="margin-top:0; color:#13344f;">📑 الزيارات السابقة</h3>
+    <ul id="visitsList" style="list-style:none; padding:0;"></ul>
+    <button onclick="closeVisitsModal()" style="margin-top:15px; padding:8px 15px; background:#13344f; color:white; border:none; border-radius:5px; cursor:pointer;">إغلاق</button>
+  </div>
+</div>
 
   <!-- الفوتر -->
   <footer class="main-footer">
@@ -853,8 +864,76 @@
       viewBtn.addEventListener("click", () => {
         alert("📑 هنا سيتم عرض قائمة الزيارات السابقة للمدرسة");
         // ⚡ لاحقاً: هنا نضيف استدعاء دالة تجلب الزيارات وتعرضها في نافذة أو صفحة جديدة
+        if (viewBtn) {
+  viewBtn.addEventListener("click", async () => {
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "getVisits",
+          school: schoolInfo.school
+        })
       });
+
+      if (!res.ok) throw new Error("فشل في جلب البيانات");
+
+      const result = await res.json();
+      if (result.success && result.visits.length > 0) {
+        // ✅ إنشاء نافذة منبثقة
+        let modal = document.createElement("div");
+        modal.style.position = "fixed";
+        modal.style.top = "0";
+        modal.style.left = "0";
+        modal.style.width = "100%";
+        modal.style.height = "100%";
+        modal.style.background = "rgba(0,0,0,0.5)";
+        modal.style.display = "flex";
+        modal.style.alignItems = "center";
+        modal.style.justifyContent = "center";
+        modal.style.zIndex = "9999";
+
+        // ✅ صندوق القائمة
+        let box = document.createElement("div");
+        box.style.background = "white";
+        box.style.padding = "20px";
+        box.style.borderRadius = "10px";
+        box.style.width = "400px";
+        box.style.maxHeight = "70%";
+        box.style.overflowY = "auto";
+        box.innerHTML = `<h3>📑 زيارات ${schoolInfo.school}</h3><ul id="visitsList"></ul>
+                         <button id="closeModal" 
+                           style="margin-top:15px;padding:8px 15px;background:#dc3545;color:white;
+                           border:none;border-radius:5px;cursor:pointer;">إغلاق</button>`;
+
+        modal.appendChild(box);
+        document.body.appendChild(modal);
+
+        // ✅ تعبئة القائمة
+        const list = box.querySelector("#visitsList");
+        result.visits.forEach(v => {
+          const li = document.createElement("li");
+          li.style.marginBottom = "8px";
+          li.innerHTML = `<a href="report.html?school=${encodeURIComponent(v.school)}&visit=${v.number}" target="_blank">
+                            🗓️ ${v.date} - زيارة رقم ${v.number}
+                          </a>`;
+          list.appendChild(li);
+        });
+
+        // ✅ زر إغلاق
+        box.querySelector("#closeModal").addEventListener("click", () => {
+          document.body.removeChild(modal);
+        });
+
+      } else {
+        alert("⚠️ لا توجد زيارات سابقة لهذه المدرسة");
+      }
+    } catch (err) {
+      console.error("خطأ في جلب الزيارات:", err);
+      alert("❌ حدث خطأ أثناء جلب الزيارات");
     }
+  });
+}
 
     // ✅ إظهار النموذج
     document.getElementById("evaluationForm").style.display = "block";

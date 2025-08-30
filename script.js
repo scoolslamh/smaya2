@@ -184,3 +184,57 @@ if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
     }
   });
 }
+// ✅ دالة فتح النافذة
+function openVisitsModal() {
+  document.getElementById("visitsModal").style.display = "flex";
+}
+
+// ✅ دالة إغلاق النافذة
+function closeVisitsModal() {
+  document.getElementById("visitsModal").style.display = "none";
+}
+
+// ✅ جلب الزيارات من الخادم
+async function fetchVisits(schoolName) {
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "getVisits", school: schoolName })
+    });
+
+    const result = await res.json();
+    if (result.success) {
+      const visitsList = document.getElementById("visitsList");
+      visitsList.innerHTML = ""; // تفريغ القائمة
+
+      if (result.visits.length === 0) {
+        visitsList.innerHTML = "<li>⚠️ لا توجد زيارات سابقة</li>";
+      } else {
+        result.visits.forEach(v => {
+          const li = document.createElement("li");
+          li.style.padding = "10px";
+          li.style.borderBottom = "1px solid #ddd";
+          li.style.cursor = "pointer";
+
+          li.innerHTML = `🔹 <b>زيارة رقم ${v.visit_number}</b> - بتاريخ ${v.visit_date}`;
+          
+          // عند الضغط على الزيارة → فتح صفحة جديدة للتقرير
+          li.addEventListener("click", () => {
+            const url = `report.html?school=${encodeURIComponent(v.school)}&visit=${v.visit_number}`;
+            window.open(url, "_blank");
+          });
+
+          visitsList.appendChild(li);
+        });
+      }
+
+      openVisitsModal();
+    } else {
+      alert("⚠️ لم يتم جلب الزيارات: " + (result.message || "خطأ غير معروف"));
+    }
+  } catch (err) {
+    console.error("خطأ في جلب الزيارات:", err);
+    alert("❌ فشل الاتصال بالخادم");
+  }
+}
