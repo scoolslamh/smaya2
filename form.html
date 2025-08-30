@@ -868,12 +868,8 @@
     infoBox.style.display = "block";
 
     // ✅ ربط حدث الضغط على الزر
-    const viewBtn = document.getElementById("viewVisitsBtn");
-    if (viewBtn) {
-      viewBtn.addEventListener("click", () => {
-        alert("📑 هنا سيتم عرض قائمة الزيارات السابقة للمدرسة");
-        // ⚡ لاحقاً: هنا نضيف استدعاء دالة تجلب الزيارات وتعرضها في نافذة أو صفحة جديدة
-        if (viewBtn) {
+const viewBtn = document.getElementById("viewVisitsBtn");
+if (viewBtn) {
   viewBtn.addEventListener("click", async () => {
     try {
       const res = await fetch(API_URL, {
@@ -943,6 +939,7 @@
     }
   });
 }
+
 
     // ✅ إظهار النموذج
     document.getElementById("evaluationForm").style.display = "block";
