@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>نظام تقييم المباني المدرسية</title>
+  <title>نظام زيارة المباني المدرسية</title>
   <link rel="stylesheet" href="style.css" />
   <style>
     body {
@@ -190,8 +190,16 @@
             <input type="text" name="stage" id="stage">
           </label>
           <label>المراحل الملحقة: 
-            <input type="text" name="extra_stages" id="extra_stages">
-          </label>
+  <select name="extra_stages" id="extra_stages">
+    <option value="">اختر</option>
+    <option value="ابتدائي">ابتدائي</option>
+    <option value="متوسط">متوسط</option>
+    <option value="ثانوي">ثانوي</option>
+    <option value="طفولة مبكرة">طفولة مبكرة</option>
+    <option value="مجمع">مجمع</option>
+  </select>
+</label>
+
           
           <label>عدد الفصول: 
             <input type="number" name="classes" id="classes">
@@ -402,8 +410,8 @@
     <label>البواب:
       <select name="keys" required>
         <option value="">اختر</option>
-        <option value="مطابق">مطابق</option>
-        <option value="غير مطابق">غير مطابق</option>
+        <option value="مرضي">مرضي</option>
+        <option value="غير مرضي">غير مرضي</option>
         </select>
     </label>
 
