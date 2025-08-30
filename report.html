@@ -57,28 +57,35 @@
       border-radius: 6px;
       font-size: 16px;
     }
+
+    /* ✅ تنسيقات الجدول */
     .report-table {
       width: 100%;
-      border-collapse: collapse;
+      border-collapse: collapse; /* دمج الحدود */
+      border: 2px solid #13344f; /* إطار خارجي */
     }
     .report-table th, 
-    /* ✅ القيم داخل الحقول */
-.report-table td {
-  font-weight: bold;   /* غامق */
-  color: #000;         /* أسود صريح */
-  font-size: 15px;     /* أوضح */
-}
+    .report-table td {
+      border: 1px solid #999;  /* حدود أوضح */
+      padding: 8px;
+      text-align: center;      /* ✅ توسيط أفقي */
+      vertical-align: middle;  /* ✅ توسيط عمودي */
+      font-size: 14px;
+    }
     .report-table th {
       background: #f0f4f8;
       color: #13344f;
+      font-weight: bold;
       width: 15%;
     }
-    ..report-table td {
-  width: 18%;
-  font-weight: bold;   /* ✅ يخلي النص بولد */
-  color: #000;         /* ✅ أسود صريح أوضح */
-  font-size: 15px;     /* ✅ (اختياري) تكبر الخط شوي */
-}
+    .report-table td {
+      width: 18%;
+      font-weight: bold;   /* ✅ القيم بخط بولد */
+      color: #000;
+      font-size: 15px;
+    }
+
+    /* ✅ زر الطباعة */
     .print-btn {
       display: block;
       margin: 25px auto 0;
@@ -170,7 +177,7 @@
     <th>🏠 ملكية المبنى</th><td id="ownership"></td>
     <td colspan="4"></td>
   </tr>
-    </table>
+</table>
 
     <!-- ✅ الصحة والسلامة -->
     <div class="section-title">🚨 الصحة والسلامة</div>
@@ -205,8 +212,8 @@
         <th>📡 وصلة الدفاع المدني</th><td id="civil_defense"></td>
         <th>👮‍♂️ البوّاب</th><td id="keys"></td>
       </tr>
-     </tr>
-      <th>⚡ لوحة التحكم</th><td id="control_panel"></td>
+      <tr>
+        <th>⚡ لوحة التحكم</th><td id="control_panel"></td>
         <th>📒 سجل المخاطر</th><td id="edges"></td>
         <th>💧 مضخات الحريق</th><td id="fire_pumps"></td>
       </tr>
@@ -266,18 +273,20 @@
         <td colspan="2"></td>
       </tr>
     </table>
-<!-- ✅ حقل الاعتماد -->
-<div class="section-title">🔏 الاعتماد</div>
-<table class="report-table">
-  <tr>
-    <th>المعتمد / الاسم</th>
-    <td colspan="3" style="height:40px;"></td>
-  </tr>
-  <tr>
-    <th>التوقيع</th><td style="height:60px;"></td>
-    <th>الختم</th><td style="height:60px;"></td>
-  </tr>
-</table>
+
+    <!-- ✅ حقل الاعتماد -->
+    <div class="section-title">🔏 الاعتماد</div>
+    <table class="report-table">
+      <tr>
+        <th>المعتمد / الاسم</th>
+        <td colspan="3" style="height:40px;"></td>
+      </tr>
+      <tr>
+        <th>التوقيع</th><td style="height:60px;"></td>
+        <th>الختم</th><td style="height:60px;"></td>
+      </tr>
+    </table>
+
     <button onclick="window.print()" class="print-btn">🖨️ طباعة / حفظ PDF</button>
   </div>
 
@@ -310,22 +319,22 @@
         if (result.success) {
           const report = result.data;
           for (const key in report) {
-  const el = document.getElementById(key);
-  if (el) {
-    let value = report[key] || "-";
+            const el = document.getElementById(key);
+            if (el) {
+              let value = report[key] || "-";
 
-    // ✅ تنسيق التاريخ (dd-mm-yyyy)
-    if (key === "visit_date" && value && value !== "-") {
-      const dateObj = new Date(value);
-      const day = ("0" + dateObj.getDate()).slice(-2);
-      const month = ("0" + (dateObj.getMonth() + 1)).slice(-2);
-      const year = dateObj.getFullYear();
-      value = `${day}-${month}-${year}`;
-    }
+              // ✅ تنسيق التاريخ (dd-mm-yyyy)
+              if (key === "visit_date" && value && value !== "-") {
+                const dateObj = new Date(value);
+                const day = ("0" + dateObj.getDate()).slice(-2);
+                const month = ("0" + (dateObj.getMonth() + 1)).slice(-2);
+                const year = dateObj.getFullYear();
+                value = `${day}-${month}-${year}`;
+              }
 
-    el.textContent = value;
-  }
-}
+              el.textContent = value;
+            }
+          }
           loader.style.display = "none";
           reportContainer.style.display = "block";
         } else {
