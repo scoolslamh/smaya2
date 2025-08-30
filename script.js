@@ -1,4 +1,4 @@
-// ✅ بدل ما نستدعي Google Script مباشرةً
+// ✅ بدل ما نستدعي Google Script مباشرة
 // نخلي الطلب يمر عبر Netlify Proxy (netlify.toml)
 const API_URL = "/api";
 
@@ -70,7 +70,7 @@ async function loadSchools() {
       const selectedOption = schoolSelect.options[schoolSelect.selectedIndex];
       if (!selectedOption.value) return;
 
-      // ✅ تعبئة الحقول الأساسية من القائمة
+      // ✅ تعبئة الحقول الأساسية
       document.getElementById("region").value = selectedOption.dataset.region;
       document.getElementById("city").value = selectedOption.dataset.city;
       document.getElementById("school").value = selectedOption.value;
@@ -97,7 +97,7 @@ async function loadSchools() {
         console.error("⚠️ خطأ في جلب بيانات المدرسة:", err);
       }
 
-      // ✅ إظهار النموذج بعد اختيار المدرسة
+      // ✅ إظهار النموذج
       document.getElementById("evaluationForm").style.display = "block";
     });
 
@@ -143,7 +143,7 @@ document.getElementById("evaluationForm").addEventListener("submit", async funct
   }
 });
 
-// ✅ تحميل المدارس + رسالة الترحيب عند فتح الصفحة
+// ✅ تحميل المدارس + رسالة الترحيب
 window.addEventListener("DOMContentLoaded", () => {
   loadSchools();
 
@@ -164,16 +164,15 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
-// ✅ كود تجاوز تسجيل الدخول محليًا (localhost)
+
+// ✅ تجاوز تسجيل الدخول محليًا (localhost)
 if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
   console.log("🔓 Localhost detected - auto login as Admin");
 
-  // جلسة وهمية
   localStorage.setItem("isLoggedIn", "true");
   localStorage.setItem("role", "المشرف");
   localStorage.setItem("fullName", "Local Admin");
 
-  // إذا عندك login-section و dashboard داخل نفس الصفحة
   document.addEventListener("DOMContentLoaded", () => {
     const loginSection = document.getElementById("login-section");
     const dashboardSection = document.getElementById("dashboard");
@@ -184,12 +183,13 @@ if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
     }
   });
 }
-// ✅ دالة فتح النافذة
+
+// ✅ فتح النافذة
 function openVisitsModal() {
   document.getElementById("visitsModal").style.display = "flex";
 }
 
-// ✅ دالة إغلاق النافذة
+// ✅ إغلاق النافذة
 function closeVisitsModal() {
   document.getElementById("visitsModal").style.display = "none";
 }

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>نظام زيارة المباني المدرسية</title>
+  <title>نظام تقييم المباني التعليمية</title>
   <link rel="stylesheet" href="style.css" />
   <style>
     body {
@@ -94,7 +94,7 @@
   <div class="header-center">
     <img src="logo.png" alt="شعار الشركة" class="logo" />
     <h1>شركــة سمايا</h1>
-    <div class="subtitle">نظام متابعة الصيانة في المدارس</div>
+    <div class="subtitle">نظام تقييم المباني التعليمية</div>
   </div>
 </header>
 
@@ -184,13 +184,8 @@
     <option value="كبير">كبير</option>
   </select>
 </label>
-
-          </label>
           <label>المرحلة التعليمية: 
-            <input type="text" name="stage" id="stage">
-          </label>
-          <label>المراحل الملحقة: 
-  <select name="extra_stages" id="extra_stages">
+  <select name="stage" id="stage" required>
     <option value="">اختر</option>
     <option value="ابتدائي">ابتدائي</option>
     <option value="متوسط">متوسط</option>
@@ -199,7 +194,9 @@
     <option value="مجمع">مجمع</option>
   </select>
 </label>
-
+          <label>المراحل الملحقة:
+             <input type="text" name="extra_stages" id="extra_stages"> 
+          </label>
           
           <label>عدد الفصول: 
             <input type="number" name="classes" id="classes">

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تسجيل الدخول - نظام تقييم المباني المدرسية</title>
+  <title>تسجيل الدخول - نظام تقييم المباني التعليمية</title>
   <link rel="stylesheet" href="style.css">
   <style>
     body {
@@ -31,6 +31,7 @@
       width: 100%;
       max-width: 400px;
       text-align: right;
+      position: relative;
     }
 
     .login-card h2 {
@@ -76,6 +77,22 @@
       margin-top: 10px;
       text-align: center;
       font-size: 14px;
+    }
+
+    /* ✅ مؤشر التحميل */
+    .loader {
+      display: none;
+      margin: 15px auto;
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #13344f;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     header, footer {
@@ -139,7 +156,9 @@
       <label>كلمة المرور</label>
       <input type="password" name="password" required>
 
-      <button type="submit">دخول</button>
+      <button type="submit" id="loginBtn">دخول</button>
+      <!-- ✅ مؤشر التحميل -->
+      <div class="loader" id="loginLoader"></div>
       <p id="errorMsg" class="error"></p>
     </form>
   </main>
@@ -156,6 +175,14 @@
       e.preventDefault();
       const username = e.target.username.value.trim();
       const password = e.target.password.value.trim();
+      const btn = document.getElementById("loginBtn");
+      const loader = document.getElementById("loginLoader");
+      const errorMsg = document.getElementById("errorMsg");
+
+      // ✅ تفعيل التحميل
+      btn.disabled = true;
+      loader.style.display = "block";
+      errorMsg.textContent = "";
 
       try {
         const res = await fetch(API_URL, {
@@ -179,13 +206,17 @@
           // ✅ التوجيه للصفحة التالية بعد الدخول
           window.location.href = "form.html";
         } else {
-          document.getElementById("errorMsg").textContent = data.message || "❌ بيانات الدخول غير صحيحة";
+          errorMsg.textContent = data.message || "❌ بيانات الدخول غير صحيحة";
           e.target.password.value = "";
         }
       } catch (err) {
-        document.getElementById("errorMsg").textContent = "⚠️ خطأ في الاتصال بالخادم";
+        errorMsg.textContent = "⚠️ خطأ في الاتصال بالخادم";
         console.error("خطأ:", err);
         e.target.password.value = "";
+      } finally {
+        // ✅ إيقاف التحميل
+        btn.disabled = false;
+        loader.style.display = "none";
       }
     });
   </script>
