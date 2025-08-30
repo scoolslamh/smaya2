@@ -177,7 +177,14 @@
             <input type="text" name="street" id="street">
           </label>
           <label>تصنيف المدرسة: 
-            <input type="text" name="category" id="category">
+  <select name="category" id="category" required>
+    <option value="">اختر</option>
+    <option value="صغير">صغير</option>
+    <option value="وسط">وسط</option>
+    <option value="كبير">كبير</option>
+  </select>
+</label>
+
           </label>
           <label>المرحلة التعليمية: 
             <input type="text" name="stage" id="stage">
@@ -185,9 +192,7 @@
           <label>المراحل الملحقة: 
             <input type="text" name="extra_stages" id="extra_stages">
           </label>
-          <label>تاريخ الفحص: 
-            <input type="date" name="inspection_date" id="inspection_date">
-          </label>
+          
           <label>عدد الفصول: 
             <input type="number" name="classes" id="classes">
           </label>
@@ -203,8 +208,14 @@
               <option>لا</option>
             </select>
           </label>
-          <label>طرق الوصول للمدرسة: 
-            <input type="text" name="access" id="access">
+          <label>نوع الزيارة: 
+  <select name="visit_type" id="visit_type" required>
+    <option value="">اختر</option>
+    <option value="دورية">دورية</option>
+    <option value="طارئة">طارئة</option>
+  </select>
+</label>
+
           </label>
           <label>ملكية المبنى: 
             <select name="ownership" id="ownership" required>
