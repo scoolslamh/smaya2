@@ -929,15 +929,25 @@ if (viewBtn) {
         document.body.appendChild(modal);
 
         // ✅ تعبئة القائمة
-        const list = box.querySelector("#visitsList");
-        result.visits.forEach(v => {
-          const li = document.createElement("li");
-          li.style.marginBottom = "8px";
-          li.innerHTML = `<a href="report.html?school=${encodeURIComponent(v.school)}&visit=${v.visit_number}" target="_blank">
-                  🗓️ ${v.visit_date} - زيارة رقم ${v.visit_number}
-                </a>`;
-          list.appendChild(li);
-        });
+const list = box.querySelector("#visitsList");
+result.visits.forEach(v => {
+  // تنسيق التاريخ إلى dd-mm-yyyy
+  let formattedDate = "-";
+  if (v.visit_date) {
+    const dateObj = new Date(v.visit_date);
+    const day = ("0" + dateObj.getDate()).slice(-2);
+    const month = ("0" + (dateObj.getMonth() + 1)).slice(-2);
+    const year = dateObj.getFullYear();
+    formattedDate = `${day}-${month}-${year}`;
+  }
+
+  const li = document.createElement("li");
+  li.style.marginBottom = "8px";
+  li.innerHTML = `<a href="report.html?school=${encodeURIComponent(v.school)}&visit=${v.visit_number}" target="_blank">
+          🗓️ ${formattedDate} - زيارة رقم ${v.visit_number}
+        </a>`;
+  list.appendChild(li);
+});
 
         // ✅ زر إغلاق
         box.querySelector("#closeModal").addEventListener("click", () => {
