@@ -185,17 +185,24 @@ if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
 }
 
 // ✅ فتح النافذة
-function openVisitsModal() {
+function openVisitsModal(schoolName) {
   document.getElementById("visitsModal").style.display = "flex";
+  document.getElementById("visitsTitle").textContent = `📑 زيارات ${schoolName}`;
 }
 
 // ✅ إغلاق النافذة
-function closeVisitsModal() {
+document.getElementById("closeModal").addEventListener("click", () => {
   document.getElementById("visitsModal").style.display = "none";
-}
+});
 
 // ✅ جلب الزيارات من الخادم
 async function fetchVisits(schoolName) {
+  const loader = document.getElementById("visitsLoader");
+  const list = document.getElementById("visitsList");
+
+  loader.style.display = "block";
+  list.innerHTML = "";
+
   try {
     const res = await fetch(API_URL, {
       method: "POST",
@@ -204,37 +211,35 @@ async function fetchVisits(schoolName) {
     });
 
     const result = await res.json();
-    if (result.success) {
-      const visitsList = document.getElementById("visitsList");
-      visitsList.innerHTML = ""; // تفريغ القائمة
+    loader.style.display = "none";
 
-      if (result.visits.length === 0) {
-        visitsList.innerHTML = "<li>⚠️ لا توجد زيارات سابقة</li>";
-      } else {
-        result.visits.forEach(v => {
-          const li = document.createElement("li");
-          li.style.padding = "10px";
-          li.style.borderBottom = "1px solid #ddd";
-          li.style.cursor = "pointer";
+    if (result.success && result.visits.length > 0) {
+      result.visits.forEach(v => {
+        let formattedDate = "-";
+        if (v.visit_date) {
+          const d = new Date(v.visit_date);
+          const day = ("0" + d.getDate()).slice(-2);
+          const month = ("0" + (d.getMonth() + 1)).slice(-2);
+          const year = d.getFullYear();
+          formattedDate = `${day}-${month}-${year}`;
+        }
 
-          li.innerHTML = `🔹 <b>زيارة رقم ${v.visit_number}</b> - بتاريخ ${v.visit_date}`;
-          
-          // عند الضغط على الزيارة → فتح صفحة جديدة للتقرير
-          li.addEventListener("click", () => {
-            const url = `report.html?school=${encodeURIComponent(v.school)}&visit=${v.visit_number}`;
-            window.open(url, "_blank");
-          });
-
-          visitsList.appendChild(li);
-        });
-      }
-
-      openVisitsModal();
+        const li = document.createElement("li");
+        li.innerHTML = `<a href="report.html?school=${encodeURIComponent(v.school)}&visit=${v.visit_number}" target="_blank">
+                          🗓️ ${formattedDate} - زيارة رقم ${v.visit_number}
+                        </a>`;
+        list.appendChild(li);
+      });
     } else {
-      alert("⚠️ لم يتم جلب الزيارات: " + (result.message || "خطأ غير معروف"));
+      list.innerHTML = "<li>⚠️ لا توجد زيارات سابقة</li>";
     }
+
+    openVisitsModal(schoolName);
+
   } catch (err) {
+    loader.style.display = "none";
     console.error("خطأ في جلب الزيارات:", err);
-    alert("❌ فشل الاتصال بالخادم");
+    list.innerHTML = "<li>❌ حدث خطأ أثناء جلب البيانات</li>";
+    openVisitsModal(schoolName);
   }
 }

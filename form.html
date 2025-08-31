@@ -920,47 +920,37 @@ box.style.borderRadius = "10px";
 box.style.width = "400px";
 box.style.maxHeight = "70%";
 box.style.overflowY = "auto";
+
+// ✅ محتوى الصندوق مع العنوان + لودر + القائمة + زر الإغلاق
 box.innerHTML = `
   <h3>📑 زيارات ${schoolInfo.school}</h3>
-  
-  <!-- ✅ مؤشر التحميل -->
-  <div id="visitsLoader" style="display:none; text-align:center; margin:10px 0;">
-    <div style="
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid #13344f;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 10px;">
-    </div>
-    <p>⏳ جاري جلب البيانات...</p>
+
+  <!-- مؤشر التحميل -->
+  <div id="visitsLoader" style="text-align:center; padding:10px; color:#13344f;">
+    ⏳ جاري جلب البيانات...
   </div>
 
-  <!-- ✅ القائمة -->
-  <ul id="visitsList" style="list-style:none; padding:0;"></ul>
+  <!-- قائمة الزيارات -->
+  <ul id="visitsList" style="list-style:none; padding:0; margin-top:10px;"></ul>
 
-  <button id="closeModal" 
-    style="margin-top:15px;padding:8px 15px;background:#dc3545;color:white;
-           border:none;border-radius:5px;cursor:pointer;">
+  <!-- زر الإغلاق -->
+  <button id="closeModal"
+    style="margin-top:15px; padding:8px 15px; background:#dc3545; color:white;
+           border:none; border-radius:5px; cursor:pointer;">
     إغلاق
   </button>
-
-  <!-- ✅ أنيميشن التحميل -->
-  <style>
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-  </style>
 `;
 
+modal.appendChild(box);
+document.body.appendChild(modal);
 
-        modal.appendChild(box);
-        document.body.appendChild(modal);
-
-        // ✅ تعبئة القائمة
+// ✅ تعبئة القائمة بعد جلب البيانات
 const list = box.querySelector("#visitsList");
+const loaderEl = box.querySelector("#visitsLoader");
+
+// نخفي اللودر بعد اكتمال الجلب
+loaderEl.style.display = "none";
+
 result.visits.forEach(v => {
   // تنسيق التاريخ إلى dd-mm-yyyy
   let formattedDate = "-";
@@ -972,13 +962,19 @@ result.visits.forEach(v => {
     formattedDate = `${day}-${month}-${year}`;
   }
 
+  // عنصر القائمة
   const li = document.createElement("li");
   li.style.marginBottom = "8px";
-  li.innerHTML = `<a href="report.html?school=${encodeURIComponent(v.school)}&visit=${v.visit_number}" target="_blank">
-          🗓️ ${formattedDate} - زيارة رقم ${v.visit_number}
-        </a>`;
+
+  li.innerHTML = `
+    <a href="report.html?school=${encodeURIComponent(v.school)}&visit=${v.visit_number}" target="_blank">
+      🗓️ ${formattedDate} - زيارة رقم ${v.visit_number}
+    </a>
+  `;
+
   list.appendChild(li);
 });
+
 
         // ✅ زر إغلاق
         box.querySelector("#closeModal").addEventListener("click", () => {
