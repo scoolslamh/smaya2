@@ -913,17 +913,48 @@ if (viewBtn) {
         modal.style.zIndex = "9999";
 
         // ✅ صندوق القائمة
-        let box = document.createElement("div");
-        box.style.background = "white";
-        box.style.padding = "20px";
-        box.style.borderRadius = "10px";
-        box.style.width = "400px";
-        box.style.maxHeight = "70%";
-        box.style.overflowY = "auto";
-        box.innerHTML = `<h3>📑 زيارات ${schoolInfo.school}</h3><ul id="visitsList"></ul>
-                         <button id="closeModal" 
-                           style="margin-top:15px;padding:8px 15px;background:#dc3545;color:white;
-                           border:none;border-radius:5px;cursor:pointer;">إغلاق</button>`;
+let box = document.createElement("div");
+box.style.background = "white";
+box.style.padding = "20px";
+box.style.borderRadius = "10px";
+box.style.width = "400px";
+box.style.maxHeight = "70%";
+box.style.overflowY = "auto";
+box.innerHTML = `
+  <h3>📑 زيارات ${schoolInfo.school}</h3>
+  
+  <!-- ✅ مؤشر التحميل -->
+  <div id="visitsLoader" style="display:none; text-align:center; margin:10px 0;">
+    <div style="
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #13344f;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 10px;">
+    </div>
+    <p>⏳ جاري جلب البيانات...</p>
+  </div>
+
+  <!-- ✅ القائمة -->
+  <ul id="visitsList" style="list-style:none; padding:0;"></ul>
+
+  <button id="closeModal" 
+    style="margin-top:15px;padding:8px 15px;background:#dc3545;color:white;
+           border:none;border-radius:5px;cursor:pointer;">
+    إغلاق
+  </button>
+
+  <!-- ✅ أنيميشن التحميل -->
+  <style>
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+`;
+
 
         modal.appendChild(box);
         document.body.appendChild(modal);
