@@ -733,6 +733,340 @@
     <p>جميع الحقوق محفوظة لشركة سمايا © 2025</p>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    let data = []; // نخزن بيانات المدارس هنا
+    const API_URL = "/.netlify/functions/api";
+
+    // استخراج اليوم/الشهر/السنة من التاريخ
+    document.getElementById("visit_date").addEventListener("change", function() {
+      const date = new Date(this.value);
+      const days = ["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+      document.getElementById("visit_day").value = days[date.getDay()];
+      document.getElementById("visit_month").value = (date.getMonth() + 1).toString().padStart(2, "0");
+      document.getElementById("visit_year").value = date.getFullYear();
+    });
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      document.getElementById("visitor").value = localStorage.getItem("fullName") || "مشرف";
+
+      // ✅ عرض رسالة الترحيب بالاسم والدور فقط عند تسجيل الدخول
+      const isLoggedIn = localStorage.getItem("loggedIn") === "true";
+      const role = localStorage.getItem("role") || "المشرف";
+      const fullName = localStorage.getItem("fullName") || "مستخدم";
+      const welcomeMsg = document.getElementById("welcomeMsg");
+      const userHeader = document.getElementById("userHeader");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      if (isLoggedIn) {
+        if (welcomeMsg) welcomeMsg.textContent = `👋 مرحباً، ${role}: ${fullName}`;
+        if (userHeader) userHeader.style.display = "block";
+      } else {
+        if (userHeader) userHeader.style.display = "none";
+      }
+
+      if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+          localStorage.clear();
+          window.location.href = "index.html";
+        });
+      }
+
+      document.getElementById("newEntryBtn").addEventListener("click", () => {
+        const formEl = document.getElementById("evaluationForm");
+        if (formEl) {
+          formEl.reset();                 
+          formEl.style.display = "block"; 
+        }
+      });
+
+      // ✅ جلب بيانات المدارس
+      try {
+        const res = await fetch(API_URL);
+        data = await res.json(); 
+
+        const regionSelect = document.getElementById("regionFilter");
+        const citySelect = document.getElementById("cityFilter");
+        const schoolSelect = document.getElementById("schoolFilter");
+
+        // تعبئة المناطق
+        const regions = [...new Set(data.map(s => s.region))];
+        regions.forEach(r => {
+          const opt = document.createElement("option");
+          opt.value = r;
+          opt.textContent = r;
+          regionSelect.appendChild(opt);
+        });
+
+        // عند اختيار منطقة
+        regionSelect.addEventListener("change", () => {
+          const cities = [...new Set(data.filter(s => s.region === regionSelect.value).map(s => s.city))];
+          citySelect.innerHTML = "<option value=''>اختر المدينة</option>";
+          citySelect.disabled = false;
+          cities.forEach(c => {
+            const opt = document.createElement("option");
+            opt.value = c;
+            opt.textContent = c;
+            citySelect.appendChild(opt);
+          });
+        });
+
+        // ✅ عند اختيار مدينة
+        citySelect.addEventListener("change", () => {
+          const schools = data.filter(s => s.city === citySelect.value);
+          schoolSelect.innerHTML = "<option value=''>اختر المدرسة</option>";
+          schoolSelect.disabled = false;
+          schools.forEach(s => {
+            const opt = document.createElement("option");
+            opt.value = s.school;
+            opt.textContent = s.school;
+            schoolSelect.appendChild(opt);
+          });
+        });
+
+        // ✅ البحث عن مدرسة
+        document.getElementById("schoolSearch").addEventListener("input", (e) => {
+          const searchTerm = e.target.value.trim().toLowerCase();
+          const filteredSchools = data.filter(s => {
+            const matchCity = !citySelect.value || s.city === citySelect.value;
+            const matchRegion = !regionSelect.value || s.region === regionSelect.value;
+            const matchName = s.school.toLowerCase().includes(searchTerm);
+            return matchCity && matchRegion && matchName;
+          });
+
+          schoolSelect.innerHTML = "<option value=''>اختر المدرسة</option>";
+          schoolSelect.disabled = false;
+          filteredSchools.forEach(s => {
+            const opt = document.createElement("option");
+            opt.value = s.school;
+            opt.textContent = s.school;
+            schoolSelect.appendChild(opt);
+          });
+        });
+
+        // ✅ عند اختيار مدرسة
+        schoolSelect.addEventListener("change", () => {
+          const selectedSchool = schoolSelect.value;
+          const schoolInfo = data.find(s => s.school === selectedSchool);
+
+          if (schoolInfo) {
+            document.getElementById("region").value = schoolInfo.region;
+            document.getElementById("city").value = schoolInfo.city;
+            document.getElementById("school").value = schoolInfo.school;
+            document.getElementById("code").value = schoolInfo.code;
+
+           // ✅ إظهار آخر زيارة وعدد الزيارات
+    const infoBox = document.getElementById("lastVisitInfo");
+    let formattedDate = "لا يوجد";
+    if (schoolInfo.last_visit) {
+      const visitDate = new Date(schoolInfo.last_visit);
+      formattedDate = visitDate.toLocaleDateString("ar-EG", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      });
+    }
+
+    // ✅ إضافة النص + زر الاستعراض
+    infoBox.innerHTML = `
+      🗓️ آخر زيارة: <b>${formattedDate}</b> |
+      🔢 عدد الزيارات: <b>${schoolInfo.visits || 0}</b>
+      <br>
+      <button id="viewVisitsBtn"
+              style="margin-top:10px; padding:8px 15px;
+                     background:#007BFF; color:white;
+                     border:none; border-radius:5px; cursor:pointer;">
+        استعراض الزيارات السابقة
+      </button>
+    `;
+    infoBox.style.display = "block";
+
+    // ✅ ربط حدث الضغط على الزر
+const viewBtn = document.getElementById("viewVisitsBtn");
+if (viewBtn) {
+  viewBtn.addEventListener("click", async () => {
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "getVisits",
+          school: schoolInfo.school
+        })
+      });
+
+      if (!res.ok) throw new Error("فشل في جلب البيانات");
+
+      const result = await res.json();
+      if (result.success && result.visits.length > 0) {
+        // ✅ إنشاء نافذة منبثقة
+        let modal = document.createElement("div");
+        modal.style.position = "fixed";
+        modal.style.top = "0";
+        modal.style.left = "0";
+        modal.style.width = "100%";
+        modal.style.height = "100%";
+        modal.style.background = "rgba(0,0,0,0.5)";
+        modal.style.display = "flex";
+        modal.style.alignItems = "center";
+        modal.style.justifyContent = "center";
+        modal.style.zIndex = "9999";
+
+        // ✅ صندوق القائمة
+        let box = document.createElement("div");
+        box.style.background = "white";
+        box.style.padding = "20px";
+        box.style.borderRadius = "10px";
+        box.style.width = "400px";
+        box.style.maxHeight = "70%";
+        box.style.overflowY = "auto";
+        box.innerHTML = `<h3>📑 زيارات ${schoolInfo.school}</h3><ul id="visitsList"></ul>
+                         <button id="closeModal" 
+                           style="margin-top:15px;padding:8px 15px;background:#dc3545;color:white;
+                           border:none;border-radius:5px;cursor:pointer;">إغلاق</button>`;
+
+        modal.appendChild(box);
+        document.body.appendChild(modal);
+
+        // ✅ تعبئة القائمة
+const list = box.querySelector("#visitsList");
+result.visits.forEach(v => {
+  // تنسيق التاريخ إلى dd-mm-yyyy
+  let formattedDate = "-";
+  if (v.visit_date) {
+    const dateObj = new Date(v.visit_date);
+    const day = ("0" + dateObj.getDate()).slice(-2);
+    const month = ("0" + (dateObj.getMonth() + 1)).slice(-2);
+    const year = dateObj.getFullYear();
+    formattedDate = `${day}-${month}-${year}`;
+  }
+
+  const li = document.createElement("li");
+  li.style.marginBottom = "8px";
+  li.innerHTML = `<a href="report.html?school=${encodeURIComponent(v.school)}&visit=${v.visit_number}" target="_blank">
+          🗓️ ${formattedDate} - زيارة رقم ${v.visit_number}
+        </a>`;
+  list.appendChild(li);
+});
+
+        // ✅ زر إغلاق
+        box.querySelector("#closeModal").addEventListener("click", () => {
+          document.body.removeChild(modal);
+        });
+
+      } else {
+        alert("⚠️ لا توجد زيارات سابقة لهذه المدرسة");
+      }
+    } catch (err) {
+      console.error("خطأ في جلب الزيارات:", err);
+      alert("❌ حدث خطأ أثناء جلب الزيارات");
+    }
+  });
+}
+
+
+    // ✅ إظهار النموذج
+    document.getElementById("evaluationForm").style.display = "block";
+  }
+});
+
+      } catch (err) {
+        console.error("خطأ في تحميل المدارس:", err);
+        alert("⚠️ لم يتم تحميل بيانات المدارس من الشيت");
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const steps = document.querySelectorAll(".form-step");
+      const nextBtns = document.querySelectorAll(".next");
+      const prevBtns = document.querySelectorAll(".prev");
+      let currentStep = 0;
+
+      function showStep(index) {
+        steps.forEach((step, i) => {
+          step.style.display = i === index ? "block" : "none";
+        });
+      }
+
+      nextBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          if (currentStep < steps.length - 1) {
+            currentStep++;
+            showStep(currentStep);
+          }
+        });
+      });
+
+      prevBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          if (currentStep > 0) {
+            currentStep--;
+            showStep(currentStep);
+          }
+        });
+      });
+
+      showStep(currentStep);
+    });
+
+    // ✅ إرسال النموذج إلى Google Sheet
+    document.getElementById("evaluationForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const form = e.target;
+      const messageBox = document.getElementById("formMessage");
+
+      const requiredFields = form.querySelectorAll("[required]");
+      let missing = [];
+      requiredFields.forEach(field => {
+        if (!field.value || field.value.trim() === "") {
+          missing.push(field);
+          field.style.border = "2px solid red";
+        } else {
+          field.style.border = "";
+        }
+      });
+
+      if (missing.length > 0) {
+        messageBox.textContent = "⚠️ عليك إكمال باقي الحقول المطلوبة";
+        messageBox.style.display = "block";
+        return;
+      } else {
+        messageBox.style.display = "none";
+      }
+
+      const formData = new FormData(form);
+      const data = {};
+      formData.forEach((value, key) => {
+        data[key] = value;
+      });
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "saveEvaluation",
+            ...data
+          })
+        });
+
+        if (!res.ok) throw new Error("فشل الاتصال بالخادم");
+
+        const result = await res.json();
+        if (result.success) {
+          alert("✅ تم إرسال التقييم بنجاح!");
+          form.reset();
+          const formEl = document.getElementById("evaluationForm");
+          if (formEl) formEl.style.display = "none";
+        } else {
+          alert("⚠️ لم يتم الإرسال: " + (result.message || "خطأ غير معروف"));
+        }
+      } catch (err) {
+        console.error("خطأ:", err);
+        alert("❌ فشل الاتصال بالخادم");
+      }
+    });
+  </script>
 </body>
 </html>
