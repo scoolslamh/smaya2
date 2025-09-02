@@ -1015,64 +1015,68 @@ result.visits.forEach(v => {
       showStep(currentStep);
     });
 
-    // ✅ إرسال النموذج إلى Google Sheet
-    document.getElementById("evaluationForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
+   // ✅ إرسال النموذج إلى Google Sheet
+document.getElementById("evaluationForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-      const form = e.target;
-      const messageBox = document.getElementById("formMessage");
+  const form = e.target;
+  const messageBox = document.getElementById("formMessage");
 
-      const requiredFields = form.querySelectorAll("[required]");
-      let missing = [];
-      requiredFields.forEach(field => {
-        if (!field.value || field.value.trim() === "") {
-          missing.push(field);
-          field.style.border = "2px solid red";
-        } else {
-          field.style.border = "";
-        }
-      });
+  const requiredFields = form.querySelectorAll("[required]");
+  let missing = [];
+  requiredFields.forEach(field => {
+    if (!field.value || field.value.trim() === "") {
+      missing.push(field);
+      field.style.border = "2px solid red";
+    } else {
+      field.style.border = "";
+    }
+  });
 
-      if (missing.length > 0) {
-        messageBox.textContent = "⚠️ عليك إكمال باقي الحقول المطلوبة";
-        messageBox.style.display = "block";
-        return;
-      } else {
-        messageBox.style.display = "none";
-      }
+  if (missing.length > 0) {
+    messageBox.textContent = "⚠️ عليك إكمال باقي الحقول المطلوبة";
+    messageBox.style.display = "block";
+    return;
+  } else {
+    messageBox.style.display = "none";
+  }
 
-      const formData = new FormData(form);
-      const data = {};
-      formData.forEach((value, key) => {
-        data[key] = value;
-      });
+  const formData = new FormData(form);
+  const data = {};
+  formData.forEach((value, key) => {
+    data[key] = value;
+  });
 
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            action: "saveEvaluation",
-            ...data
-          })
-        });
+  // ✅ فحص قيمة مسالك الهروب
+  console.log("🚀 escape_routes:", data.escape_routes);
 
-        if (!res.ok) throw new Error("فشل الاتصال بالخادم");
-
-        const result = await res.json();
-        if (result.success) {
-          alert("✅ تم إرسال التقييم بنجاح!");
-          form.reset();
-          const formEl = document.getElementById("evaluationForm");
-          if (formEl) formEl.style.display = "none";
-        } else {
-          alert("⚠️ لم يتم الإرسال: " + (result.message || "خطأ غير معروف"));
-        }
-      } catch (err) {
-        console.error("خطأ:", err);
-        alert("❌ فشل الاتصال بالخادم");
-      } 
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "saveEvaluation",
+        ...data
+      })
     });
-  </script>
+
+    if (!res.ok) throw new Error("فشل الاتصال بالخادم");
+
+    const result = await res.json();
+    if (result.success) {
+      alert("✅ تم إرسال التقييم بنجاح!");
+      form.reset();
+      const formEl = document.getElementById("evaluationForm");
+      if (formEl) formEl.style.display = "none";
+    } else {
+      alert("⚠️ لم يتم الإرسال: " + (result.message || "خطأ غير معروف"));
+    }
+  } catch (err) {
+    console.error("خطأ:", err);
+    alert("❌ فشل الاتصال بالخادم");
+  } 
+});
+</script>
 </body>
 </html>
+
