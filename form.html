@@ -1064,18 +1064,20 @@ document.getElementById("evaluationForm").addEventListener("submit", async (e) =
 
     const result = await res.json();
     if (result.success) {
-      alert("✅ تم إرسال التقييم بنجاح!");
-      form.reset();
-      const formEl = document.getElementById("evaluationForm");
-      if (formEl) formEl.style.display = "none";
-    } else {
-      alert("⚠️ لم يتم الإرسال: " + (result.message || "خطأ غير معروف"));
-    }
-  } catch (err) {
-    console.error("خطأ:", err);
-    alert("❌ فشل الاتصال بالخادم");
-  } 
+  alert("✅ شكراً، تم إرسال التقرير بنجاح!");
+  // إعادة تحميل الصفحة بعد ثانيتين
+  setTimeout(() => {
+    window.location.reload();
+  }, 2000);
+} else {
+  alert("⚠️ لم يتم الإرسال: " + (result.message || "خطأ غير معروف"));
+}
+} catch (err) {
+  console.error("خطأ:", err);
+  alert("❌ فشل الاتصال بالخادم");
+}
 });
+
 </script>
 </body>
 </html>
