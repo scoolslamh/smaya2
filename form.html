@@ -710,8 +710,8 @@
 
     <!-- أزرار إضافية -->
     <div class="form-navigation">
-      <button type="button" id="newEntryBtn">🔄 إدخال جديد</button>
-    </div>
+  <button type="button" id="newEntryBtn">🔄 إدخال جديد</button>
+</div>
   </main>
  <!-- ✅ نافذة منبثقة لاستعراض الزيارات السابقة -->
 <div id="visitsModal" style="display:none;
@@ -778,10 +778,25 @@
       }
 
       document.getElementById("newEntryBtn").addEventListener("click", () => {
-        const formEl = document.getElementById("evaluationForm");
-        if (formEl) {
-          formEl.reset();                 
-          formEl.style.display = "block"; 
+  // ✅ إعادة تعيين الفلاتر
+  document.getElementById("regionFilter").value = "";
+  document.getElementById("cityFilter").innerHTML = '<option value="">اختر المدينة</option>';
+  document.getElementById("cityFilter").disabled = true;
+  document.getElementById("schoolFilter").innerHTML = '<option value="">اختر المدرسة</option>';
+  document.getElementById("schoolFilter").disabled = true;
+
+  // ✅ إعادة تعيين النموذج
+  const formEl = document.getElementById("evaluationForm");
+  if (formEl) {
+    formEl.reset();                 
+    formEl.style.display = "none";  // نخفيه لحد ما يختار مدرسة من جديد
+  }
+
+  // ✅ إخفاء أي رسائل سابقة
+  const messageBox = document.getElementById("formMessage");
+  if (messageBox) {
+    messageBox.style.display = "none";
+    messageBox.textContent = "";
         }
       });
 
