@@ -335,3 +335,7 @@ input:focus, select:focus, textarea:focus {
 .percent-red {
   background-color: #F44336; /* أحمر */
 }
+.report-table.summary {
+  margin-top: 15px;  /* مسافة علوية */
+  margin-bottom: 15px; /* مسافة سفلية */
+}
