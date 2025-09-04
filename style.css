@@ -295,3 +295,43 @@ input:focus, select:focus, textarea:focus {
 .header .logo {
   height: 40px;
 }
+/* ✅ صندوق الملخص */
+.summary-box {
+  margin: 20px auto;
+  padding: 15px;
+  max-width: 500px;
+  border-radius: 10px;
+  border: 2px solid #13344f;
+  background: #f9fbfd;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  font-size: 15px;
+  font-weight: bold;
+}
+
+/* ✅ النصوص داخل الصندوق */
+.summary-box div {
+  margin: 8px 0;
+  color: #13344f;
+}
+
+/* ✅ النسبة (تلوين ديناميكي) */
+.percent-box {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 6px;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* ✅ الألوان حسب النسبة */
+.percent-green {
+  background-color: #4CAF50; /* أخضر */
+}
+.percent-yellow {
+  background-color: #FFC107; /* أصفر */
+  color: #000;
+}
+.percent-red {
+  background-color: #F44336; /* أحمر */
+}

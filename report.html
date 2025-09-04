@@ -221,7 +221,11 @@
   <th>🚪 مسالك الهروب</th><td id="escape_routes"></td>
 </tr>
     </table>
-
+     <!-- ✅ صندوق ملخص الصحة والسلامة -->
+<div class="summary-box">
+  <div><strong>📊 مجموع الصحة والسلامة:</strong> <span id="health_sum">-</span></div>
+  <div><strong>النسبة:</strong> <span id="health_percent" class="percent-box">-</span></div>
+</div>
     <!-- ✅ العناصر المدنية -->
     <div class="section-title">🏗️ العناصر المدنية</div>
     <table class="report-table">
@@ -276,7 +280,17 @@
         <td colspan="2"></td>
       </tr>
     </table>
+      <!-- ✅ صندوق ملخص العناصر المدنية -->
+<div class="summary-box">
+  <div><strong>📊 مجموع المدني:</strong> <span id="civil_sum">-</span></div>
+  <div><strong>النسبة:</strong> <span id="civil_percent" class="percent-box">-</span></div>
+</div>
 
+    <!-- ✅ الصندوق النهائي -->
+<div class="summary-box">
+  <div><strong>📊 المجموع الكلي:</strong> <span id="total_sum">-</span></div>
+  <div><strong>النسبة الكلية:</strong> <span id="total_percent" class="percent-box">-</span></div>
+</div>
     <!-- ✅ حقل الاعتماد -->
     <div class="section-title">🔏 الاعتماد</div>
     <table class="report-table">
@@ -338,20 +352,59 @@
               el.textContent = value;
             }
           }
-          loader.style.display = "none";
-          reportContainer.style.display = "block";
-        } else {
-          loader.style.display = "none";
-          alert("⚠️ " + (result.message || "لم يتم العثور على التقرير"));
-        }
-      } catch (err) {
-        loader.style.display = "none";
-        console.error("خطأ:", err);
-        alert("❌ فشل الاتصال بالخادم");
-      }
-    }
+                loader.style.display = "none";
+      reportContainer.style.display = "block";
 
-    loadReport();
-  </script>
+      // ✅ ملء المجاميع والنسب
+      document.getElementById("health_sum").textContent = report.health_sum || "0";
+      document.getElementById("civil_sum").textContent = report.civil_sum || "0";
+      document.getElementById("total_sum").textContent = report.total_sum || "0";
+
+      const healthPercentEl = document.getElementById("health_percent");
+      healthPercentEl.textContent = (report.health_percent || 0) + "%";
+      setBoxColor(healthPercentEl, report.health_percent);
+
+      const civilPercentEl = document.getElementById("civil_percent");
+      civilPercentEl.textContent = (report.civil_percent || 0) + "%";
+      setBoxColor(civilPercentEl, report.civil_percent);
+
+      const totalPercentEl = document.getElementById("total_percent");
+      totalPercentEl.textContent = (report.total_percent || 0) + "%";
+      setBoxColor(totalPercentEl, report.total_percent);
+
+    } else {
+      loader.style.display = "none";
+      alert("⚠️ " + (result.message || "لم يتم العثور على التقرير"));
+    }
+  } catch (err) {
+    loader.style.display = "none";
+    console.error("خطأ:", err);
+    alert("❌ فشل الاتصال بالخادم");
+  }
+}
+
+// ✅ دالة لتلوين الصندوق حسب النسبة
+function setBoxColor(element, percent) {
+  if (!percent || isNaN(percent)) {
+    element.style.backgroundColor = "#eee"; // رمادي
+    element.style.color = "#000";
+    return;
+  }
+
+  if (percent >= 90) {
+    element.style.backgroundColor = "#b6d7a8"; // أخضر فاتح
+    element.style.color = "#000";
+  } else if (percent >= 70) {
+    element.style.backgroundColor = "#ffe599"; // أصفر
+    element.style.color = "#000";
+  } else {
+    element.style.backgroundColor = "#f4cccc"; // أحمر
+    element.style.color = "#000";
+  }
+}
+
+loadReport();
+</script>
 </body>
 </html>
+
