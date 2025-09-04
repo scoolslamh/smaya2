@@ -376,22 +376,31 @@
         loader.style.display = "none";
         reportContainer.style.display = "block";
 
-        // ✅ ملء المجاميع والنسب
+       // ✅ ملء المجاميع والنسب مع معالجة الفواصل
+function parseNumber(value) {
+  if (value === null || value === undefined || value === "-") return 0;
+  return parseFloat(value.toString().replace(",", "."));
+}
+
 document.getElementById("health_sum").textContent = report.health_sum || "0";
 document.getElementById("civil_sum").textContent = report.civil_sum || "0";
 document.getElementById("total_sum").textContent = report.total_sum || "0";
 
+const healthValue = parseNumber(report.health_percent);
 const healthPercentEl = document.getElementById("health_percent");
-healthPercentEl.textContent = ((report.health_percent || 0).toFixed(1)) + "%";
-setBoxColor(healthPercentEl, report.health_percent);
+healthPercentEl.textContent = healthValue.toFixed(1) + "%";
+setBoxColor(healthPercentEl, healthValue);
 
+const civilValue = parseNumber(report.civil_percent);
 const civilPercentEl = document.getElementById("civil_percent");
-civilPercentEl.textContent = ((report.civil_percent || 0).toFixed(1)) + "%";
-setBoxColor(civilPercentEl, report.civil_percent);
+civilPercentEl.textContent = civilValue.toFixed(1) + "%";
+setBoxColor(civilPercentEl, civilValue);
 
+const totalValue = parseNumber(report.total_percent);
 const totalPercentEl = document.getElementById("total_percent");
-totalPercentEl.textContent = ((report.total_percent || 0).toFixed(1)) + "%";
-setBoxColor(totalPercentEl, report.total_percent);
+totalPercentEl.textContent = totalValue.toFixed(1) + "%";
+setBoxColor(totalPercentEl, totalValue);
+
 
 } else {
   loader.style.display = "none";
