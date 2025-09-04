@@ -313,130 +313,103 @@
   </div>
 
   <script>
-    const API_URL = "/.netlify/functions/api"; 
+  const API_URL = "/.netlify/functions/api"; 
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const schoolName = urlParams.get("school");
-    const visitNumber = urlParams.get("visit");
+  const urlParams = new URLSearchParams(window.location.search);
+  const schoolName = urlParams.get("school");
+  const visitNumber = urlParams.get("visit");
 
-    async function loadReport() {
-      const loader = document.getElementById("loader");
-      const reportContainer = document.getElementById("reportContainer");
+  async function loadReport() {
+    const loader = document.getElementById("loader");
+    const reportContainer = document.getElementById("reportContainer");
 
-      try {
-        loader.style.display = "flex";
-        reportContainer.style.display = "none";
+    try {
+      loader.style.display = "flex";
+      reportContainer.style.display = "none";
 
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            action: "getVisitReport",
-            school: schoolName,
-            visit: visitNumber
-          })
-        });
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "getVisitReport",
+          school: schoolName,
+          visit: visitNumber
+        })
+      });
 
-        const result = await res.json();
-        if (result.success) {
-          const report = result.data;
-          for (const key in report) {
-            const el = document.getElementById(key);
-            if (el) {
-              let value = report[key] || "-";
+      const result = await res.json();
+      if (result.success) {
+        const report = result.data;
+        for (const key in report) {
+          const el = document.getElementById(key);
+          if (el) {
+            let value = report[key] || "-";
 
-              // ✅ تنسيق التاريخ (dd-mm-yyyy)
-              if (key === "visit_date" && value && value !== "-") {
-                const dateObj = new Date(value);
-                const day = ("0" + dateObj.getDate()).slice(-2);
-                const month = ("0" + (dateObj.getMonth() + 1)).slice(-2);
-                const year = dateObj.getFullYear();
-                value = `${day}-${month}-${year}`;
-              }
-
-              el.textContent = value;
+            // ✅ تنسيق التاريخ (dd-mm-yyyy)
+            if (key === "visit_date" && value && value !== "-") {
+              const dateObj = new Date(value);
+              const day = ("0" + dateObj.getDate()).slice(-2);
+              const month = ("0" + (dateObj.getMonth() + 1)).slice(-2);
+              const year = dateObj.getFullYear();
+              value = `${day}-${month}-${year}`;
             }
+
+            el.textContent = value;
           }
-                loader.style.display = "none";
-      reportContainer.style.display = "block";
+        }
 
-      // ✅ ملء المجاميع والنسب
-      document.getElementById("health_sum").textContent = report.health_sum || "0";
-      document.getElementById("civil_sum").textContent = report.civil_sum || "0";
-      document.getElementById("total_sum").textContent = report.total_sum || "0";
+        loader.style.display = "none";
+        reportContainer.style.display = "block";
 
-      const healthPercentEl = document.getElementById("health_percent");
-      healthPercentEl.textContent = (report.health_percent || 0) + "%";
-      setBoxColor(healthPercentEl, report.health_percent);
+        // ✅ ملء المجاميع والنسب
+        document.getElementById("health_sum").textContent = report.health_sum || "0";
+        document.getElementById("civil_sum").textContent = report.civil_sum || "0";
+        document.getElementById("total_sum").textContent = report.total_sum || "0";
 
-      const civilPercentEl = document.getElementById("civil_percent");
-      civilPercentEl.textContent = (report.civil_percent || 0) + "%";
-      setBoxColor(civilPercentEl, report.civil_percent);
+        const healthPercentEl = document.getElementById("health_percent");
+        healthPercentEl.textContent = (report.health_percent || 0) + "%";
+        setBoxColor(healthPercentEl, report.health_percent);
 
-      const totalPercentEl = document.getElementById("total_percent");
-      totalPercentEl.textContent = (report.total_percent || 0) + "%";
-      setBoxColor(totalPercentEl, report.total_percent);
+        const civilPercentEl = document.getElementById("civil_percent");
+        civilPercentEl.textContent = (report.civil_percent || 0) + "%";
+        setBoxColor(civilPercentEl, report.civil_percent);
 
-    } else {
+        const totalPercentEl = document.getElementById("total_percent");
+        totalPercentEl.textContent = (report.total_percent || 0) + "%";
+        setBoxColor(totalPercentEl, report.total_percent);
+
+      } else {
+        loader.style.display = "none";
+        alert("⚠️ " + (result.message || "لم يتم العثور على التقرير"));
+      }
+    } catch (err) {
       loader.style.display = "none";
-      alert("⚠️ " + (result.message || "لم يتم العثور على التقرير"));
+      console.error("خطأ:", err);
+      alert("❌ فشل الاتصال بالخادم");
     }
-  } catch (err) {
-    loader.style.display = "none";
-    console.error("خطأ:", err);
-    alert("❌ فشل الاتصال بالخادم");
-  }
-}
-
-// ✅ دالة لتلوين الصندوق حسب النسبة
-function setBoxColor(element, percent) {
-  if (!percent || isNaN(percent)) {
-    element.style.backgroundColor = "#eee"; // رمادي
-    element.style.color = "#000";
-    return;
   }
 
-  if (percent >= 90) {
-    element.style.backgroundColor = "#b6d7a8"; // أخضر فاتح
-    element.style.color = "#000";
-  } else if (percent >= 70) {
-    element.style.backgroundColor = "#ffe599"; // أصفر
-    element.style.color = "#000";
-  } else {
-    element.style.backgroundColor = "#f4cccc"; // أحمر
-    element.style.color = "#000";
+  // ✅ دالة لتلوين الصندوق حسب النسبة
+  function setBoxColor(element, percent) {
+    if (!percent || isNaN(percent)) {
+      element.style.backgroundColor = "#eee"; // رمادي
+      element.style.color = "#000";
+      return;
+    }
+
+    if (percent >= 90) {
+      element.style.backgroundColor = "#b6d7a8"; // أخضر فاتح
+      element.style.color = "#000";
+    } else if (percent >= 70) {
+      element.style.backgroundColor = "#ffe599"; // أصفر
+      element.style.color = "#000";
+    } else {
+      element.style.backgroundColor = "#f4cccc"; // أحمر
+      element.style.color = "#000";
+    }
   }
-}
-// ✅ دالة تلوين النسب حسب القيمة
-function colorize(element, value) {
-  if (!element) return;
-  let num = parseFloat(value) || 0;
-  if (num >= 90) {
-    element.style.backgroundColor = "#4caf50"; // أخضر
-    element.style.color = "#fff";
-  } else if (num >= 70) {
-    element.style.backgroundColor = "#ffc107"; // أصفر
-    element.style.color = "#000";
-  } else {
-    element.style.backgroundColor = "#f44336"; // أحمر
-    element.style.color = "#fff";
-  }
-}
 
-// ✅ بعد جلب البيانات في loadReport()
-document.getElementById("health_sum").textContent = report.health_sum || 0;
-document.getElementById("health_percent").textContent = (report.health_percent || 0) + "%";
-colorize(document.getElementById("health_percent"), report.health_percent);
-
-document.getElementById("civil_sum").textContent = report.civil_sum || 0;
-document.getElementById("civil_percent").textContent = (report.civil_percent || 0) + "%";
-colorize(document.getElementById("civil_percent"), report.civil_percent);
-
-document.getElementById("total_percent").textContent = (report.total_percent || 0) + "%";
-colorize(document.getElementById("total_percent"), report.total_percent);
-
-loadReport();
+  loadReport();
 </script>
 </body>
 </html>
-
