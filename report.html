@@ -377,32 +377,51 @@
         reportContainer.style.display = "block";
 
         // ✅ ملء المجاميع والنسب
-        document.getElementById("health_sum").textContent = report.health_sum || "0";
-        document.getElementById("civil_sum").textContent = report.civil_sum || "0";
-        document.getElementById("total_sum").textContent = report.total_sum || "0";
+document.getElementById("health_sum").textContent = report.health_sum || "0";
+document.getElementById("civil_sum").textContent = report.civil_sum || "0";
+document.getElementById("total_sum").textContent = report.total_sum || "0";
 
-        const healthPercentEl = document.getElementById("health_percent");
-        healthPercentEl.textContent = (report.health_percent || 0) + "%";
-        setBoxColor(healthPercentEl, report.health_percent);
+const healthPercentEl = document.getElementById("health_percent");
+healthPercentEl.textContent = ((report.health_percent || 0).toFixed(1)) + "%";
+setBoxColor(healthPercentEl, report.health_percent);
 
-        const civilPercentEl = document.getElementById("civil_percent");
-        civilPercentEl.textContent = (report.civil_percent || 0) + "%";
-        setBoxColor(civilPercentEl, report.civil_percent);
+const civilPercentEl = document.getElementById("civil_percent");
+civilPercentEl.textContent = ((report.civil_percent || 0).toFixed(1)) + "%";
+setBoxColor(civilPercentEl, report.civil_percent);
 
-        const totalPercentEl = document.getElementById("total_percent");
-        totalPercentEl.textContent = (report.total_percent || 0) + "%";
-        setBoxColor(totalPercentEl, report.total_percent);
+const totalPercentEl = document.getElementById("total_percent");
+totalPercentEl.textContent = ((report.total_percent || 0).toFixed(1)) + "%";
+setBoxColor(totalPercentEl, report.total_percent);
 
-      } else {
-        loader.style.display = "none";
-        alert("⚠️ " + (result.message || "لم يتم العثور على التقرير"));
-      }
-    } catch (err) {
-      loader.style.display = "none";
-      console.error("خطأ:", err);
-      alert("❌ فشل الاتصال بالخادم");
-    }
-  }
+} else {
+  loader.style.display = "none";
+  showError("⚠️ " + (result.message || "لم يتم العثور على التقرير"));
+}
+} catch (err) {
+  loader.style.display = "none";
+  console.error("خطأ:", err);
+  showError("❌ فشل الاتصال بالخادم");
+}
+}
+
+// ✅ دالة إظهار رسالة خطأ منسقة داخل الصفحة
+function showError(message) {
+  const reportContainer = document.getElementById("reportContainer");
+  reportContainer.style.display = "block";
+  reportContainer.innerHTML = `
+    <div class="error-box" style="
+      background:#f8d7da;
+      color:#721c24;
+      border:1px solid #f5c6cb;
+      padding:15px;
+      margin:20px;
+      border-radius:8px;
+      font-size:16px;
+      text-align:center;">
+      ${message}
+    </div>
+  `;
+}
 
   // ✅ دالة لتلوين الصندوق حسب النسبة
   function setBoxColor(element, percent) {
