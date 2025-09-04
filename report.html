@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>تقرير زيارة مبنى مدرسي</title>
-  <!-- ربط ملف CSS -->
+  <!-- ✅ تنسيقات CSS -->
   <style>
     body {
       font-family: "Tajawal", sans-serif;
       background: #f5f7fa;
       margin: 0;
       padding: 0;
+      color: #13344f;
     }
 
     /* ✅ الهيدر */
@@ -18,20 +19,24 @@
       justify-content: space-between;
       align-items: center;
       background: #13344f;
-      color: white;
-      padding: 8px 20px;
+      color: #ffffff;
+      padding: 10px 20px;
+      border-bottom: 3px solid #0e2233;
     }
     .header .title h1 {
       margin: 0;
-      font-size: 18px;
+      font-size: 20px;
+      font-weight: bold;
     }
     .header .title p {
-      margin: 0;
+      margin: 2px 0 0;
       font-size: 14px;
-      color: #ddd;
+      color: #cfd8dc;
     }
     .header .logo {
-      height: 40px;
+      height: 45px;
+      max-width: 100px;
+      object-fit: contain;
     }
 
     /* ✅ التقرير */
@@ -402,6 +407,33 @@ function setBoxColor(element, percent) {
     element.style.color = "#000";
   }
 }
+// ✅ دالة تلوين النسب حسب القيمة
+function colorize(element, value) {
+  if (!element) return;
+  let num = parseFloat(value) || 0;
+  if (num >= 90) {
+    element.style.backgroundColor = "#4caf50"; // أخضر
+    element.style.color = "#fff";
+  } else if (num >= 70) {
+    element.style.backgroundColor = "#ffc107"; // أصفر
+    element.style.color = "#000";
+  } else {
+    element.style.backgroundColor = "#f44336"; // أحمر
+    element.style.color = "#fff";
+  }
+}
+
+// ✅ بعد جلب البيانات في loadReport()
+document.getElementById("health_sum").textContent = report.health_sum || 0;
+document.getElementById("health_percent").textContent = (report.health_percent || 0) + "%";
+colorize(document.getElementById("health_percent"), report.health_percent);
+
+document.getElementById("civil_sum").textContent = report.civil_sum || 0;
+document.getElementById("civil_percent").textContent = (report.civil_percent || 0) + "%";
+colorize(document.getElementById("civil_percent"), report.civil_percent);
+
+document.getElementById("total_percent").textContent = (report.total_percent || 0) + "%";
+colorize(document.getElementById("total_percent"), report.total_percent);
 
 loadReport();
 </script>
