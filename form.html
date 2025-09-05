@@ -910,9 +910,19 @@ infoBox.innerHTML = `
 infoBox.style.display = "block";
 
 // ✅ عرض بطاقة التقييم الكلي (مجموع + نسبة + تقدير لفظي)
-if (schoolInfo.total_sum !== undefined && schoolInfo.total_percent !== undefined) {
-  renderSchoolEvaluation(schoolInfo.total_sum, schoolInfo.total_percent);
+if (
+  schoolInfo.total_sum !== undefined && schoolInfo.total_sum !== null &&
+  schoolInfo.total_percent !== undefined && schoolInfo.total_percent !== null
+) {
+  const totalSum = Number(schoolInfo.total_sum) || 0;
+  const totalPercent = Number(schoolInfo.total_percent) || 0;
+
+  // ✅ استدعاء الدالة لعرض البطاقة
+  renderSchoolEvaluation(totalSum, totalPercent);
+} else {
+  console.warn("⚠️ لا توجد بيانات للتقييم الكلي لهذه المدرسة.");
 }
+
 
     // ✅ ربط حدث الضغط على الزر
 const viewBtn = document.getElementById("viewVisitsBtn");
