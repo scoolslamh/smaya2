@@ -1154,12 +1154,15 @@ document.getElementById("evaluationForm").addEventListener("submit", async (e) =
       font-size: 16px;
     `;
 
-    box.innerHTML = `
-      <div>📊 <b>التقييم الكلي</b></div>
-      <div>🔢 المجموع: ${totalSum}</div>
-      <div>📈 النسبة: ${totalPercent.toFixed(1)}%</div>
-      <div>🏆 التقدير: ${grade}</div>
-    `;
+    // ✅ المحتوى في صف واحد
+box.innerHTML = `
+  <div style="display:flex; justify-content:space-around; align-items:center; gap:15px; flex-wrap:wrap;">
+    <span>📊 <b>التقييم الكلي</b></span>
+    <span>🔢 المجموع: ${totalSum}</span>
+    <span>📈 النسبة: ${totalPercent.toFixed(1)}%</span>
+    <span>🏆 التقدير: ${grade}</span>
+  </div>
+`;
   }
 </script>
 </body>
