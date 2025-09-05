@@ -243,3 +243,42 @@ async function fetchVisits(schoolName) {
     openVisitsModal(schoolName);
   }
 }
+// ✅ دالة عرض التقييم الكلي
+function renderSchoolEvaluation(totalSum, totalPercent) {
+  const box = document.getElementById("schoolevaluation");
+
+  let grade = "ضعيف";
+  let bgColor = "#f44336"; // 🔴 أحمر
+
+  if (totalPercent >= 90) {
+    grade = "ممتاز";
+    bgColor = "#2e7d32"; // 🟢 أخضر غامق
+  } else if (totalPercent >= 80) {
+    grade = "جيد جدًا";
+    bgColor = "#388e3c"; // 🟢 أخضر
+  } else if (totalPercent >= 70) {
+    grade = "جيد";
+    bgColor = "#fbc02d"; // 🟡 أصفر غامق
+  }
+
+  // ✅ تنسيق البطاقة
+  box.style.cssText = `
+    background: ${bgColor};
+    color: #fff;
+    font-weight: bold;
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 16px;
+  `;
+
+  // ✅ المحتوى
+  box.innerHTML = `
+    <div>📊 <b>التقييم الكلي</b></div>
+    <div>🔢 المجموع: ${totalSum}</div>
+    <div>📈 النسبة: ${totalPercent.toFixed(1)}%</div>
+    <div>🏆 التقدير: ${grade}</div>
+  `;
+}
+

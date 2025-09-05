@@ -149,6 +149,8 @@
     <div id="lastVisitInfo" 
          style="display:none; text-align:center; margin:15px 0; font-weight:bold; color:#13344f; background:#f0f4f8; padding:10px; border-radius:6px;">
     </div>
+     <!-- ✅ بطاقة التقييم الكلي -->
+<div id="schoolEvaluation" class="evaluation-card"></div>
 
     <!-- النماذج -->
     <form id="evaluationForm" novalidate>
@@ -901,7 +903,10 @@
       </button>
     `;
     infoBox.style.display = "block";
-
+    // ✅ عرض بطاقة التقييم الكلي (مجموع + نسبة + تقدير لفظي)
+if (schoolInfo.total_sum && schoolInfo.total_percent) {
+  renderSchoolEvaluation(schoolInfo.total_sum, schoolInfo.total_percent);
+}
     // ✅ ربط حدث الضغط على الزر
 const viewBtn = document.getElementById("viewVisitsBtn");
 if (viewBtn) {

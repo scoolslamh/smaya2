@@ -339,3 +339,15 @@ input:focus, select:focus, textarea:focus {
   margin-top: 15px;  /* مسافة علوية */
   margin-bottom: 15px; /* مسافة سفلية */
 }
+.evaluation-card {
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  color: #fff;
+  max-width: 400px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: all 0.3s ease-in-out;
+}
