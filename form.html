@@ -146,12 +146,16 @@
     </div>
 
     <!-- ✅ معلومات آخر زيارة -->
-    <div id="lastVisitInfo" 
-         style="display:none; text-align:center; margin:15px 0; font-weight:bold; color:#13344f; background:#f0f4f8; padding:10px; border-radius:6px;">
-    </div>
-     <!-- ✅ بطاقة التقييم الكلي -->
-<div id="schoolEvaluation" class="evaluation-card"></div>
+<div id="lastVisitInfo" 
+     style="display:none; text-align:center; margin:15px 0; font-weight:bold; 
+            color:#13344f; background:#f0f4f8; padding:15px; border-radius:8px; font-size:16px;">
+</div>
 
+<!-- ✅ بطاقة التقييم الكلي -->
+<div id="schoolEvaluation" 
+     style="display:none; text-align:center; margin:15px 0; font-weight:bold; 
+            color:#fff; padding:20px; border-radius:8px; font-size:18px;">
+</div>
     <!-- النماذج -->
     <form id="evaluationForm" novalidate>
       <!-- القسم الأول -->
@@ -878,35 +882,37 @@
             document.getElementById("code").value = schoolInfo.code;
 
            // ✅ إظهار آخر زيارة وعدد الزيارات
-    const infoBox = document.getElementById("lastVisitInfo");
-    let formattedDate = "لا يوجد";
-    if (schoolInfo.last_visit) {
-      const visitDate = new Date(schoolInfo.last_visit);
-      formattedDate = visitDate.toLocaleDateString("ar-EG", {
-        weekday: "long",
-        day: "numeric",
-        month: "long",
-        year: "numeric"
-      });
-    }
+const infoBox = document.getElementById("lastVisitInfo");
+let formattedDate = "لا يوجد";
+if (schoolInfo.last_visit) {
+  const visitDate = new Date(schoolInfo.last_visit);
+  formattedDate = visitDate.toLocaleDateString("ar-EG", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+}
 
-    // ✅ إضافة النص + زر الاستعراض
-    infoBox.innerHTML = `
-      🗓️ آخر زيارة: <b>${formattedDate}</b> |
-      🔢 عدد الزيارات: <b>${schoolInfo.visits || 0}</b>
-      <br>
-      <button id="viewVisitsBtn"
-              style="margin-top:10px; padding:8px 15px;
-                     background:#007BFF; color:white;
-                     border:none; border-radius:5px; cursor:pointer;">
-        استعراض الزيارات السابقة
-      </button>
-    `;
-    infoBox.style.display = "block";
-    // ✅ عرض بطاقة التقييم الكلي (مجموع + نسبة + تقدير لفظي)
-if (schoolInfo.total_sum && schoolInfo.total_percent) {
+// ✅ إضافة النص + زر الاستعراض
+infoBox.innerHTML = `
+  🗓️ آخر زيارة: <b>${formattedDate}</b> |
+  🔢 عدد الزيارات: <b>${schoolInfo.visits || 0}</b>
+  <br>
+  <button id="viewVisitsBtn"
+          style="margin-top:10px; padding:8px 15px;
+                 background:#007BFF; color:white;
+                 border:none; border-radius:5px; cursor:pointer;">
+    استعراض الزيارات السابقة
+  </button>
+`;
+infoBox.style.display = "block";
+
+// ✅ عرض بطاقة التقييم الكلي (مجموع + نسبة + تقدير لفظي)
+if (schoolInfo.total_sum !== undefined && schoolInfo.total_percent !== undefined) {
   renderSchoolEvaluation(schoolInfo.total_sum, schoolInfo.total_percent);
 }
+
     // ✅ ربط حدث الضغط على الزر
 const viewBtn = document.getElementById("viewVisitsBtn");
 if (viewBtn) {

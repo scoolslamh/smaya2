@@ -245,7 +245,7 @@ async function fetchVisits(schoolName) {
 }
 // ✅ دالة عرض التقييم الكلي
 function renderSchoolEvaluation(totalSum, totalPercent) {
-  const box = document.getElementById("schoolevaluation");
+  const box = document.getElementById("schoolEvaluation"); // ← تأكد أن id مطابق
 
   let grade = "ضعيف";
   let bgColor = "#f44336"; // 🔴 أحمر
@@ -277,8 +277,9 @@ function renderSchoolEvaluation(totalSum, totalPercent) {
   box.innerHTML = `
     <div>📊 <b>التقييم الكلي</b></div>
     <div>🔢 المجموع: ${totalSum}</div>
-    <div>📈 النسبة: ${totalPercent.toFixed(1)}%</div>
+    <div>📈 النسبة: ${totalPercent ? totalPercent.toFixed(1) : 0}%</div>
     <div>🏆 التقدير: ${grade}</div>
   `;
 }
+
 
