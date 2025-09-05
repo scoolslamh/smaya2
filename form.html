@@ -909,20 +909,31 @@ infoBox.innerHTML = `
 `;
 infoBox.style.display = "block";
 
-// ✅ عرض بطاقة التقييم الكلي (مجموع + نسبة + تقدير لفظي)
-if (
-  schoolInfo.total_sum !== undefined && schoolInfo.total_sum !== null &&
-  schoolInfo.total_percent !== undefined && schoolInfo.total_percent !== null
-) {
-  const totalSum = Number(schoolInfo.total_sum) || 0;
-  const totalPercent = Number(schoolInfo.total_percent) || 0;
+// ✅ جلب التقييم الكلي من آخر زيارة
+if (schoolInfo.last_visit && schoolInfo.visits > 0) {
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "getVisitReport",
+        school: schoolInfo.school,
+        visit: schoolInfo.visits  // 👈 رقم آخر زيارة
+      })
+    });
 
-  // ✅ استدعاء الدالة لعرض البطاقة
-  renderSchoolEvaluation(totalSum, totalPercent);
-} else {
-  console.warn("⚠️ لا توجد بيانات للتقييم الكلي لهذه المدرسة.");
+    const result = await res.json();
+    if (result.success && result.data) {
+      const totalSum = Number(result.data.total_sum) || 0;
+      const totalPercent = Number(result.data.total_percent) || 0;
+      renderSchoolEvaluation(totalSum, totalPercent);
+    } else {
+      console.warn("⚠️ لم يتم العثور على بيانات التقييم الكلي من التقارير.");
+    }
+  } catch (err) {
+    console.error("❌ خطأ في جلب التقييم الكلي:", err);
+  }
 }
-
 
     // ✅ ربط حدث الضغط على الزر
 const viewBtn = document.getElementById("viewVisitsBtn");
