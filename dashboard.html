@@ -56,10 +56,10 @@
           <p id="status-asir" class="text-2xl font-bold">جاري التحديث...</p>
         </div>
         <div class="mt-12 text-right text-base font-semibold text-gray-700 space-y-2">
-          <p>📊 عدد الزيارات: 120</p>
-          <p>🟢 النطاق الأخضر: 80</p>
-          <p>🟡 النطاق الأصفر: 30</p>
-          <p>🔴 النطاق الأحمر: 10</p>
+          <p id="visits-asir">📊 عدد الزيارات: -</p>
+          <p id="green-asir">🟢 النطاق الأخضر: -</p>
+          <p id="yellow-asir">🟡 النطاق الأصفر: -</p>
+          <p id="red-asir">🔴 النطاق الأحمر: -</p>
         </div>
       </div>
 
@@ -72,10 +72,10 @@
           <p id="status-baha" class="text-2xl font-bold">جاري التحديث...</p>
         </div>
         <div class="mt-12 text-right text-base font-semibold text-gray-700 space-y-2">
-          <p>📊 عدد الزيارات: 95</p>
-          <p>🟢 النطاق الأخضر: 60</p>
-          <p>🟡 النطاق الأصفر: 25</p>
-          <p>🔴 النطاق الأحمر: 10</p>
+          <p id="visits-baha">📊 عدد الزيارات: -</p>
+          <p id="green-baha">🟢 النطاق الأخضر: -</p>
+          <p id="yellow-baha">🟡 النطاق الأصفر: -</p>
+          <p id="red-baha">🔴 النطاق الأحمر: -</p>
         </div>
       </div>
 
@@ -88,10 +88,10 @@
           <p id="status-najran" class="text-2xl font-bold">جاري التحديث...</p>
         </div>
         <div class="mt-12 text-right text-base font-semibold text-gray-700 space-y-2">
-          <p>📊 عدد الزيارات: 110</p>
-          <p>🟢 النطاق الأخضر: 70</p>
-          <p>🟡 النطاق الأصفر: 30</p>
-          <p>🔴 النطاق الأحمر: 10</p>
+          <p id="visits-najran">📊 عدد الزيارات: -</p>
+          <p id="green-najran">🟢 النطاق الأخضر: -</p>
+          <p id="yellow-najran">🟡 النطاق الأصفر: -</p>
+          <p id="red-najran">🔴 النطاق الأحمر: -</p>
         </div>
       </div>
 
@@ -104,10 +104,10 @@
           <p id="status-jazan" class="text-2xl font-bold">جاري التحديث...</p>
         </div>
         <div class="mt-12 text-right text-base font-semibold text-gray-700 space-y-2">
-          <p>📊 عدد الزيارات: 140</p>
-          <p>🟢 النطاق الأخضر: 90</p>
-          <p>🟡 النطاق الأصفر: 35</p>
-          <p>🔴 النطاق الأحمر: 15</p>
+          <p id="visits-jazan">📊 عدد الزيارات: -</p>
+          <p id="green-jazan">🟢 النطاق الأخضر: -</p>
+          <p id="yellow-jazan">🟡 النطاق الأصفر: -</p>
+          <p id="red-jazan">🔴 النطاق الأحمر: -</p>
         </div>
       </div>
 
@@ -120,10 +120,10 @@
           <p id="status-total" class="text-2xl font-bold">جاري التحديث...</p>
         </div>
         <div class="mt-12 text-right text-base font-semibold text-gray-700 space-y-2">
-          <p>📊 مجموع الزيارات: 465</p>
-          <p>🟢 مجموع النطاق الأخضر: 300</p>
-          <p>🟡 مجموع النطاق الأصفر: 120</p>
-          <p>🔴 مجموع النطاق الأحمر: 45</p>
+          <p id="visits-total">📊 مجموع الزيارات: -</p>
+          <p id="green-total">🟢 مجموع النطاق الأخضر: -</p>
+          <p id="yellow-total">🟡 مجموع النطاق الأصفر: -</p>
+          <p id="red-total">🔴 مجموع النطاق الأحمر: -</p>
         </div>
       </div>
 
@@ -184,12 +184,62 @@
       }, 20);
     }
 
-    // تشغيل المؤشرات
-    initGauge("#gauge-asir", "#percent-asir", "#status-asir", 75);
-    initGauge("#gauge-baha", "#percent-baha", "#status-baha", 65);
-    initGauge("#gauge-najran", "#percent-najran", "#status-najran", 55);
-    initGauge("#gauge-jazan", "#percent-jazan", "#status-jazan", 82);
-    initGauge("#gauge-total", "#percent-total", "#status-total", 70);
+    // ✅ جلب البيانات من Google Apps Script
+    async function loadDashboard() {
+      try {
+        const response = await fetch("https://script.google.com/macros/s/AKfycb.../exec?action=dashboard");
+        const result = await response.json();
+
+        // تحديث الكروت حسب المناطق
+        result.regions.forEach(region => {
+          const key = region.region.trim(); // مثلاً: عسير، الباحة...
+
+          if (key.includes("عسير")) {
+            initGauge("#gauge-asir", "#percent-asir", "#status-asir", region.percent);
+            document.getElementById("visits-asir").textContent = `📊 عدد الزيارات: ${region.visits}`;
+            document.getElementById("green-asir").textContent = `🟢 النطاق الأخضر: ${region.green}`;
+            document.getElementById("yellow-asir").textContent = `🟡 النطاق الأصفر: ${region.yellow}`;
+            document.getElementById("red-asir").textContent = `🔴 النطاق الأحمر: ${region.red}`;
+          }
+
+          if (key.includes("الباحة")) {
+            initGauge("#gauge-baha", "#percent-baha", "#status-baha", region.percent);
+            document.getElementById("visits-baha").textContent = `📊 عدد الزيارات: ${region.visits}`;
+            document.getElementById("green-baha").textContent = `🟢 النطاق الأخضر: ${region.green}`;
+            document.getElementById("yellow-baha").textContent = `🟡 النطاق الأصفر: ${region.yellow}`;
+            document.getElementById("red-baha").textContent = `🔴 النطاق الأحمر: ${region.red}`;
+          }
+
+          if (key.includes("نجران")) {
+            initGauge("#gauge-najran", "#percent-najran", "#status-najran", region.percent);
+            document.getElementById("visits-najran").textContent = `📊 عدد الزيارات: ${region.visits}`;
+            document.getElementById("green-najran").textContent = `🟢 النطاق الأخضر: ${region.green}`;
+            document.getElementById("yellow-najran").textContent = `🟡 النطاق الأصفر: ${region.yellow}`;
+            document.getElementById("red-najran").textContent = `🔴 النطاق الأحمر: ${region.red}`;
+          }
+
+          if (key.includes("جيزان")) {
+            initGauge("#gauge-jazan", "#percent-jazan", "#status-jazan", region.percent);
+            document.getElementById("visits-jazan").textContent = `📊 عدد الزيارات: ${region.visits}`;
+            document.getElementById("green-jazan").textContent = `🟢 النطاق الأخضر: ${region.green}`;
+            document.getElementById("yellow-jazan").textContent = `🟡 النطاق الأصفر: ${region.yellow}`;
+            document.getElementById("red-jazan").textContent = `🔴 النطاق الأحمر: ${region.red}`;
+          }
+        });
+
+        // ✅ تحديث الكلي
+        initGauge("#gauge-total", "#percent-total", "#status-total", result.total.percent);
+        document.getElementById("visits-total").textContent = `📊 مجموع الزيارات: ${result.total.visits}`;
+        document.getElementById("green-total").textContent = `🟢 مجموع النطاق الأخضر: ${result.total.green}`;
+        document.getElementById("yellow-total").textContent = `🟡 مجموع النطاق الأصفر: ${result.total.yellow}`;
+        document.getElementById("red-total").textContent = `🔴 مجموع النطاق الأحمر: ${result.total.red}`;
+
+      } catch (err) {
+        console.error("⚠️ خطأ في جلب بيانات الداشبورد:", err);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadDashboard);
   </script>
 
 </body>
