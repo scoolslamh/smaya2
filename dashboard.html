@@ -133,60 +133,93 @@
   }
 }
 
-// ✅ تحديث الكروت
-const cardsContainer = document.getElementById("cardsContainer");
-cardsContainer.innerHTML = "";
+<!-- ✅ تحديث الكروت -->
+<script>
+async function loadDashboard() {
+  const year = document.getElementById("year").value;
+  const month = document.getElementById("month").value;
 
+  try {
+    const res = await fetch(
+      `/.netlify/functions/api?action=dashboard&year=${year}&month=${month}`
+    );
 
-        // إنشاء كرت لكل منطقة
-        data.regions.forEach(region => {
-          const card = document.createElement("div");
-          card.className = "max-w-sm mx-auto bg-white rounded-lg shadow-md p-6 text-center";
+    if (!res.ok) {
+      throw new Error("فشل في جلب البيانات من الخادم");
+    }
 
-          card.innerHTML = `
-            <h2 class="text-lg font-bold text-gray-800 mb-4">منطقة ${region.region}</h2>
-            <div id="gauge-${region.region}" class="mb-4"></div>
-            <div class="text-right text-base font-semibold text-gray-700 space-y-2">
-              <p>📊 عدد الزيارات: ${region.visits}</p>
-              <p>🟢 النطاق الأخضر: ${region.green}</p>
-              <p>🟡 النطاق الأصفر: ${region.yellow}</p>
-              <p>🔴 النطاق الأحمر: ${region.red}</p>
-            </div>
-          `;
+    const data = await res.json();
+    console.log("📊 الرد القادم من Google Apps Script:", data);
 
-          cardsContainer.appendChild(card);
-          initGauge(document.getElementById(`gauge-${region.region}`), region.percent);
-        });
+    const cardsContainer = document.getElementById("cardsContainer");
+    cardsContainer.innerHTML = "";
 
-        // كرت التقييم الكلي
-        const totalCard = document.createElement("div");
-        totalCard.className = "max-w-sm mx-auto bg-white rounded-lg shadow-md p-6 text-center";
-        totalCard.innerHTML = `
-          <h2 class="text-lg font-bold text-gray-800 mb-4">📊 التقييم الكلي لجميع المناطق</h2>
-          <div id="gauge-total" class="mb-4"></div>
+    // 🔹 إنشاء كرت لكل منطقة
+    if (data && Array.isArray(data.regions)) {
+      data.regions.forEach(region => {
+        const card = document.createElement("div");
+        card.className =
+          "max-w-sm mx-auto bg-white rounded-lg shadow-md p-6 text-center";
+
+        card.innerHTML = `
+          <h2 class="text-lg font-bold text-gray-800 mb-4">منطقة ${region.region}</h2>
+          <div id="gauge-${region.region}" class="mb-4"></div>
           <div class="text-right text-base font-semibold text-gray-700 space-y-2">
-            <p>📊 مجموع الزيارات: ${data.total.visits}</p>
-            <p>🟢 مجموع النطاق الأخضر: ${data.total.green}</p>
-            <p>🟡 مجموع النطاق الأصفر: ${data.total.yellow}</p>
-            <p>🔴 مجموع النطاق الأحمر: ${data.total.red}</p>
+            <p>📊 عدد الزيارات: ${region.visits}</p>
+            <p>🟢 النطاق الأخضر: ${region.green}</p>
+            <p>🟡 النطاق الأصفر: ${region.yellow}</p>
+            <p>🔴 النطاق الأحمر: ${region.red}</p>
           </div>
         `;
-        cardsContainer.appendChild(totalCard);
-        initGauge(document.getElementById("gauge-total"), data.total.percent);
 
-      catch (err) {
-        console.error("خطأ في جلب البيانات:", err);
-      }
-        // افتراضياً السنة والشهر الحالي
-    document.addEventListener("DOMContentLoaded", () => {
-      const now = new Date();
-      document.getElementById("year").value = now.getFullYear();
-      document.getElementById("month").value = (now.getMonth() + 1).toString().padStart(2, "0");
-      loadDashboard();
-    });
+        cardsContainer.appendChild(card);
+        initGauge(
+          document.getElementById(`gauge-${region.region}`),
+          region.percent || 0
+        );
+      });
+    }
 
-    document.getElementById("year").addEventListener("change", loadDashboard);
-    document.getElementById("month").addEventListener("change", loadDashboard);
-  </script>
+    // 🔹 كرت التقييم الكلي
+    if (data && data.total) {
+      const totalCard = document.createElement("div");
+      totalCard.className =
+        "max-w-sm mx-auto bg-white rounded-lg shadow-md p-6 text-center";
+
+      totalCard.innerHTML = `
+        <h2 class="text-lg font-bold text-gray-800 mb-4">📊 التقييم الكلي لجميع المناطق</h2>
+        <div id="gauge-total" class="mb-4"></div>
+        <div class="text-right text-base font-semibold text-gray-700 space-y-2">
+          <p>📊 مجموع الزيارات: ${data.total.visits}</p>
+          <p>🟢 مجموع النطاق الأخضر: ${data.total.green}</p>
+          <p>🟡 مجموع النطاق الأصفر: ${data.total.yellow}</p>
+          <p>🔴 مجموع النطاق الأحمر: ${data.total.red}</p>
+        </div>
+      `;
+
+      cardsContainer.appendChild(totalCard);
+      initGauge(document.getElementById("gauge-total"), data.total.percent || 0);
+    }
+  } catch (err) {
+    console.error("❌ خطأ في جلب البيانات:", err);
+  }
+}
+
+// ✅ افتراضياً السنة والشهر الحالي
+document.addEventListener("DOMContentLoaded", () => {
+  const now = new Date();
+  document.getElementById("year").value = now.getFullYear();
+  document.getElementById("month").value = (now.getMonth() + 1)
+    .toString()
+    .padStart(2, "0");
+  loadDashboard();
+});
+
+// ✅ التحديث عند تغيير السنة أو الشهر
+document.getElementById("year").addEventListener("change", loadDashboard);
+document.getElementById("month").addEventListener("change", loadDashboard);
+</script>
+
 </body>
 </html>
+
