@@ -108,7 +108,8 @@ if (!res.ok) {
   throw new Error("فشل في جلب البيانات من الخادم");
 }
 
-const data = await res.json();
+const data = await res.json();// ✅ هنا نحط الطباعة للفحص
+    console.log("📊 الرد القادم من Google Apps Script:", data);
 
 // ✅ تحديث الكروت
 const cardsContainer = document.getElementById("cardsContainer");
