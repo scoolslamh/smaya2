@@ -96,43 +96,47 @@
     }
 
     async function loadDashboard() {
-      const year = document.getElementById("year").value;
-      const month = document.getElementById("month").value;
+  const year = document.getElementById("year").value;
+  const month = document.getElementById("month").value;
 
-      try {
-       const res = await fetch(
-  `/.netlify/functions/api?action=dashboard&year=${year}&month=${month}`
-);
+  try {
+    const res = await fetch(
+      `/.netlify/functions/api?action=dashboard&year=${year}&month=${month}`
+    );
 
-if (!res.ok) {
-  throw new Error("فشل في جلب البيانات من الخادم");
+    if (!res.ok) {
+      throw new Error("فشل في جلب البيانات من الخادم");
+    }
+
+    const data = await res.json();
+    console.log("📊 الرد القادم من Google Apps Script:", data);
+
+    // ✅ تحقق من شكل البيانات
+    if (Array.isArray(data)) {
+      // الحالة الأولى: الرد عبارة عن مصفوفة مدارس مباشرة
+      data.forEach(school => {
+        console.log("📌 مدرسة:", school.school, "زيارات:", school.visits);
+        // 🔹 هنا تبني الكروت الخاصة بالمدارس
+      });
+
+    } else if (data && Array.isArray(data.regions)) {
+      // الحالة الثانية: الرد عبارة عن كائن فيه regions
+      data.regions.forEach(region => {
+        console.log("📌 منطقة:", region.region, "زيارات:", region.visits);
+        // 🔹 هنا تبني الكروت الخاصة بالمناطق
+      });
+
+      // ✅ إذا فيه مجاميع
+      console.log("📊 الإجمالي:", data.total);
+
+    } else {
+      console.error("⚠️ البيانات غير متوقعة:", data);
+    }
+
+  } catch (err) {
+    console.error("خطأ في جلب البيانات:", err);
+  }
 }
-
-const data = await res.json(); 
-console.log("📊 الرد القادم من Google Apps Script:", data);
-
-// ✅ تحقق من شكل البيانات
-if (Array.isArray(data)) {
-  // الحالة الأولى: الرد عبارة عن مصفوفة مباشرة
-  data.forEach(region => {
-    console.log("📌 مدرسة:", region.school, "زيارات:", region.visits);
-    // 🔹 هنا تقدر تبني الكروت الخاصة بالداشبورد
-  });
-
-} else if (data && Array.isArray(data.regions)) {
-  // الحالة الثانية: الرد عبارة عن كائن فيه regions
-  data.regions.forEach(region => {
-    console.log("📌 منطقة:", region.region, "زيارات:", region.visits);
-    // 🔹 هنا تقدر تبني الكروت الخاصة بالداشبورد
-  });
-
-  // ✅ إذا فيه مجاميع
-  console.log("📊 الإجمالي:", data.total);
-
-} else {
-  console.error("⚠️ البيانات غير متوقعة:", data);
-}
-
 
 
 // ✅ تحديث الكروت
