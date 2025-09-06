@@ -12,11 +12,9 @@
   <!-- الهيدر -->
   <header class="bg-[#13344F] text-white shadow-md">
     <div class="container mx-auto flex items-center justify-between px-6 py-3">
-      <img src="logo.png" alt="شعار سمايا" class="h-10 filter invert brightness-0">
       <h1 class="text-xl font-bold text-center flex-1">
         لوحة البيانات الرئيسية لتقييم المدارس
       </h1>
-      <div class="w-10"></div>
     </div>
   </header>
 
@@ -28,21 +26,22 @@
         <select id="year" class="border rounded px-3 py-2 w-40 focus:ring-2 focus:ring-blue-500">
           <option value="2023">2023</option>
           <option value="2024">2024</option>
-          <option value="2025">2025</option>
+          <option value="2025" selected>2025</option>
+          <option value="2026">2026</option>
         </select>
       </div>
       <div>
         <label for="month" class="block text-sm font-medium text-gray-700 mb-1">اختر الشهر</label>
         <select id="month" class="border rounded px-3 py-2 w-40 focus:ring-2 focus:ring-blue-500">
-          <option value="01">يناير</option>
-          <option value="02">فبراير</option>
-          <option value="03">مارس</option>
-          <option value="04">أبريل</option>
-          <option value="05">مايو</option>
-          <option value="06">يونيو</option>
-          <option value="07">يوليو</option>
-          <option value="08">أغسطس</option>
-          <option value="09">سبتمبر</option>
+          <option value="1">يناير</option>
+          <option value="2">فبراير</option>
+          <option value="3">مارس</option>
+          <option value="4">أبريل</option>
+          <option value="5">مايو</option>
+          <option value="6">يونيو</option>
+          <option value="7">يوليو</option>
+          <option value="8" selected>أغسطس</option>
+          <option value="9">سبتمبر</option>
           <option value="10">أكتوبر</option>
           <option value="11">نوفمبر</option>
           <option value="12">ديسمبر</option>
@@ -51,10 +50,10 @@
     </div>
   </section>
 
-  <!-- المحتوى -->
+  <!-- الكروت -->
   <main class="container mx-auto px-4">
     <div id="cardsContainer" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      <!-- الكروت ستنشأ هنا ديناميكياً -->
+      <!-- يتم إنشاء الكروت هنا -->
     </div>
   </main>
 
@@ -80,7 +79,7 @@
               name: { show: false },
               value: {
                 show: true,
-                fontSize: "26px",
+                fontSize: "22px",
                 fontWeight: "bold",
                 formatter: (val) => val + "%"
               }
@@ -89,94 +88,69 @@
         },
         fill: { colors: [getColor(targetValue)] }
       };
-
       container.innerHTML = "";
       const chart = new ApexCharts(container, options);
       chart.render();
     }
 
-    // ✅ الدالة الوحيدة الصحيحة
     async function loadDashboard() {
-  const year = document.getElementById("year").value;
-  const month = document.getElementById("month").value;
+      const year = document.getElementById("year").value;
+      const month = document.getElementById("month").value;
 
-  try {
-    const res = await fetch(
-      `/.netlify/functions/api?action=dashboard&year=${year}&month=${month}`
-    );
-
-    if (!res.ok) {
-      throw new Error("فشل في جلب البيانات من الخادم");
-    }
-
-    const data = await res.json();
-    console.log("📊 الرد القادم من Google Apps Script:", data);
-
-    // ✅ تحديث الكروت
-    const cardsContainer = document.getElementById("cardsContainer");
-    cardsContainer.innerHTML = "";
-
-    if (data && Array.isArray(data.regions)) {
-      data.regions.forEach(region => {
-        const card = document.createElement("div");
-        card.className =
-          "max-w-sm mx-auto bg-white rounded-lg shadow-md p-6 text-center";
-
-        card.innerHTML = `
-          <h2 class="text-lg font-bold text-gray-800 mb-4">منطقة ${region.region}</h2>
-          <div id="gauge-${region.region}" class="mb-4"></div>
-          <div class="text-right text-base font-semibold text-gray-700 space-y-2">
-            <p>📊 عدد الزيارات: ${region.visits}</p>
-            <p>🟢 النطاق الأخضر: ${region.green}</p>
-            <p>🟡 النطاق الأصفر: ${region.yellow}</p>
-            <p>🔴 النطاق الأحمر: ${region.red}</p>
-          </div>
-        `;
-
-        cardsContainer.appendChild(card);
-        initGauge(
-          document.getElementById(`gauge-${region.region}`),
-          region.percent || 0
+      try {
+        const res = await fetch(
+          `/.netlify/functions/api?action=dashboard&year=${year}&month=${month}`
         );
-      });
+
+        if (!res.ok) throw new Error("فشل في جلب البيانات من الخادم");
+
+        const data = await res.json();
+        console.log("📊 الرد القادم من Google Apps Script:", data);
+
+        const cardsContainer = document.getElementById("cardsContainer");
+        cardsContainer.innerHTML = "";
+
+        // إنشاء كرت لكل منطقة
+        if (data && Array.isArray(data.regions)) {
+          data.regions.forEach(region => {
+            const card = document.createElement("div");
+            card.className = "max-w-sm mx-auto bg-white rounded-lg shadow-md p-6 text-center";
+
+            card.innerHTML = `
+              <h2 class="text-lg font-bold text-gray-800 mb-4">
+                ${region.region} - ${region.year}/${region.month}
+              </h2>
+              <div id="gauge-${region.region}-${region.month}" class="mb-4"></div>
+              <div class="text-right text-base font-semibold text-gray-700 space-y-2">
+                <p>📊 عدد الزيارات: ${region.visits}</p>
+                <p>🟢 النطاق الأخضر: ${region.green}</p>
+                <p>🟡 النطاق الأصفر: ${region.yellow}</p>
+                <p>🔴 النطاق الأحمر: ${region.red}</p>
+              </div>
+            `;
+
+            cardsContainer.appendChild(card);
+            initGauge(
+              document.getElementById(`gauge-${region.region}-${region.month}`),
+              region.percent || 0
+            );
+          });
+        }
+      } catch (err) {
+        console.error("❌ خطأ في جلب البيانات:", err);
+      }
     }
 
-    if (data && data.total) {
-      const totalCard = document.createElement("div");
-      totalCard.className =
-        "max-w-sm mx-auto bg-white rounded-lg shadow-md p-6 text-center";
+    // افتراضياً السنة والشهر الحالي
+    document.addEventListener("DOMContentLoaded", () => {
+      const now = new Date();
+      document.getElementById("year").value = now.getFullYear();
+      document.getElementById("month").value = (now.getMonth() + 1).toString();
+      loadDashboard();
+    });
 
-      totalCard.innerHTML = `
-        <h2 class="text-lg font-bold text-gray-800 mb-4">📊 التقييم الكلي لجميع المناطق</h2>
-        <div id="gauge-total" class="mb-4"></div>
-        <div class="text-right text-base font-semibold text-gray-700 space-y-2">
-          <p>📊 مجموع الزيارات: ${data.total.visits}</p>
-          <p>🟢 مجموع النطاق الأخضر: ${data.total.green}</p>
-          <p>🟡 مجموع النطاق الأصفر: ${data.total.yellow}</p>
-          <p>🔴 مجموع النطاق الأحمر: ${data.total.red}</p>
-        </div>
-      `;
-
-      cardsContainer.appendChild(totalCard);
-      initGauge(document.getElementById("gauge-total"), data.total.percent || 0);
-    }
-
-  } catch (err) {
-    console.error("❌ خطأ في جلب البيانات:", err);
-  }
-} //
-
-// ✅ افتراضياً السنة والشهر الحالي
-document.addEventListener("DOMContentLoaded", () => {
-  const now = new Date();
-  document.getElementById("year").value = now.getFullYear();
-  document.getElementById("month").value = (now.getMonth() + 1).toString().padStart(2, "0");
-  loadDashboard();
-});
-
-// ✅ التحديث عند تغيير السنة أو الشهر
-document.getElementById("year").addEventListener("change", loadDashboard);
-document.getElementById("month").addEventListener("change", loadDashboard);
-</script>
+    document.getElementById("year").addEventListener("change", loadDashboard);
+    document.getElementById("month").addEventListener("change", loadDashboard);
+  </script>
 </body>
 </html>
