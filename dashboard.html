@@ -178,22 +178,25 @@ else if (data && Array.isArray(data.regions)) {
   }
 }
 
-else {
-  console.error("⚠️ البيانات غير متوقعة:", data);
+  } else {
+    console.error("⚠️ البيانات غير متوقعة:", data);
+  }
+} catch (err) {
+  console.error("❌ خطأ في جلب البيانات:", err);
 }
+} // ← هنا إغلاق دالة loadDashboard()
 
+// ✅ افتراضياً السنة والشهر الحالي
+document.addEventListener("DOMContentLoaded", () => {
+  const now = new Date();
+  document.getElementById("year").value = now.getFullYear();
+  document.getElementById("month").value = (now.getMonth() + 1).toString().padStart(2, "0");
+  loadDashboard();
+});
 
-    // ✅ افتراضياً السنة والشهر الحالي
-    document.addEventListener("DOMContentLoaded", () => {
-      const now = new Date();
-      document.getElementById("year").value = now.getFullYear();
-      document.getElementById("month").value = (now.getMonth() + 1).toString().padStart(2, "0");
-      loadDashboard();
-    });
-
-    // ✅ التحديث عند تغيير السنة أو الشهر
-    document.getElementById("year").addEventListener("change", loadDashboard);
-    document.getElementById("month").addEventListener("change", loadDashboard);
-  </script>
+// ✅ التحديث عند تغيير السنة أو الشهر
+document.getElementById("year").addEventListener("change", loadDashboard);
+document.getElementById("month").addEventListener("change", loadDashboard);
+</script>
 </body>
 </html>
