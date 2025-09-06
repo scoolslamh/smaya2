@@ -174,7 +174,7 @@ cardsContainer.innerHTML = "";
         cardsContainer.appendChild(totalCard);
         initGauge(document.getElementById("gauge-total"), data.total.percent);
 
-      } catch (err) {
+      catch (err) {
         console.error("خطأ في جلب البيانات:", err);
       }
         // افتراضياً السنة والشهر الحالي
