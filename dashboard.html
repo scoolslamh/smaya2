@@ -110,6 +110,18 @@ if (!res.ok) {
 
 const data = await res.json();// ✅ هنا نحط الطباعة للفحص
     console.log("📊 الرد القادم من Google Apps Script:", data);
+    if (data && Array.isArray(data.regions)) {
+  data.regions.forEach(region => {
+    console.log("📌 منطقة:", region.region, "زيارات:", region.visits);
+    // 🔹 هنا تقدر تبني الكروت الخاصة بالداشبورد
+  });
+
+  // مجاميع
+  console.log("📊 الإجمالي:", data.total);
+} else {
+  console.error("⚠️ لم يتم العثور على مصفوفة regions في الرد");
+}
+
 
 // ✅ تحديث الكروت
 const cardsContainer = document.getElementById("cardsContainer");
