@@ -177,9 +177,7 @@ cardsContainer.innerHTML = "";
       } catch (err) {
         console.error("خطأ في جلب البيانات:", err);
       }
-    }
-
-    // افتراضياً السنة والشهر الحالي
+        // افتراضياً السنة والشهر الحالي
     document.addEventListener("DOMContentLoaded", () => {
       const now = new Date();
       document.getElementById("year").value = now.getFullYear();
