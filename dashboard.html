@@ -108,19 +108,31 @@ if (!res.ok) {
   throw new Error("فشل في جلب البيانات من الخادم");
 }
 
-const data = await res.json();// ✅ هنا نحط الطباعة للفحص
-    console.log("📊 الرد القادم من Google Apps Script:", data);
-    if (data && Array.isArray(data.regions)) {
+const data = await res.json(); 
+console.log("📊 الرد القادم من Google Apps Script:", data);
+
+// ✅ تحقق من شكل البيانات
+if (Array.isArray(data)) {
+  // الحالة الأولى: الرد عبارة عن مصفوفة مباشرة
+  data.forEach(region => {
+    console.log("📌 مدرسة:", region.school, "زيارات:", region.visits);
+    // 🔹 هنا تقدر تبني الكروت الخاصة بالداشبورد
+  });
+
+} else if (data && Array.isArray(data.regions)) {
+  // الحالة الثانية: الرد عبارة عن كائن فيه regions
   data.regions.forEach(region => {
     console.log("📌 منطقة:", region.region, "زيارات:", region.visits);
     // 🔹 هنا تقدر تبني الكروت الخاصة بالداشبورد
   });
 
-  // مجاميع
+  // ✅ إذا فيه مجاميع
   console.log("📊 الإجمالي:", data.total);
+
 } else {
-  console.error("⚠️ لم يتم العثور على مصفوفة regions في الرد");
+  console.error("⚠️ البيانات غير متوقعة:", data);
 }
+
 
 
 // ✅ تحديث الكروت
