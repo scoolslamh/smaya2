@@ -117,7 +117,6 @@
       data.forEach(region => {
         console.log("📌 مدرسة:", region.school, "زيارات:", region.visits);
       });
-
     } else if (data && Array.isArray(data.regions)) {
       // الحالة الثانية: الرد عبارة عن كائن فيه regions
       data.regions.forEach(region => {
@@ -126,16 +125,13 @@
 
       // ✅ إذا فيه مجاميع
       console.log("📊 الإجمالي:", data.total);
-
     } else {
       console.error("⚠️ البيانات غير متوقعة:", data);
     }
-
   } catch (err) {
     console.error("خطأ في جلب البيانات:", err);
   }
 }
-
 
 
 // ✅ تحديث الكروت
