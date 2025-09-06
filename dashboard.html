@@ -100,13 +100,20 @@
       const month = document.getElementById("month").value;
 
       try {
-        const res = await fetch(
-          `https://script.google.com/macros/s/AKfycbXXXXXXXXXXXX/exec?action=dashboard&year=${year}&month=${month}`
-        );
-        const data = await res.json();
+       const res = await fetch(
+  `/.netlify/functions/api?action=dashboard&year=${year}&month=${month}`
+);
 
-        const cardsContainer = document.getElementById("cardsContainer");
-        cardsContainer.innerHTML = "";
+if (!res.ok) {
+  throw new Error("فشل في جلب البيانات من الخادم");
+}
+
+const data = await res.json();
+
+// ✅ تحديث الكروت
+const cardsContainer = document.getElementById("cardsContainer");
+cardsContainer.innerHTML = "";
+
 
         // إنشاء كرت لكل منطقة
         data.regions.forEach(region => {
