@@ -245,7 +245,7 @@ input:focus, select:focus, textarea:focus {
   color: #13344f;            /* لون النص */
   display: flex;
   align-items: center;
-  justify-content: flex-end;   /* ✅ يجبر العناصر لليسار */
+  justify-content: space-between;  /* ✅ الترحيب يسار والأزرار يمين */
   padding: 10px 20px;
   font-size: 15px;
   font-weight: bold;
@@ -253,22 +253,41 @@ input:focus, select:focus, textarea:focus {
 }
 
 .welcome-bar span {
-  margin-left: 15px; /* مسافة بين النص والزر */
+  margin-left: 15px; /* مسافة بسيطة */
 }
 
-.welcome-bar button {
+/* ✅ الحاوية للأزرار */
+.welcome-bar .actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* ✅ أزرار عامة (رابط أو زر) */
+.welcome-bar .actions a,
+.welcome-bar .actions button {
   padding: 6px 14px;
-  background: #e74c3c;
+  background: #13344f;
   color: #fff;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-size: 13px;
   transition: background 0.3s;
+  text-decoration: none;  /* لإزالة خط تحت الرابط */
 }
 
-.welcome-bar button:hover {
+/* ✅ لون خاص لزر تسجيل الخروج */
+.welcome-bar .actions button {
+  background: #e74c3c;
+}
+
+.welcome-bar .actions button:hover {
   background: #c0392b;
+}
+
+/* ✅ تأثير عند تمرير الماوس على الأزرار */
+.welcome-bar .actions a:hover {
+  background: #0f2c40;
 }
 
 /* تنسيق الهيدر */
