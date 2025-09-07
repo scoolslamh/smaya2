@@ -12,9 +12,11 @@
   <!-- الهيدر -->
   <header class="bg-[#13344F] text-white shadow-md">
     <div class="container mx-auto flex items-center justify-between px-6 py-3">
+      <img src="logo.png" alt="شعار سمايا" class="h-10 filter invert brightness-0">
       <h1 class="text-xl font-bold text-center flex-1">
         لوحة البيانات الرئيسية لتقييم المدارس
       </h1>
+      <div class="w-10"></div>
     </div>
   </header>
 
@@ -23,134 +25,211 @@
     <div class="bg-white rounded-lg shadow p-4 flex flex-col sm:flex-row gap-6 justify-center">
       <div>
         <label for="year" class="block text-sm font-medium text-gray-700 mb-1">اختر السنة</label>
-        <select id="year" class="border rounded px-3 py-2 w-40 focus:ring-2 focus:ring-blue-500">
-          <option value="2023">2023</option>
-          <option value="2024">2024</option>
-          <option value="2025" selected>2025</option>
-          <option value="2026">2026</option>
-        </select>
+        <select id="year" class="border rounded px-3 py-2 w-40 focus:ring-2 focus:ring-blue-500"></select>
       </div>
       <div>
         <label for="month" class="block text-sm font-medium text-gray-700 mb-1">اختر الشهر</label>
-        <select id="month" class="border rounded px-3 py-2 w-40 focus:ring-2 focus:ring-blue-500">
-          <option value="1">يناير</option>
-          <option value="2">فبراير</option>
-          <option value="3">مارس</option>
-          <option value="4">أبريل</option>
-          <option value="5">مايو</option>
-          <option value="6">يونيو</option>
-          <option value="7">يوليو</option>
-          <option value="8" selected>أغسطس</option>
-          <option value="9">سبتمبر</option>
-          <option value="10">أكتوبر</option>
-          <option value="11">نوفمبر</option>
-          <option value="12">ديسمبر</option>
-        </select>
+        <select id="month" class="border rounded px-3 py-2 w-40 focus:ring-2 focus:ring-blue-500"></select>
       </div>
     </div>
   </section>
 
-  <!-- الكروت -->
+  <!-- المحتوى -->
   <main class="container mx-auto px-4">
-    <div id="cardsContainer" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      <!-- يتم إنشاء الكروت هنا -->
-    </div>
+    <div id="cardsContainer" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+    <p id="noDataMsg" class="text-center text-red-600 font-bold mt-6 hidden">⚠️ لا توجد بيانات للفترة المختارة</p>
   </main>
 
-  <!-- سكربت -->
   <script>
-    function getColor(value) {
-      if (value >= 70) return "#16A34A";  // أخضر
-      if (value >= 40) return "#FACC15";  // أصفر
-      return "#DC2626";                   // أحمر
+    const API_URL = "https://script.google.com/macros/s/AKfycbykLY-uyKjmz6xFcOtepUd5-7Em6UyZaStaKX1GWzKdkxfmqkXzpU3NjBBsbbe9bahQjQ/exec";
+
+    const monthsMap = {
+      1: "يناير", 2: "فبراير", 3: "مارس", 4: "أبريل",
+      5: "مايو", 6: "يونيو", 7: "يوليو", 8: "أغسطس",
+      9: "سبتمبر", 10: "أكتوبر", 11: "نوفمبر", 12: "ديسمبر"
+    };
+
+    // تعبئة الفلاتر بالسنة والشهر الحالي
+    function initFilters() {
+      const yearSelect = document.getElementById("year");
+      const monthSelect = document.getElementById("month");
+
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      const currentMonth = now.getMonth() + 1;
+
+      // تعبئة السنوات (آخر 3 سنوات + القادمة)
+      for (let y = currentYear - 1; y <= currentYear + 1; y++) {
+        const opt = document.createElement("option");
+        opt.value = y;
+        opt.textContent = y;
+        if (y === currentYear) opt.selected = true;
+        yearSelect.appendChild(opt);
+      }
+
+      // تعبئة الأشهر
+      for (let m = 1; m <= 12; m++) {
+        const opt = document.createElement("option");
+        opt.value = m;
+        opt.textContent = monthsMap[m];
+        if (m === currentMonth) opt.selected = true;
+        monthSelect.appendChild(opt);
+      }
     }
 
-    function initGauge(container, targetValue) {
+    // إحضار البيانات من Google Apps Script
+    async function fetchData(year, month) {
+      try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        return data.filter(row => row["السنة"] == year && row["الشهر"] == month);
+      } catch (err) {
+        console.error("خطأ في جلب البيانات:", err);
+        return [];
+      }
+    }
+
+    // إنشاء كرت
+    function createCard(region, stats) {
+      const { visits, green, yellow, red } = stats;
+      const percent = visits > 0 ? Math.round((green / visits) * 100) : 0;
+
+      const cardId = "gauge-" + region;
+      const percentId = "percent-" + region;
+      const statusId = "status-" + region;
+
+      const card = document.createElement("div");
+      card.className = "max-w-sm mx-auto bg-white rounded-lg shadow-md p-6 text-center relative";
+
+      card.innerHTML = `
+        <h2 class="text-lg font-bold text-gray-800 mb-4">منطقة ${region}</h2>
+        <div id="${cardId}"></div>
+        <div class="absolute top-28 left-1/2 transform -translate-x-1/2 text-center">
+          <p id="${percentId}" class="text-4xl font-extrabold text-gray-900">0%</p>
+          <p id="${statusId}" class="text-2xl font-bold">جاري التحديث...</p>
+        </div>
+        <div class="mt-12 text-right text-base font-semibold text-gray-700 space-y-2">
+          <p>📊 عدد الزيارات: ${visits}</p>
+          <p>🟢 النطاق الأخضر: ${green}</p>
+          <p>🟡 النطاق الأصفر: ${yellow}</p>
+          <p>🔴 النطاق الأحمر: ${red}</p>
+        </div>
+      `;
+
+      setTimeout(() => initGauge("#" + cardId, "#" + percentId, "#" + statusId, percent), 100);
+      return card;
+    }
+
+    // Gauge
+    function getColor(value) {
+      if (value >= 70) return "#16A34A";
+      if (value >= 40) return "#FACC15";
+      return "#DC2626";
+    }
+
+    function initGauge(id, percentId, statusId, targetValue) {
+      let currentValue = 0;
       const options = {
-        chart: { type: "radialBar", height: 220 },
-        series: [targetValue],
+        chart: { type: 'radialBar', height: 250 },
+        series: [0],
         plotOptions: {
           radialBar: {
             startAngle: -90,
             endAngle: 90,
-            hollow: { margin: 0, size: "70%" },
-            track: { background: "#e0e0e0" },
-            dataLabels: {
-              name: { show: false },
-              value: {
-                show: true,
-                fontSize: "22px",
-                fontWeight: "bold",
-                formatter: (val) => val + "%"
-              }
-            }
+            hollow: { margin: 0, size: '70%' },
+            track: { background: '#e0e0e0', strokeWidth: '100%' },
+            dataLabels: { show: false }
           }
         },
-        fill: { colors: [getColor(targetValue)] }
+        fill: { colors: [getColor(0)] },
       };
-      container.innerHTML = "";
-      const chart = new ApexCharts(container, options);
+
+      const chart = new ApexCharts(document.querySelector(id), options);
       chart.render();
-    }
 
-    async function loadDashboard() {
-      const year = document.getElementById("year").value;
-      const month = document.getElementById("month").value;
-
-      try {
-        const res = await fetch(
-          `/.netlify/functions/api?action=dashboard&year=${year}&month=${month}`
-        );
-
-        if (!res.ok) throw new Error("فشل في جلب البيانات من الخادم");
-
-        const data = await res.json();
-        console.log("📊 الرد القادم من Google Apps Script:", data);
-
-        const cardsContainer = document.getElementById("cardsContainer");
-        cardsContainer.innerHTML = "";
-
-        // إنشاء كرت لكل منطقة
-        if (data && Array.isArray(data.regions)) {
-          data.regions.forEach(region => {
-            const card = document.createElement("div");
-            card.className = "max-w-sm mx-auto bg-white rounded-lg shadow-md p-6 text-center";
-
-            card.innerHTML = `
-              <h2 class="text-lg font-bold text-gray-800 mb-4">
-                ${region.region} - ${region.year}/${region.month}
-              </h2>
-              <div id="gauge-${region.region}-${region.month}" class="mb-4"></div>
-              <div class="text-right text-base font-semibold text-gray-700 space-y-2">
-                <p>📊 عدد الزيارات: ${region.visits}</p>
-                <p>🟢 النطاق الأخضر: ${region.green}</p>
-                <p>🟡 النطاق الأصفر: ${region.yellow}</p>
-                <p>🔴 النطاق الأحمر: ${region.red}</p>
-              </div>
-            `;
-
-            cardsContainer.appendChild(card);
-            initGauge(
-              document.getElementById(`gauge-${region.region}-${region.month}`),
-              region.percent || 0
-            );
+      const interval = setInterval(() => {
+        if (currentValue < targetValue) {
+          currentValue++;
+          chart.updateOptions({
+            series: [currentValue],
+            fill: { colors: [getColor(currentValue)] }
           });
+          document.querySelector(percentId).textContent = currentValue + "%";
+          const statusText = document.querySelector(statusId);
+
+          if (currentValue >= 70) {
+            statusText.textContent = "ممتاز";
+            statusText.className = "text-green-600 text-2xl font-bold";
+          } else if (currentValue >= 40) {
+            statusText.textContent = "متوسط";
+            statusText.className = "text-yellow-600 text-2xl font-bold";
+          } else {
+            statusText.textContent = "ضعيف";
+            statusText.className = "text-red-600 text-2xl font-bold";
+          }
+        } else {
+          clearInterval(interval);
         }
-      } catch (err) {
-        console.error("❌ خطأ في جلب البيانات:", err);
-      }
+      }, 20);
     }
 
-    // افتراضياً السنة والشهر الحالي
-    document.addEventListener("DOMContentLoaded", () => {
-      const now = new Date();
-      document.getElementById("year").value = now.getFullYear();
-      document.getElementById("month").value = (now.getMonth() + 1).toString();
-      loadDashboard();
-    });
+    // عرض البيانات
+    async function renderDashboard() {
+      const year = parseInt(document.getElementById("year").value);
+      const month = parseInt(document.getElementById("month").value);
 
-    document.getElementById("year").addEventListener("change", loadDashboard);
-    document.getElementById("month").addEventListener("change", loadDashboard);
+      const rows = await fetchData(year, month);
+      const container = document.getElementById("cardsContainer");
+      const noDataMsg = document.getElementById("noDataMsg");
+      container.innerHTML = "";
+
+      if (rows.length === 0) {
+        noDataMsg.classList.remove("hidden");
+        return;
+      } else {
+        noDataMsg.classList.add("hidden");
+      }
+
+      // تجميع حسب المنطقة
+      const grouped = {};
+      rows.forEach(r => {
+        const region = r["المنطقة"];
+        if (!grouped[region]) grouped[region] = { visits: 0, green: 0, yellow: 0, red: 0 };
+        grouped[region].visits += parseInt(r["عدد الزيارات"]);
+        grouped[region].green += parseInt(r["النطاق الأخضر"]);
+        grouped[region].yellow += parseInt(r["النطاق الأصفر"]);
+        grouped[region].red += parseInt(r["النطاق الأحمر"]);
+      });
+
+      // ترتيب أبجدي
+      const regions = Object.keys(grouped).sort();
+
+      // إنشاء الكروت للمناطق
+      regions.forEach(region => {
+        const card = createCard(region, grouped[region]);
+        container.appendChild(card);
+      });
+
+      // كرت التقييم الكلي
+      const total = { visits: 0, green: 0, yellow: 0, red: 0 };
+      regions.forEach(r => {
+        total.visits += grouped[r].visits;
+        total.green += grouped[r].green;
+        total.yellow += grouped[r].yellow;
+        total.red += grouped[r].red;
+      });
+      const totalCard = createCard("📊 التقييم الكلي لجميع المناطق", total);
+      container.appendChild(totalCard);
+    }
+
+    // بدء التشغيل
+    initFilters();
+    renderDashboard();
+
+    // تحديث عند تغيير الفلاتر
+    document.getElementById("year").addEventListener("change", renderDashboard);
+    document.getElementById("month").addEventListener("change", renderDashboard);
   </script>
+
 </body>
 </html>
