@@ -235,7 +235,7 @@ function createCard(regionKey, stats, title) {
 
 // ✅ التحقق من الصلاحية قبل تشغيل الداشبورد
 document.addEventListener("DOMContentLoaded", () => {
-  let role = localStorage.getItem("userRole") || "";
+  let role = localStorage.getItem("userRole") || localStorage.getItem("role") || "";
   role = role.trim().normalize(); // ✅ إزالة المسافات وتوحيد الترميز
 
   console.log("🔍 الدور الحالي:", role); // للتأكد في Console
