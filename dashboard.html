@@ -47,7 +47,7 @@
   </main>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzp2m_3a2I5w9AoW6SOlBy2OyoCppUN-fo7of5S42M6hB9tq5r4Bo469C96fepe_uez/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbx5c5Fyvsx5b9Daed8yvarIchZ4qtGwJcQCbvG9mdGB22aPrUMXNX60RFsCQ8nLlXqH/exec";
 
     const monthsMap = {
       1: "يناير", 2: "فبراير", 3: "مارس", 4: "أبريل",
@@ -84,16 +84,15 @@
     }
 
     // إحضار البيانات من Google Apps Script
-    async function fetchData(year, month) {
+async function fetchData(year, month) {
   try {
-    const res = await fetch(`${API_URL}?action=dashboard`);
+    // ✅ نرسل السنة والشهر كـ باراميترات في الرابط
+    const res = await fetch(`${API_URL}?action=dashboard&year=${year}&month=${month}`);
     const data = await res.json();
-    console.log("📥 البيانات القادمة:", JSON.stringify(data));
+    console.log("📥 البيانات القادمة:", data);
 
-    // ✅ استخدم regions فقط
-   return data.regions.filter(r =>
-  Number(r.year) === Number(year) && Number(r.month) === Number(month)
-);
+    // ✅ نرجع كل البيانات (لأن الفلترة صارت تتم في Apps Script)
+    return data.regions || [];
 
   } catch (err) {
     console.error("خطأ في جلب البيانات:", err);
@@ -124,8 +123,13 @@ function createCard(regionKey, stats, title) {
       <p id="${statusId}" class="text-2xl font-bold">جاري التحديث...</p>
     </div>
     <div class="mt-12 text-right text-base font-semibold text-gray-700 space-y-2">
-      <p>📊 عدد الزيارات: ${visits}</p>
+  <p>📊 عدد الزيارات: ${visits}</p>
+  <p>🟢 <a href="#" onclick="openDetails('النطاق الأخضر', ${JSON.stringify(stats.greenSchools)})" class="text-green-600 hover:underline">النطاق الأخضر: ${green}</a></p>
+  <p>🟡 <a href="#" onclick="openDetails('النطاق الأصفر', ${JSON.stringify(stats.yellowSchools)})" class="text-yellow-600 hover:underline">النطاق الأصفر: ${yellow}</a></p>
+  <p>🔴 <a href="#" onclick="openDetails('النطاق الأحمر', ${JSON.stringify(stats.redSchools)})" class="text-red-600 hover:underline">النطاق الأحمر: ${red}</a></p>
+</div>
 
+    
       <!-- أزرار النطاقات -->
       <p>🟢 
         <button onclick="openDetails('🟢 المدارس في النطاق الأخضر', '${generateSchoolList(regionKey, 'green')}')" 
