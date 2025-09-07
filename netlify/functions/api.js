@@ -1,6 +1,6 @@
 export async function handler(event, context) {
   const GOOGLE_SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbyBJEEfUMxjpDEsECtkWehevo0cZhyP_HUlVN941F2GsXbe6-uo-ygNDkaKAJyeTI64/exec";
+    "https://script.google.com/macros/s/AKfycbx46ovuyJ3x7lS5gcmYSBe_dHq6rCyWO9w5VjHNOiuGUv1v9hmszfbREfF56SM82sSM/exec";
 
   try {
     // ✅ معالجة طلبات الـ OPTIONS (مطلوبة للـ CORS)
