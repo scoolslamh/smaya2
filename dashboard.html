@@ -82,9 +82,9 @@
   try {
     const res = await fetch(`${API_URL}?action=dashboard`);
     const data = await res.json();
-    console.log("📥 البيانات القادمة:", data);
+    console.log("📥 البيانات القادمة:", JSON.stringify(data));
 
-    // ✅ data.regions هي المصفوفة الصحيحة
+    // ✅ استخدم regions فقط
     return data.regions.filter(r => r.year == year && r.month == month);
 
   } catch (err) {
@@ -92,8 +92,6 @@
     return [];
   }
 }
-
-
     // إنشاء كرت
     function createCard(region, stats) {
       const { visits, green, yellow, red } = stats;
