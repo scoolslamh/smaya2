@@ -198,8 +198,8 @@ function createCard(regionKey, stats, regionLabel = null) {
 
       // تجميع حسب المنطقة
       const grouped = {};
-      rows.forEach(r => {
-  const region = r.region;
+rows.forEach(r => {
+  const region = r.region; // ✅ بالإنجليزي زي ما يجي من JSON
   if (!grouped[region]) grouped[region] = { visits: 0, green: 0, yellow: 0, red: 0 };
   grouped[region].visits += r.visits;
   grouped[region].green += r.green;
