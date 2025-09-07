@@ -125,9 +125,28 @@ function createCard(regionKey, stats, title) {
     </div>
     <div class="mt-12 text-right text-base font-semibold text-gray-700 space-y-2">
       <p>📊 عدد الزيارات: ${visits}</p>
-      <p>🟢 النطاق الأخضر: ${green}</p>
-      <p>🟡 النطاق الأصفر: ${yellow}</p>
-      <p>🔴 النطاق الأحمر: ${red}</p>
+
+      <!-- أزرار النطاقات -->
+      <p>🟢 
+        <button onclick="openDetails('🟢 المدارس في النطاق الأخضر', '${generateSchoolList(regionKey, 'green')}')" 
+                class="underline text-green-600 hover:text-green-800">
+          النطاق الأخضر: ${green}
+        </button>
+      </p>
+
+      <p>🟡 
+        <button onclick="openDetails('🟡 المدارس في النطاق الأصفر', '${generateSchoolList(regionKey, 'yellow')}')" 
+                class="underline text-yellow-600 hover:text-yellow-800">
+          النطاق الأصفر: ${yellow}
+        </button>
+      </p>
+
+      <p>🔴 
+        <button onclick="openDetails('🔴 المدارس في النطاق الأحمر', '${generateSchoolList(regionKey, 'red')}')" 
+                class="underline text-red-600 hover:text-red-800">
+          النطاق الأحمر: ${red}
+        </button>
+      </p>
     </div>
   `;
 
@@ -135,12 +154,38 @@ function createCard(regionKey, stats, title) {
   return card;
 }
 
-    // Gauge
-    function getColor(value) {
-      if (value >= 70) return "#16A34A";
-      if (value >= 40) return "#FACC15";
-      return "#DC2626";
-    }
+// ✅ دالة مؤقتة لتوليد قائمة المدارس
+function generateSchoolList(regionKey, color) {
+  // لاحقاً تربطها ببيانات الشيت
+  if (color === "green") {
+    return "<ul><li>مدرسة الفيصل</li><li>مدرسة الشروق</li></ul>";
+  } else if (color === "yellow") {
+    return "<ul><li>مدرسة الوحدة</li><li>مدرسة النجاح</li></ul>";
+  } else if (color === "red") {
+    return "<ul><li>مدرسة الأمل</li><li>مدرسة المستقبل</li></ul>";
+  }
+  return "<p>لا توجد بيانات</p>";
+}
+
+// ✅ دالة فتح النافذة
+function openDetails(title, content) {
+  document.getElementById("detailsTitle").innerHTML = title;
+  document.getElementById("detailsContent").innerHTML = content;
+  document.getElementById("detailsModal").classList.remove("hidden");
+}
+
+// ✅ دالة إغلاق النافذة
+function closeDetails() {
+  document.getElementById("detailsModal").classList.add("hidden");
+}
+
+// Gauge
+function getColor(value) {
+  if (value >= 70) return "#16A34A";
+  if (value >= 40) return "#FACC15";
+  return "#DC2626";
+}
+
 
     function initGauge(id, percentId, statusId, targetValue) {
       let currentValue = 0;
@@ -266,8 +311,37 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("year").addEventListener("change", renderDashboard);
   document.getElementById("month").addEventListener("change", renderDashboard);
 });
-</script>
+// ✅ فتح النافذة
+function openDetails(title, content) {
+  document.getElementById("detailsTitle").textContent = title;
+  document.getElementById("detailsContent").innerHTML = content;
+  document.getElementById("detailsModal").classList.remove("hidden");
+}
 
+// ✅ إغلاق النافذة
+function closeDetails() {
+  document.getElementById("detailsModal").classList.add("hidden");
+}
+
+</script>
+<!-- ✅ نافذة منبثقة للتفاصيل -->
+<div id="detailsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg shadow-lg w-11/12 max-w-3xl max-h-[80vh] overflow-y-auto relative p-6">
+    
+    <!-- زر الإغلاق (❌) -->
+    <button onclick="closeDetails()" 
+            class="absolute top-3 left-3 text-gray-600 hover:text-red-600 text-2xl font-bold">
+      &times;
+    </button>
+    
+    <h2 id="detailsTitle" class="text-xl font-bold text-gray-800 mb-4">📋 تفاصيل المدارس</h2>
+    
+    <!-- محتوى مؤقت -->
+    <div id="detailsContent" class="text-gray-700">
+      👋 أهلاً! هذه نافذة منبثقة للتجربة.
+    </div>
+  </div>
+</div>ٍ
 </body>
 </html>
 
