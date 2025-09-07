@@ -80,7 +80,7 @@
     // إحضار البيانات من Google Apps Script
     async function fetchData(year, month) {
   try {
-    const res = await fetch(API_URL + "?action=dashboard");
+    const res = await fetch(`${API_URL}?action=dashboard`);
     const data = await res.json();
     console.log("📥 البيانات القادمة:", data);
 
