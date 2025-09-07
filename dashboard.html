@@ -122,12 +122,21 @@ function createCard(regionKey, stats, title) {
       <p id="${percentId}" class="text-4xl font-extrabold text-gray-900">0%</p>
       <p id="${statusId}" class="text-2xl font-bold">جاري التحديث...</p>
     </div>
+
     <div class="mt-12 text-right text-base font-semibold text-gray-700 space-y-2">
   <p>📊 عدد الزيارات: ${visits}</p>
-  <p>🟢 <a href="#" onclick="openDetails('النطاق الأخضر', ${JSON.stringify(stats.greenSchools)})" class="text-green-600 hover:underline">النطاق الأخضر: ${green}</a></p>
-  <p>🟡 <a href="#" onclick="openDetails('النطاق الأصفر', ${JSON.stringify(stats.yellowSchools)})" class="text-yellow-600 hover:underline">النطاق الأصفر: ${yellow}</a></p>
-  <p>🔴 <a href="#" onclick="openDetails('النطاق الأحمر', ${JSON.stringify(stats.redSchools)})" class="text-red-600 hover:underline">النطاق الأحمر: ${red}</a></p>
+
+  <p class="text-green-600 cursor-pointer" onclick="showDetails('${regionKey}','green')">
+    🟢 النطاق الأخضر: ${green}
+  </p>
+  <p class="text-yellow-600 cursor-pointer" onclick="showDetails('${regionKey}','yellow')">
+    🟡 النطاق الأصفر: ${yellow}
+  </p>
+  <p class="text-red-600 cursor-pointer" onclick="showDetails('${regionKey}','red')">
+    🔴 النطاق الأحمر: ${red}
+  </p>
 </div>
+
 
     
       <!-- أزرار النطاقات -->
@@ -325,8 +334,26 @@ function openDetails(title, content) {
 function closeDetails() {
   document.getElementById("detailsModal").classList.add("hidden");
 }
+function showDetails(region, status) {
+  const schools = grouped[region][status + "Schools"];
+  const modal = document.getElementById("detailsModal");
+  const title = document.getElementById("detailsTitle");
+  const content = document.getElementById("detailsContent");
+
+  title.textContent = `🏫 المدارس في ${region} (${status})`;
+  content.innerHTML = schools.length > 0 
+    ? `<ul class="list-disc pr-6">${schools.map(s => `<li>${s}</li>`).join("")}</ul>`
+    : "<p>لا توجد مدارس في هذا النطاق</p>";
+
+  modal.classList.remove("hidden");
+}
+
+function closeDetails() {
+  document.getElementById("detailsModal").classList.add("hidden");
+}
 
 </script>
+
 <!-- ✅ نافذة منبثقة للتفاصيل -->
 <div id="detailsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
   <div class="bg-white rounded-lg shadow-lg w-11/12 max-w-3xl max-h-[80vh] overflow-y-auto relative p-6">
