@@ -79,15 +79,20 @@
 
     // إحضار البيانات من Google Apps Script
     async function fetchData(year, month) {
-      try {
-        const res = await fetch(API_URL);
-        const data = await res.json();
-        return data.filter(row => row["السنة"] == year && row["الشهر"] == month);
-      } catch (err) {
-        console.error("خطأ في جلب البيانات:", err);
-        return [];
-      }
-    }
+  try {
+    const res = await fetch(API_URL + "?action=dashboard");
+    const data = await res.json();
+    console.log("📥 البيانات القادمة:", data);
+
+    // ✅ data.regions هي المصفوفة الصحيحة
+    return data.regions.filter(r => r.year == year && r.month == month);
+
+  } catch (err) {
+    console.error("خطأ في جلب البيانات:", err);
+    return [];
+  }
+}
+
 
     // إنشاء كرت
     function createCard(region, stats) {
