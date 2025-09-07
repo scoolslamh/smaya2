@@ -94,12 +94,15 @@
     return [];
   }
 }
-    // 🟢 إنشاء كرت
-function createCard(regionKey, stats, regionLabel = null) {
+  // إنشاء كرت
+function createCard(regionKey, stats, title) {
   const { visits, green, yellow, red } = stats;
-  const percent = visits > 0 ? Math.round((green / visits) * 100) : 0;
 
-  // ✅ استخدم regionKey (قصير بدون مسافات) للـ IDs
+  // 🟢 حساب النقاط بالنظام الجديد
+  const totalPoints = (green * 5) + (yellow * 2.5) + (red * 0);
+  const maxPoints = visits * 5;
+  const percent = maxPoints > 0 ? Math.round((totalPoints / maxPoints) * 100) : 0;
+
   const cardId = "gauge-" + regionKey;
   const percentId = "percent-" + regionKey;
   const statusId = "status-" + regionKey;
@@ -108,9 +111,7 @@ function createCard(regionKey, stats, regionLabel = null) {
   card.className = "max-w-sm mx-auto bg-white rounded-lg shadow-md p-6 text-center relative";
 
   card.innerHTML = `
-    <h2 class="text-lg font-bold text-gray-800 mb-4">
-      ${regionLabel ? regionLabel : "منطقة " + regionKey}
-    </h2>
+    <h2 class="text-lg font-bold text-gray-800 mb-4">${title}</h2>
     <div id="${cardId}"></div>
     <div class="absolute top-28 left-1/2 transform -translate-x-1/2 text-center">
       <p id="${percentId}" class="text-4xl font-extrabold text-gray-900">0%</p>
