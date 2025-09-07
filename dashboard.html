@@ -233,8 +233,8 @@ function getColor(value) {
       }, 20);
     }
 
-    // عرض البيانات
-    async function renderDashboard() {
+   // ✅ عرض البيانات
+async function renderDashboard() {
   const year = parseInt(document.getElementById("year").value);
   const month = parseInt(document.getElementById("month").value);
 
@@ -245,55 +245,40 @@ function getColor(value) {
   const noDataMsg = document.getElementById("noDataMsg");
   container.innerHTML = "";
 
-  if (rows.length === 0) {
+  if (!rows || rows.length === 0) {
     noDataMsg.classList.remove("hidden");
     return;
   } else {
     noDataMsg.classList.add("hidden");
   }
 
-  // 🔹 تجميع حسب المنطقة
-const grouped = {};
-rows.forEach(r => {
-  const region = r.region;
+  // 🔹 ترتيب أبجدي حسب اسم المنطقة
+  const sorted = [...rows].sort((a, b) => a.region.localeCompare(b.region, "ar"));
 
-  // ✅ إذا أول مرة نشوف المنطقة → نهيئها
-  if (!grouped[region]) {
-    grouped[region] = { 
-      visits: 0, green: 0, yellow: 0, red: 0,
-      greenSchools: [], yellowSchools: [], redSchools: []
-    };
-  }
+  // 🔹 إنشاء الكروت لكل منطقة
+  sorted.forEach(r => {
+    const card = createCard(r.region, {
+      visits: r.visits,
+      green: r.green,
+      yellow: r.yellow,
+      red: r.red,
+      greenSchools: r.greenSchools || [],
+      yellowSchools: r.yellowSchools || [],
+      redSchools: r.redSchools || []
+    }, "منطقة " + r.region);
 
-  // ✅ نجمع القيم
-  grouped[region].visits += r.visits;
-  grouped[region].green += r.green;
-  grouped[region].yellow += r.yellow;
-  grouped[region].red += r.red;
-
-  // ✅ نضيف أسماء المدارس حسب النطاق
-  grouped[region].greenSchools.push(...(r.schools.green || []));
-  grouped[region].yellowSchools.push(...(r.schools.yellow || []));
-  grouped[region].redSchools.push(...(r.schools.red || []));
-});
-
-  // 🔹 ترتيب أبجدي
-  const regions = Object.keys(grouped).sort();
-
-  // 🔹 إنشاء الكروت للمناطق
-  regions.forEach(region => {
-    const card = createCard(region, grouped[region], "منطقة " + region);
     container.appendChild(card);
   });
 
-    // 🔹 التقييم الكلي
-  const total = { visits: 0, green: 0, yellow: 0, red: 0 };
-  regions.forEach(r => {
-    total.visits += grouped[r].visits;
-    total.green += grouped[r].green;
-    total.yellow += grouped[r].yellow;
-    total.red += grouped[r].red;
-  });
+  // 🔹 التقييم الكلي
+  const total = rows.reduce((acc, r) => {
+    acc.visits += r.visits;
+    acc.green += r.green;
+    acc.yellow += r.yellow;
+    acc.red += r.red;
+    return acc;
+  }, { visits: 0, green: 0, yellow: 0, red: 0 });
+
   const totalCard = createCard("total", total, "📊 التقييم الكلي لجميع المناطق");
   container.appendChild(totalCard);
 }
