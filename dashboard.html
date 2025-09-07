@@ -92,36 +92,39 @@
     return [];
   }
 }
-    // إنشاء كرت
-    function createCard(region, stats) {
-      const { visits, green, yellow, red } = stats;
-      const percent = visits > 0 ? Math.round((green / visits) * 100) : 0;
+    // 🟢 إنشاء كرت
+function createCard(regionKey, stats, regionLabel = null) {
+  const { visits, green, yellow, red } = stats;
+  const percent = visits > 0 ? Math.round((green / visits) * 100) : 0;
 
-      const cardId = "gauge-" + region;
-      const percentId = "percent-" + region;
-      const statusId = "status-" + region;
+  // ✅ استخدم regionKey (قصير بدون مسافات) للـ IDs
+  const cardId = "gauge-" + regionKey;
+  const percentId = "percent-" + regionKey;
+  const statusId = "status-" + regionKey;
 
-      const card = document.createElement("div");
-      card.className = "max-w-sm mx-auto bg-white rounded-lg shadow-md p-6 text-center relative";
+  const card = document.createElement("div");
+  card.className = "max-w-sm mx-auto bg-white rounded-lg shadow-md p-6 text-center relative";
 
-      card.innerHTML = `
-        <h2 class="text-lg font-bold text-gray-800 mb-4">منطقة ${region}</h2>
-        <div id="${cardId}"></div>
-        <div class="absolute top-28 left-1/2 transform -translate-x-1/2 text-center">
-          <p id="${percentId}" class="text-4xl font-extrabold text-gray-900">0%</p>
-          <p id="${statusId}" class="text-2xl font-bold">جاري التحديث...</p>
-        </div>
-        <div class="mt-12 text-right text-base font-semibold text-gray-700 space-y-2">
-          <p>📊 عدد الزيارات: ${visits}</p>
-          <p>🟢 النطاق الأخضر: ${green}</p>
-          <p>🟡 النطاق الأصفر: ${yellow}</p>
-          <p>🔴 النطاق الأحمر: ${red}</p>
-        </div>
-      `;
+  card.innerHTML = `
+    <h2 class="text-lg font-bold text-gray-800 mb-4">
+      ${regionLabel ? regionLabel : "منطقة " + regionKey}
+    </h2>
+    <div id="${cardId}"></div>
+    <div class="absolute top-28 left-1/2 transform -translate-x-1/2 text-center">
+      <p id="${percentId}" class="text-4xl font-extrabold text-gray-900">0%</p>
+      <p id="${statusId}" class="text-2xl font-bold">جاري التحديث...</p>
+    </div>
+    <div class="mt-12 text-right text-base font-semibold text-gray-700 space-y-2">
+      <p>📊 عدد الزيارات: ${visits}</p>
+      <p>🟢 النطاق الأخضر: ${green}</p>
+      <p>🟡 النطاق الأصفر: ${yellow}</p>
+      <p>🔴 النطاق الأحمر: ${red}</p>
+    </div>
+  `;
 
-      setTimeout(() => initGauge("#" + cardId, "#" + percentId, "#" + statusId, percent), 100);
-      return card;
-    }
+  setTimeout(() => initGauge("#" + cardId, "#" + percentId, "#" + statusId, percent), 100);
+  return card;
+}
 
     // Gauge
     function getColor(value) {
@@ -221,8 +224,8 @@
         total.yellow += grouped[r].yellow;
         total.red += grouped[r].red;
       });
-      const totalCard = createCard("📊 التقييم الكلي لجميع المناطق", total);
-      container.appendChild(totalCard);
+      const totalCard = createCard("total", total, "📊 التقييم الكلي لجميع المناطق");
+container.appendChild(totalCard);
     }
 
     // بدء التشغيل
