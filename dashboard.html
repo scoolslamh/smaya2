@@ -36,7 +36,7 @@
 
   <!-- المحتوى -->
   <main class="container mx-auto px-4">
-    <div id="cardsContainer" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+    <div id="cardsContainer" class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"></div>
     <p id="noDataMsg" class="text-center text-red-600 font-bold mt-6 hidden">⚠️ لا توجد بيانات للفترة المختارة</p>
   </main>
 
@@ -108,7 +108,7 @@ function createCard(regionKey, stats, title) {
   const statusId = "status-" + regionKey;
 
   const card = document.createElement("div");
-  card.className = "max-w-sm mx-auto bg-white rounded-lg shadow-md p-6 text-center relative";
+  card.className = "bg-white rounded-xl shadow-lg p-6 text-center relative transition hover:shadow-xl";
 
   card.innerHTML = `
     <h2 class="text-lg font-bold text-gray-800 mb-4">${title}</h2>
