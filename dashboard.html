@@ -100,11 +100,11 @@ async function fetchData(year, month) {
   }
 }
   // إنشاء كرت
-function createCard(regionKey, stats, title) {
+function createCard(regionKey, stats, title, isTotal = false) {
   const { visits, green, yellow, red } = stats;
 
-  // 🟢 حساب النقاط بالنظام الجديد
-  const totalPoints = (green * 5) + (yellow * 2.5) + (red * 0);
+  // 🟢 حساب النقاط
+  const totalPoints = (green * 5) + (yellow * 2.5);
   const maxPoints = visits * 5;
   const percent = maxPoints > 0 ? Math.round((totalPoints / maxPoints) * 100) : 0;
 
@@ -122,56 +122,34 @@ function createCard(regionKey, stats, title) {
       <p id="${percentId}" class="text-4xl font-extrabold text-gray-900">0%</p>
       <p id="${statusId}" class="text-2xl font-bold">جاري التحديث...</p>
     </div>
-
     <div class="mt-12 text-right text-base font-semibold text-gray-700 space-y-2">
-  <p>📊 عدد الزيارات: ${visits}</p>
-
-  <p class="text-green-600 cursor-pointer" 
-     onclick="showDetails('${regionKey}','green')">
-     🟢 النطاق الأخضر: ${green}
-  </p>
-
-  <p class="text-yellow-600 cursor-pointer" 
-     onclick="showDetails('${regionKey}','yellow')">
-     🟡 النطاق الأصفر: ${yellow}
-  </p>
-
-  <p class="text-red-600 cursor-pointer" 
-     onclick="showDetails('${regionKey}','red')">
-     🔴 النطاق الأحمر: ${red}
-  </p>
-</div>
-
-
-
-    
-      <!-- أزرار النطاقات -->
-      <p>🟢 
-        <button onclick="openDetails('🟢 المدارس في النطاق الأخضر', '${generateSchoolList(regionKey, 'green')}')" 
-                class="underline text-green-600 hover:text-green-800">
-          النطاق الأخضر: ${green}
-        </button>
-      </p>
-
-      <p>🟡 
-        <button onclick="openDetails('🟡 المدارس في النطاق الأصفر', '${generateSchoolList(regionKey, 'yellow')}')" 
-                class="underline text-yellow-600 hover:text-yellow-800">
-          النطاق الأصفر: ${yellow}
-        </button>
-      </p>
-
-      <p>🔴 
-        <button onclick="openDetails('🔴 المدارس في النطاق الأحمر', '${generateSchoolList(regionKey, 'red')}')" 
-                class="underline text-red-600 hover:text-red-800">
-          النطاق الأحمر: ${red}
-        </button>
-      </p>
+      <p>📊 عدد الزيارات: ${visits}</p>
+      ${
+        isTotal
+          ? `
+            <p class="text-green-600">🟢 النطاق الأخضر: ${green}</p>
+            <p class="text-yellow-600">🟡 النطاق الأصفر: ${yellow}</p>
+            <p class="text-red-600">🔴 النطاق الأحمر: ${red}</p>
+          `
+          : `
+            <p class="text-green-600 cursor-pointer" onclick="showDetails('${regionKey}', 'green')">
+              🟢 النطاق الأخضر: ${green}
+            </p>
+            <p class="text-yellow-600 cursor-pointer" onclick="showDetails('${regionKey}', 'yellow')">
+              🟡 النطاق الأصفر: ${yellow}
+            </p>
+            <p class="text-red-600 cursor-pointer" onclick="showDetails('${regionKey}', 'red')">
+              🔴 النطاق الأحمر: ${red}
+            </p>
+          `
+      }
     </div>
   `;
 
   setTimeout(() => initGauge("#" + cardId, "#" + percentId, "#" + statusId, percent), 100);
   return card;
 }
+
 
 // ✅ دالة مؤقتة لتوليد قائمة المدارس
 function generateSchoolList(regionKey, color) {
@@ -317,8 +295,8 @@ async function renderDashboard() {
     total.red += grouped[r].red;
   });
 
-  const totalCard = createCard("total", total, "📊 التقييم الكلي لجميع المناطق");
-  container.appendChild(totalCard);
+  const totalCard = createCard("total", total, "📊 التقييم الكلي لجميع المناطق", true);
+container.appendChild(totalCard);
 }
 
 
