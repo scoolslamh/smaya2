@@ -424,12 +424,10 @@ function closeDetails() {
 <!-- ✅ كود الجافاسكربت -->
 <script>
 async function exportPDF() {
-  // ✅ العنوان
+  // ✅ تجهيز البيانات
   const title = document.getElementById("detailsTitle").textContent;
-
-  // ✅ تجهيز البيانات من القائمة (li) وتحويلها لجدول
   const content = [...document.querySelectorAll("#detailsContent li")].map((el, i) => [
-    { text: (i + 1).toString(), alignment: "center" }, // الرقم
+    { text: (i + 1).toString(), alignment: "center" }, // الرقم (يمين)
     { text: el.textContent.trim(), alignment: "right" } // اسم المدرسة
   ]);
 
@@ -438,14 +436,11 @@ async function exportPDF() {
     pageOrientation: "portrait",
     pageSize: "A4",
     content: [
-      // العنوان
       { text: title, style: "header", alignment: "center", margin: [0, 0, 0, 20] },
-
-      // الجدول
       {
         table: {
           headerRows: 1,
-          widths: ["auto", "*"], // الرقم (أصغر) - اسم المدرسة (أكبر)
+          widths: ["auto", "*"], // الرقم (أصغر) - الاسم (أكبر)
           body: [
             [
               { text: "#", style: "tableHeader", alignment: "center" },
@@ -458,7 +453,7 @@ async function exportPDF() {
       }
     ],
     defaultStyle: {
-      font: "Roboto", // ✅ استبدل Helvetica بـ Roboto
+      font: "NotoNaskhArabic", // ✅ خط يدعم العربية
       alignment: "right"
     },
     styles: {
@@ -467,7 +462,7 @@ async function exportPDF() {
     }
   };
 
-  // ✅ توليد وحفظ PDF
+  // ✅ تحميل مع الخط العربي
   pdfMake.createPdf(docDefinition).download("المدارس.pdf");
 }
   function exportExcel() {
