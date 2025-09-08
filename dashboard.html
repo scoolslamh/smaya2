@@ -384,25 +384,29 @@ function closeDetails() {
 <!-- ✅ نافذة منبثقة للتفاصيل -->
 <div id="detailsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
   <div class="bg-white rounded-lg shadow-lg w-11/12 max-w-3xl max-h-[80vh] overflow-y-auto relative p-6">
-    
-    <!-- زر الإغلاق -->
+
+    <!-- ✅ زر الإغلاق -->
     <button onclick="closeDetails()" 
             class="absolute top-3 left-3 text-gray-600 hover:text-red-600 text-2xl font-bold">
       &times;
     </button>
 
-    <!-- العنوان + زر PDF جنب بعض -->
+    <!-- ✅ العنوان + زر التصدير جنب بعض -->
     <div class="flex items-center justify-between mb-4">
-      <h2 id="detailsTitle" class="text-xl font-bold text-gray-800">📋 تفاصيل المدارس</h2>
+      <h2 id="detailsTitle" class="text-xl font-bold text-gray-800">
+        📋 تفاصيل المدارس
+      </h2>
       <button onclick="exportPDF()" 
-              class="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1 rounded shadow">
+              class="bg-pink-500 hover:bg-pink-600 text-white px-3 py-1 rounded text-xs flex items-center gap-1 shadow">
         📄 PDF
       </button>
     </div>
 
-    <!-- محتوى مؤقت -->
-    <div id="detailsContent" class="text-gray-700">
-      👋 أهلاً! هذه نافذة منبثقة للتجربة.
+    <!-- ✅ المحتوى القابل للتصدير -->
+    <div id="exportArea">
+      <div id="detailsContent" class="text-gray-700">
+        👋 أهلاً! هذه نافذة منبثقة للتجربة.
+      </div>
     </div>
   </div>
 </div>
@@ -410,8 +414,8 @@ function closeDetails() {
 <!-- ✅ كود الجافاسكربت -->
 <script>
   function exportPDF() {
-    // ✅ نحدد الجزء اللي فيه البيانات الفعلية فقط
-    const element = document.querySelector("#detailsModal .bg-white");
+    // ✅ نصدر فقط الجزء الخاص بالمحتوى (بدون الأزرار)
+    const element = document.getElementById("exportArea");
 
     const opt = {
       margin:       10,
@@ -421,7 +425,6 @@ function closeDetails() {
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
-    // ✅ يحول المحتوى إلى PDF
     html2pdf().set(opt).from(element).save();
   }
 </script>
