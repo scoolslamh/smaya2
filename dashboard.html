@@ -443,57 +443,63 @@ async function exportPDF() {
   ]);
 
   // ✅ تعريف المستند
-const docDefinition = {
-  pageOrientation: "portrait",
-  pageSize: "A4",
-  content: [
-    { text: title, style: "header", alignment: "center", margin: [0, 0, 0, 20] },
-    {
-      table: {
-        headerRows: 1,
-        widths: ["auto", "*"], // الرقم (أصغر) - الاسم (أكبر)
-        body: [
-          [
-            { text: "#", style: "tableHeader", alignment: "center" },
-            { text: "اسم المدرسة", style: "tableHeader", alignment: "center" }
-          ],
-          ...content
-        ]
-      },
-      layout: "lightHorizontalLines"
-    }
-  ],
-  defaultStyle: {
-    font: "Amiri",   // ✅ لازم يكون عندك ملف خط Amiri معرف
-    alignment: "right"
-  }, // 👈 الفاصلة هنا كانت ناقصة
-  styles: {
-    header: { fontSize: 16, bold: true },
-    tableHeader: { bold: true, fillColor: "#16A34A", color: "white" }
-  }
-};
+function exportPDF() {
+    const title = document.getElementById("detailsTitle").textContent;
+    const content = [...document.querySelectorAll("#detailsContent li")].map((el, i) => [
+      (i + 1).toString(), // الرقم
+      el.textContent.trim() // اسم المدرسة
+    ]);
 
-// ✅ تحميل مع الخط العربي
-pdfMake.createPdf(docDefinition).download("المدارس.pdf");
+    // ✅ تعريف المستند
+    const docDefinition = {
+      pageOrientation: "portrait",
+      pageSize: "A4",
+      content: [
+        { text: title, style: "header", alignment: "center", margin: [0, 0, 0, 20] },
+        {
+          table: {
+            headerRows: 1,
+            widths: ["auto", "*"], // الرقم (أصغر) - الاسم (أكبر)
+            body: [
+              [
+                { text: "#", style: "tableHeader", alignment: "center" },
+                { text: "اسم المدرسة", style: "tableHeader", alignment: "center" }
+              ],
+              ...content
+            ]
+          },
+          layout: "lightHorizontalLines"
+        }
+      ],
+      defaultStyle: {
+        font: "Amiri",   // ✅ لازم يكون عندك ملف خط Amiri معرف
+        alignment: "right"
+      },
+      styles: {
+        header: { fontSize: 16, bold: true },
+        tableHeader: { bold: true, fillColor: "#16A34A", color: "white" }
+      }
+    };
+
+    // ✅ تحميل مع الخط العربي
+    pdfMake.createPdf(docDefinition).download("المدارس.pdf");
+  }
 
   function exportExcel() {
     const title = document.getElementById("detailsTitle").textContent;
     const items = Array.from(document.querySelectorAll("#detailsContent li"))
-                       .map(li => [li.textContent]);
+                       .map((li, i) => [i + 1, li.textContent.trim()]);
 
-    // نضيف العنوان كسطر أول
-    const data = [[title], ["المدارس"], ...items];
+    // ✅ إضافة عنوان + رأس الجدول
+    const data = [[title], ["#", "المدرسة"], ...items];
 
-    // إنشاء ورقة Excel
     const ws = XLSX.utils.aoa_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "التفاصيل");
 
-    // حفظ الملف
     XLSX.writeFile(wb, "التفاصيل.xlsx");
   }
 </script>
-
 </body>
 </html>
 
