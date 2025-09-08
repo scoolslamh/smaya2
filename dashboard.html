@@ -418,20 +418,36 @@ function closeDetails() {
 <!-- ✅ كود الجافاسكربت -->
 <script>
   async function exportPDF() {
-    const element = document.getElementById("detailsModal").querySelector(".bg-white");
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
 
-    // ✅ إعدادات PDF
-    const opt = {
-      margin:       10,
-      filename:     'التفاصيل.pdf',
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2 },
-      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
+    // ✅ العنوان
+    const title = document.getElementById("detailsTitle").textContent;
 
-    // ✅ توليد وحفظ الملف
-    html2pdf().set(opt).from(element).save();
-  }
+    // ✅ تجهيز البيانات: الرقم أولاً (يظهر في العمود الأيمن)
+    const content = [...document.querySelectorAll("#detailsContent li")].map((el, i) => [
+      el.textContent.trim(), // اسم المدرسة
+      i + 1                   // الرقم
+    ]);
+
+    // ✅ إضافة العنوان أعلى الصفحة
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.text(title, 200, 20, { align: "right" });
+
+    // ✅ إنشاء جدول من المدارس (الرقم على اليمين)
+    doc.autoTable({
+      startY: 30,
+      head: [['اسم المدرسة', '#']], // قلبنا الترتيب
+      body: content,
+      styles: { font: "helvetica", halign: "right" }, 
+      headStyles: { fillColor: [22, 160, 133] },
+      theme: "grid"
+    });
+
+    // ✅ حفظ الملف
+    doc.save("المدارس.pdf");
+    
   function exportExcel() {
     const title = document.getElementById("detailsTitle").textContent;
     const items = Array.from(document.querySelectorAll("#detailsContent li"))
