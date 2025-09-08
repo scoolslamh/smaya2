@@ -385,35 +385,35 @@ function closeDetails() {
 <!-- ✅ نافذة منبثقة للتفاصيل -->
 <div id="detailsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
   <div class="bg-white rounded-lg shadow-lg w-11/12 max-w-3xl max-h-[80vh] overflow-y-auto relative p-6">
-
-    <!-- ✅ زر الإغلاق -->
+    
+    <!-- زر الإغلاق (❌) -->
     <button onclick="closeDetails()" 
             class="absolute top-3 left-3 text-gray-600 hover:text-red-600 text-2xl font-bold">
       &times;
     </button>
-    <button onclick="exportExcel()" 
-        class="absolute top-3 right-16 bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">
-  📊 Excel
-    </button>
-    <!-- ✅ العنوان + زر التصدير جنب بعض -->
-    <div class="flex items-center justify-between mb-4">
-      <h2 id="detailsTitle" class="text-xl font-bold text-gray-800">
-        📋 تفاصيل المدارس
-      </h2>
+    
+    <!-- العنوان -->
+    <h2 id="detailsTitle" class="text-xl font-bold text-gray-800 mb-6 text-center">📋 تفاصيل المدارس</h2>
+    
+    <!-- ✅ أزرار التصدير (وسط أعلى الشاشة) -->
+    <div class="flex justify-center space-x-3 mb-6">
       <button onclick="exportPDF()" 
-              class="bg-pink-500 hover:bg-pink-600 text-white px-3 py-1 rounded text-xs flex items-center gap-1 shadow">
+              class="bg-red-500 text-white px-4 py-2 rounded text-sm hover:bg-red-600">
         📄 PDF
+      </button>
+      <button onclick="exportExcel()" 
+              class="bg-green-500 text-white px-4 py-2 rounded text-sm hover:bg-green-600">
+        📊 Excel
       </button>
     </div>
 
-    <!-- ✅ المحتوى القابل للتصدير -->
-    <div id="exportArea">
-      <div id="detailsContent" class="text-gray-700">
-        👋 أهلاً! هذه نافذة منبثقة للتجربة.
-      </div>
+    <!-- المحتوى -->
+    <div id="detailsContent" class="text-gray-700 text-right">
+      👋 أهلاً! هذه نافذة منبثقة للتجربة.
     </div>
   </div>
 </div>
+
 
 <!-- ✅ كود الجافاسكربت -->
 <script>
