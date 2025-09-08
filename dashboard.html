@@ -7,6 +7,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://unpkg.com/jspdf-arabic/dist/jspdf-arabic.min.js"></script>
+
 </head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
@@ -407,20 +409,20 @@ function closeDetails() {
 <!-- ✅ كود الجافاسكربت -->
 <script>
   async function exportPDF() {
-  const { jsPDF } = window.jspdf;   // ✅ الطريقة الصحيحة مع UMD
+  const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
+
+  // ✅ تفعيل دعم العربية
+  doc.setFont("Amiri", "normal");  // أو Cairo/Tajawal إذا ضفته
+  doc.setFontSize(14);
 
   const title = document.getElementById("detailsTitle").textContent;
   const content = document.getElementById("detailsContent").innerText;
 
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(16);
-  doc.text(title, 10, 20);
-
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(12);
+  // ✅ كتابة النصوص باتجاه RTL
+  doc.text(title, 200, 20, { align: "right" });
   const splitText = doc.splitTextToSize(content, 180);
-  doc.text(splitText, 10, 40);
+  doc.text(splitText, 200, 40, { align: "right" });
 
   doc.save("التفاصيل.pdf");
 }
