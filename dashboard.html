@@ -391,22 +391,22 @@ function closeDetails() {
             class="absolute top-3 left-3 text-gray-600 hover:text-red-600 text-2xl font-bold">
       &times;
     </button>
+
+    <!-- ✅ أزرار التصدير (أقصى اليمين فوق العنوان) -->
+    <div class="absolute top-3 right-3 flex space-x-2">
+      <button onclick="exportExcel()" 
+              class="bg-green-500 text-white px-3 py-1 rounded text-xs hover:bg-green-600">
+        📊 Excel
+      </button>
+      <button onclick="exportPDF()" 
+              class="bg-red-500 text-white px-3 py-1 rounded text-xs hover:bg-red-600">
+        📄 PDF
+      </button>
+    </div>
     
     <!-- العنوان -->
     <h2 id="detailsTitle" class="text-xl font-bold text-gray-800 mb-6 text-center">📋 تفاصيل المدارس</h2>
     
-    <!-- ✅ أزرار التصدير (وسط أعلى الشاشة) -->
-    <div class="flex justify-center space-x-3 mb-6">
-      <button onclick="exportPDF()" 
-              class="bg-red-500 text-white px-4 py-2 rounded text-sm hover:bg-red-600">
-        📄 PDF
-      </button>
-      <button onclick="exportExcel()" 
-              class="bg-green-500 text-white px-4 py-2 rounded text-sm hover:bg-green-600">
-        📊 Excel
-      </button>
-    </div>
-
     <!-- المحتوى -->
     <div id="detailsContent" class="text-gray-700 text-right">
       👋 أهلاً! هذه نافذة منبثقة للتجربة.
