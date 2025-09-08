@@ -414,29 +414,21 @@ function closeDetails() {
 <!-- ✅ كود الجافاسكربت -->
 <script>
   async function exportPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+    const element = document.getElementById("detailsModal").querySelector(".bg-white");
 
-    // ✅ العنوان فقط
-    const title = document.getElementById("detailsTitle").textContent;
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(16);
-    doc.text(title, 200, 20, { align: "right" });
+    // ✅ إعدادات PDF
+    const opt = {
+      margin:       10,
+      filename:     'التفاصيل.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2 },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
 
-    // ✅ المدارس فقط (من التفاصيل)
-    const content = document.getElementById("detailsContent").innerText;
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(12);
-
-    const splitText = doc.splitTextToSize(content, 180); 
-    doc.text(splitText, 200, 40, { align: "right" });
-
-    // ✅ حفظ الملف
-    doc.save("التفاصيل.pdf");
+    // ✅ توليد وحفظ الملف
+    html2pdf().set(opt).from(element).save();
   }
 </script>
-
-
 
 </body>
 </html>
