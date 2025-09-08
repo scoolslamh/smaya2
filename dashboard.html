@@ -7,6 +7,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
 <body class="bg-gray-100 font-sans">
 
   <!-- الهيدر -->
@@ -384,15 +386,43 @@ function closeDetails() {
             class="absolute top-3 left-3 text-gray-600 hover:text-red-600 text-2xl font-bold">
       &times;
     </button>
-    
-    <h2 id="detailsTitle" class="text-xl font-bold text-gray-800 mb-4">📋 تفاصيل المدارس</h2>
-    
+
+    <!-- 🔹 عنوان مع زر PDF -->
+    <div class="flex justify-between items-center mb-4">
+      <h2 id="detailsTitle" class="text-xl font-bold text-gray-800">📋 تفاصيل المدارس</h2>
+      <button onclick="exportPDF()" 
+              class="bg-red-500 text-white px-3 py-1 rounded-md text-sm hover:bg-red-600 transition">
+        📄 PDF
+      </button>
+    </div>
+
     <!-- محتوى مؤقت -->
     <div id="detailsContent" class="text-gray-700">
       👋 أهلاً! هذه نافذة منبثقة للتجربة.
     </div>
   </div>
-</div>ٍ
+</div>
+// ✅ ضع الدالة exportPDF هنا
+  async function exportPDF() {
+    const { jsPDF } = window.jspdf;
+
+    const doc = new jsPDF();
+    const title = document.getElementById("detailsTitle").textContent;
+    const content = document.getElementById("detailsContent").innerText;
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text(title, 10, 20);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(12);
+    const splitText = doc.splitTextToSize(content, 180);
+    doc.text(splitText, 10, 40);
+
+    doc.save("التفاصيل.pdf");
+  }
+</script>
 </body>
 </html>
+
 
