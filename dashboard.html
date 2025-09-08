@@ -6,6 +6,7 @@
   <title>لوحة البيانات الرئيسية لتقييم المدارس</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
@@ -381,7 +382,7 @@ function closeDetails() {
 <div id="detailsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
   <div class="bg-white rounded-lg shadow-lg w-11/12 max-w-3xl max-h-[80vh] overflow-y-auto relative p-6">
     
-    <!-- زر الإغلاق (❌) -->
+    <!-- زر الإغلاق -->
     <button onclick="closeDetails()" 
             class="absolute top-3 left-3 text-gray-600 hover:text-red-600 text-2xl font-bold">
       &times;
@@ -397,32 +398,33 @@ function closeDetails() {
     </div>
 
     <!-- محتوى مؤقت -->
-<div id="detailsContent" class="text-gray-700">
-  👋 أهلاً! هذه نافذة منبثقة للتجربة.
-</div>
+    <div id="detailsContent" class="text-gray-700">
+      👋 أهلاً! هذه نافذة منبثقة للتجربة.
+    </div>
   </div>
 </div>
 
 <!-- ✅ كود الجافاسكربت -->
 <script>
   async function exportPDF() {
-    const { jsPDF } = window.jspdf;
+  const { jsPDF } = window.jspdf;   // ✅ الطريقة الصحيحة مع UMD
+  const doc = new jsPDF();
 
-    const doc = new jsPDF();
-    const title = document.getElementById("detailsTitle").textContent;
-    const content = document.getElementById("detailsContent").innerText;
+  const title = document.getElementById("detailsTitle").textContent;
+  const content = document.getElementById("detailsContent").innerText;
 
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(16);
-    doc.text(title, 10, 20);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(16);
+  doc.text(title, 10, 20);
 
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(12);
-    const splitText = doc.splitTextToSize(content, 180);
-    doc.text(splitText, 10, 40);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+  const splitText = doc.splitTextToSize(content, 180);
+  doc.text(splitText, 10, 40);
 
-    doc.save("التفاصيل.pdf");
-  }
+  doc.save("التفاصيل.pdf");
+}
+
 </script>
 
 </body>
