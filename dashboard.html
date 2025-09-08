@@ -9,6 +9,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://unpkg.com/jspdf-arabic/dist/jspdf-arabic.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 </head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
@@ -390,7 +391,10 @@ function closeDetails() {
             class="absolute top-3 left-3 text-gray-600 hover:text-red-600 text-2xl font-bold">
       &times;
     </button>
-
+    <button onclick="exportExcel()" 
+        class="absolute top-3 right-16 bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">
+  📊 Excel
+    </button>
     <!-- ✅ العنوان + زر التصدير جنب بعض -->
     <div class="flex items-center justify-between mb-4">
       <h2 id="detailsTitle" class="text-xl font-bold text-gray-800">
@@ -427,6 +431,22 @@ function closeDetails() {
 
     // ✅ توليد وحفظ الملف
     html2pdf().set(opt).from(element).save();
+  }
+  function exportExcel() {
+    const title = document.getElementById("detailsTitle").textContent;
+    const items = Array.from(document.querySelectorAll("#detailsContent li"))
+                       .map(li => [li.textContent]);
+
+    // نضيف العنوان كسطر أول
+    const data = [[title], ["المدارس"], ...items];
+
+    // إنشاء ورقة Excel
+    const ws = XLSX.utils.aoa_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "التفاصيل");
+
+    // حفظ الملف
+    XLSX.writeFile(wb, "التفاصيل.xlsx");
   }
 </script>
 
