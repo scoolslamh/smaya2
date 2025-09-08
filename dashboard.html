@@ -4,12 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>لوحة البيانات الرئيسية لتقييم المدارس</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://unpkg.com/jspdf-arabic/dist/jspdf-arabic.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+  <!-- ✅ Tailwind للتصميم -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- ✅ ApexCharts للرسوم البيانية -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+<!-- ✅ pdfmake لتوليد ملفات PDF مع دعم كامل للعربية -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+<!-- ✅ مكتبة Excel للتصدير -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 </head>
@@ -419,36 +424,52 @@ function closeDetails() {
 <!-- ✅ كود الجافاسكربت -->
 <script>
   async function exportPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+  // ✅ العنوان
+  const title = document.getElementById("detailsTitle").textContent;
 
-    // ✅ العنوان
-    const title = document.getElementById("detailsTitle").textContent;
+  // ✅ تجهيز البيانات من القائمة (li) وتحويلها لجدول
+  const content = [...document.querySelectorAll("#detailsContent li")].map((el, i) => [
+    { text: (i + 1).toString(), alignment: "center" }, // الرقم
+    { text: el.textContent.trim(), alignment: "right" } // اسم المدرسة
+  ]);
 
-    // ✅ تجهيز البيانات: الرقم أولاً (يظهر في العمود الأيمن)
-    const content = [...document.querySelectorAll("#detailsContent li")].map((el, i) => [
-      el.textContent.trim(), // اسم المدرسة
-      i + 1                   // الرقم
-    ]);
+  // ✅ تعريف المستند
+  const docDefinition = {
+    pageOrientation: "portrait",
+    pageSize: "A4",
+    content: [
+      // العنوان
+      { text: title, style: "header", alignment: "center", margin: [0, 0, 0, 20] },
 
-    // ✅ إضافة العنوان أعلى الصفحة
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(14);
-    doc.text(title, 200, 20, { align: "right" });
+      // الجدول
+      {
+        table: {
+          headerRows: 1,
+          widths: ["auto", "*"], // الرقم (أصغر) - اسم المدرسة (أكبر)
+          body: [
+            [
+              { text: "#", style: "tableHeader", alignment: "center" },
+              { text: "اسم المدرسة", style: "tableHeader", alignment: "center" }
+            ],
+            ...content
+          ]
+        },
+        layout: "lightHorizontalLines"
+      }
+    ],
+    defaultStyle: {
+      font: "Helvetica",
+      alignment: "right"
+    },
+    styles: {
+      header: { fontSize: 16, bold: true },
+      tableHeader: { bold: true, fillColor: "#16A34A", color: "white" }
+    }
+  };
 
-    // ✅ إنشاء جدول من المدارس (الرقم على اليمين)
-    doc.autoTable({
-      startY: 30,
-      head: [['اسم المدرسة', '#']], // قلبنا الترتيب
-      body: content,
-      styles: { font: "helvetica", halign: "right" }, 
-      headStyles: { fillColor: [22, 160, 133] },
-      theme: "grid"
-    });
-
-    // ✅ حفظ الملف
-    doc.save("المدارس.pdf");
-  }
+  // ✅ توليد وحفظ PDF
+  pdfMake.createPdf(docDefinition).download("المدارس.pdf");
+}
   function exportExcel() {
     const title = document.getElementById("detailsTitle").textContent;
     const items = Array.from(document.querySelectorAll("#detailsContent li"))
