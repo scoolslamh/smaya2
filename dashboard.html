@@ -12,7 +12,18 @@
 
 <!-- ✅ pdfmake لتوليد ملفات PDF مع دعم كامل للعربية -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/bpampuch/pdfmake@0.2.7/build/vfs_fonts.js"></script>
+<script>
+  // ✅ تعريف خط عربي جديد
+  pdfMake.fonts = {
+    Amiri: {
+      normal: 'Amiri-Regular.ttf',
+      bold: 'Amiri-Bold.ttf',
+      italics: 'Amiri-Italic.ttf',
+      bolditalics: 'Amiri-BoldItalic.ttf'
+    }
+  };
+</script>
 
 <!-- ✅ مكتبة Excel للتصدير -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -453,9 +464,9 @@ async function exportPDF() {
       }
     ],
     defaultStyle: {
-      font: "NotoNaskhArabic", // ✅ خط يدعم العربية
-      alignment: "right"
-    },
+  font: "Amiri",   // 👈 هذا اسم الخط اللي عرفناه
+  alignment: "right"
+}
     styles: {
       header: { fontSize: 16, bold: true },
       tableHeader: { bold: true, fillColor: "#16A34A", color: "white" }
