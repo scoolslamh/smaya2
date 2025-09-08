@@ -434,15 +434,6 @@ function closeDetails() {
 
 <!-- ✅ كود الجافاسكربت -->
 <script>
-async function exportPDF() {
-  // ✅ تجهيز البيانات
-  const title = document.getElementById("detailsTitle").textContent;
-  const content = [...document.querySelectorAll("#detailsContent li")].map((el, i) => [
-    { text: (i + 1).toString(), alignment: "center" }, // الرقم (يمين)
-    { text: el.textContent.trim(), alignment: "right" } // اسم المدرسة
-  ]);
-
-  // ✅ تعريف المستند
 function exportPDF() {
     const title = document.getElementById("detailsTitle").textContent;
     const content = [...document.querySelectorAll("#detailsContent li")].map((el, i) => [
@@ -450,7 +441,6 @@ function exportPDF() {
       el.textContent.trim() // اسم المدرسة
     ]);
 
-    // ✅ تعريف المستند
     const docDefinition = {
       pageOrientation: "portrait",
       pageSize: "A4",
@@ -459,7 +449,7 @@ function exportPDF() {
         {
           table: {
             headerRows: 1,
-            widths: ["auto", "*"], // الرقم (أصغر) - الاسم (أكبر)
+            widths: ["auto", "*"],
             body: [
               [
                 { text: "#", style: "tableHeader", alignment: "center" },
@@ -472,7 +462,7 @@ function exportPDF() {
         }
       ],
       defaultStyle: {
-        font: "Amiri",   // ✅ لازم يكون عندك ملف خط Amiri معرف
+        font: "Amiri",
         alignment: "right"
       },
       styles: {
@@ -481,7 +471,6 @@ function exportPDF() {
       }
     };
 
-    // ✅ تحميل مع الخط العربي
     pdfMake.createPdf(docDefinition).download("المدارس.pdf");
   }
 
@@ -490,7 +479,6 @@ function exportPDF() {
     const items = Array.from(document.querySelectorAll("#detailsContent li"))
                        .map((li, i) => [i + 1, li.textContent.trim()]);
 
-    // ✅ إضافة عنوان + رأس الجدول
     const data = [[title], ["#", "المدرسة"], ...items];
 
     const ws = XLSX.utils.aoa_to_sheet(data);
