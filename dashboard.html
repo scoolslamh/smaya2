@@ -8,6 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://unpkg.com/jspdf-arabic/dist/jspdf-arabic.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 </head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
@@ -408,26 +409,22 @@ function closeDetails() {
 
 <!-- ✅ كود الجافاسكربت -->
 <script>
-  async function exportPDF() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
+  function exportPDF() {
+    const element = document.getElementById("detailsModal"); // النافذة المنبثقة كلها
 
-  // ✅ تفعيل دعم العربية
-  doc.setFont("Amiri", "normal");  // أو Cairo/Tajawal إذا ضفته
-  doc.setFontSize(14);
+    const opt = {
+      margin:       10,
+      filename:     'التفاصيل.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2 },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
 
-  const title = document.getElementById("detailsTitle").textContent;
-  const content = document.getElementById("detailsContent").innerText;
-
-  // ✅ كتابة النصوص باتجاه RTL
-  doc.text(title, 200, 20, { align: "right" });
-  const splitText = doc.splitTextToSize(content, 180);
-  doc.text(splitText, 200, 40, { align: "right" });
-
-  doc.save("التفاصيل.pdf");
-}
-
+    // ✅ يحول النافذة المنبثقة إلى PDF مع دعم العربية
+    html2pdf().set(opt).from(element).save();
+  }
 </script>
+
 
 </body>
 </html>
