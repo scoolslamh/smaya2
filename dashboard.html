@@ -387,22 +387,24 @@ function closeDetails() {
       &times;
     </button>
 
-    <!-- 🔹 عنوان مع زر PDF -->
-    <div class="flex justify-between items-center mb-4">
+    <!-- العنوان + زر PDF جنب بعض -->
+    <div class="flex items-center justify-between mb-4">
       <h2 id="detailsTitle" class="text-xl font-bold text-gray-800">📋 تفاصيل المدارس</h2>
       <button onclick="exportPDF()" 
-              class="bg-red-500 text-white px-3 py-1 rounded-md text-sm hover:bg-red-600 transition">
+              class="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1 rounded shadow">
         📄 PDF
       </button>
     </div>
 
     <!-- محتوى مؤقت -->
-    <div id="detailsContent" class="text-gray-700">
-      👋 أهلاً! هذه نافذة منبثقة للتجربة.
-    </div>
+<div id="detailsContent" class="text-gray-700">
+  👋 أهلاً! هذه نافذة منبثقة للتجربة.
+</div>
   </div>
 </div>
-// ✅ ضع الدالة exportPDF هنا
+
+<!-- ✅ كود الجافاسكربت -->
+<script>
   async function exportPDF() {
     const { jsPDF } = window.jspdf;
 
@@ -422,6 +424,7 @@ function closeDetails() {
     doc.save("التفاصيل.pdf");
   }
 </script>
+
 </body>
 </html>
 
