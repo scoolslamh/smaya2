@@ -410,7 +410,8 @@ function closeDetails() {
 <!-- ✅ كود الجافاسكربت -->
 <script>
   function exportPDF() {
-    const element = document.getElementById("detailsModal"); // النافذة المنبثقة كلها
+    // ✅ نحدد الجزء اللي فيه البيانات الفعلية فقط
+    const element = document.querySelector("#detailsModal .bg-white");
 
     const opt = {
       margin:       10,
@@ -420,7 +421,7 @@ function closeDetails() {
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
-    // ✅ يحول النافذة المنبثقة إلى PDF مع دعم العربية
+    // ✅ يحول المحتوى إلى PDF
     html2pdf().set(opt).from(element).save();
   }
 </script>
