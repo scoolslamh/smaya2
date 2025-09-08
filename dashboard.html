@@ -252,7 +252,10 @@ function getColor(value) {
       }, 20);
     }
 
-   // ✅ عرض البيانات
+   // ✅ متغير عام لتخزين البيانات المجمعة
+let grouped = {};
+
+// ✅ عرض البيانات
 async function renderDashboard() {
   const year = parseInt(document.getElementById("year").value);
   const month = parseInt(document.getElementById("month").value);
@@ -271,36 +274,53 @@ async function renderDashboard() {
     noDataMsg.classList.add("hidden");
   }
 
-  // 🔹 ترتيب أبجدي حسب اسم المنطقة
-  const sorted = [...rows].sort((a, b) => a.region.localeCompare(b.region, "ar"));
+  // ✅ إعادة تهيئة المتغير العام
+  grouped = {};
 
-  // 🔹 إنشاء الكروت لكل منطقة
-  sorted.forEach(r => {
-    const card = createCard(r.region, {
-      visits: r.visits,
-      green: r.green,
-      yellow: r.yellow,
-      red: r.red,
-      greenSchools: r.greenSchools || [],
-      yellowSchools: r.yellowSchools || [],
-      redSchools: r.redSchools || []
-    }, "منطقة " + r.region);
+  // 🔹 تجميع البيانات حسب المنطقة
+  rows.forEach(r => {
+    const region = r.region;
+    if (!grouped[region]) {
+      grouped[region] = {
+        visits: 0, green: 0, yellow: 0, red: 0,
+        greenSchools: [], yellowSchools: [], redSchools: []
+      };
+    }
 
+    grouped[region].visits += r.visits;
+    grouped[region].green += r.green;
+    grouped[region].yellow += r.yellow;
+    grouped[region].red += r.red;
+
+    grouped[region].greenSchools.push(...(r.greenSchools || []));
+    grouped[region].yellowSchools.push(...(r.yellowSchools || []));
+    grouped[region].redSchools.push(...(r.redSchools || []));
+  });
+
+  // 🔹 ترتيب المناطق أبجديًا
+  const regions = Object.keys(grouped).sort((a, b) =>
+    a.localeCompare(b, "ar")
+  );
+
+  // 🔹 إنشاء الكروت
+  regions.forEach(region => {
+    const card = createCard(region, grouped[region], "منطقة " + region);
     container.appendChild(card);
   });
 
   // 🔹 التقييم الكلي
-  const total = rows.reduce((acc, r) => {
-    acc.visits += r.visits;
-    acc.green += r.green;
-    acc.yellow += r.yellow;
-    acc.red += r.red;
-    return acc;
-  }, { visits: 0, green: 0, yellow: 0, red: 0 });
+  const total = { visits: 0, green: 0, yellow: 0, red: 0 };
+  regions.forEach(r => {
+    total.visits += grouped[r].visits;
+    total.green += grouped[r].green;
+    total.yellow += grouped[r].yellow;
+    total.red += grouped[r].red;
+  });
 
   const totalCard = createCard("total", total, "📊 التقييم الكلي لجميع المناطق");
   container.appendChild(totalCard);
 }
+
 
 // ✅ التحقق من الصلاحية قبل تشغيل الداشبورد
 document.addEventListener("DOMContentLoaded", () => {
@@ -346,10 +366,28 @@ function showDetails(region, status) {
   const title = document.getElementById("detailsTitle");
   const content = document.getElementById("detailsContent");
 
-  title.textContent = `🏫 المدارس في ${region} (${status})`;
-  content.innerHTML = schools.length > 0 
-    ? `<ul class="list-disc pr-6">${schools.map(s => `<li>${s}</li>`).join("")}</ul>`
-    : "<p>لا توجد مدارس في هذا النطاق</p>";
+  // ✅ تحديد النص واللون حسب النطاق
+  let statusLabel = "";
+  let statusColor = "";
+
+  if (status === "green") {
+    statusLabel = "🟢 النطاق الأخضر";
+    statusColor = "text-green-600";
+  } else if (status === "yellow") {
+    statusLabel = "🟡 النطاق الأصفر";
+    statusColor = "text-yellow-600";
+  } else {
+    statusLabel = "🔴 النطاق الأحمر";
+    statusColor = "text-red-600";
+  }
+
+  // ✅ العنوان مع اللون
+  title.innerHTML = `<span class="${statusColor} font-bold">${statusLabel}</span> - منطقة ${region}`;
+
+  // ✅ عرض المدارس
+  content.innerHTML = schools && schools.length > 0 
+    ? `<ul class="list-disc pr-6 space-y-1">${schools.map(s => `<li>${s}</li>`).join("")}</ul>`
+    : "<p class='text-gray-500'>لا توجد مدارس في هذا النطاق</p>";
 
   modal.classList.remove("hidden");
 }
@@ -357,7 +395,6 @@ function showDetails(region, status) {
 function closeDetails() {
   document.getElementById("detailsModal").classList.add("hidden");
 }
-
 </script>
 
 <!-- ✅ نافذة منبثقة للتفاصيل -->
