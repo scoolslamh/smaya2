@@ -435,44 +435,44 @@ function closeDetails() {
 <!-- ✅ كود الجافاسكربت -->
 <script>
 function exportPDF() {
-    const title = document.getElementById("detailsTitle").textContent;
-    const content = [...document.querySelectorAll("#detailsContent li")].map((el, i) => [
-      (i + 1).toString(), // الرقم
-      el.textContent.trim() // اسم المدرسة
-    ]);
+  const title = document.getElementById("detailsTitle").textContent;
+  const content = [...document.querySelectorAll("#detailsContent li")].map((el, i) => [
+    { text: (i + 1).toString(), alignment: "center" }, // الرقم
+    { text: el.textContent.trim(), alignment: "right" } // اسم المدرسة
+  ]);
 
-    const docDefinition = {
-      pageOrientation: "portrait",
-      pageSize: "A4",
-      content: [
-        { text: title, style: "header", alignment: "center", margin: [0, 0, 0, 20] },
-        {
-          table: {
-            headerRows: 1,
-            widths: ["auto", "*"],
-            body: [
-              [
-                { text: "#", style: "tableHeader", alignment: "center" },
-                { text: "اسم المدرسة", style: "tableHeader", alignment: "center" }
-              ],
-              ...content
-            ]
-          },
-          layout: "lightHorizontalLines"
-        }
-      ],
-      defaultStyle: {
-        font: "Roboto",
-        alignment: "right"
-      },
-      styles: {
-        header: { fontSize: 16, bold: true },
-        tableHeader: { bold: true, fillColor: "#16A34A", color: "white" }
+  const docDefinition = {
+    pageOrientation: "portrait",
+    pageSize: "A4",
+    content: [
+      { text: title, style: "header", alignment: "center", margin: [0, 0, 0, 20] },
+      {
+        table: {
+          headerRows: 1,
+          widths: ["auto", "*"], // الرقم أصغر - الاسم أكبر
+          body: [
+            [
+              { text: "#", style: "tableHeader", alignment: "center" },
+              { text: "اسم المدرسة", style: "tableHeader", alignment: "center" }
+            ],
+            ...content
+          ]
+        },
+        layout: "lightHorizontalLines"
       }
-    };
+    ],
+    defaultStyle: {
+      fontSize: 12,
+      alignment: "right" // محاذاة النصوص بشكل عام
+    },
+    styles: {
+      header: { fontSize: 16, bold: true },
+      tableHeader: { bold: true, fillColor: "#16A34A", color: "white" }
+    }
+  };
 
-    pdfMake.createPdf(docDefinition).download("المدارس.pdf");
-  }
+  pdfMake.createPdf(docDefinition).download("المدارس.pdf");
+}
 
   function exportExcel() {
     const title = document.getElementById("detailsTitle").textContent;
