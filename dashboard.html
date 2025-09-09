@@ -442,38 +442,37 @@ function exportPDF() {
   ]);
 
   const docDefinition = {
-  pageOrientation: "portrait",
-  pageSize: "A4",
-  content: [
-    { text: title, style: "header", alignment: "center", margin: [0, 0, 0, 20] },
-    {
-      table: {
-        headerRows: 1,
-        widths: ["auto", "*"], 
-        body: [
-          [
-            { text: "#", style: "tableHeader", alignment: "center" },
-            { text: "اسم المدرسة", style: "tableHeader", alignment: "center" }
-          ],
-          ...content
-        ]
-      },
-      layout: "lightHorizontalLines"
+    pageOrientation: "portrait",
+    pageSize: "A4",
+    content: [
+      { text: title, style: "header", alignment: "center", margin: [0, 0, 0, 20] },
+      {
+        table: {
+          headerRows: 1,
+          widths: ["auto", "*"], 
+          body: [
+            [
+              { text: "#", style: "tableHeader", alignment: "center" },
+              { text: "اسم المدرسة", style: "tableHeader", alignment: "center" }
+            ],
+            ...content
+          ]
+        },
+        layout: "lightHorizontalLines"
+      }
+    ],
+    defaultStyle: {
+      fontSize: 12,
+      alignment: "right"
+    },
+    styles: {
+      header: { fontSize: 16, bold: true },
+      tableHeader: { bold: true, fillColor: "#16A34A", color: "white" }
     }
-  ],
-  defaultStyle: {
-    fontSize: 12,
-    alignment: "right"
-  },
-  styles: {
-    header: { fontSize: 16 }, // 🚫 بدون bold
-    tableHeader: { fillColor: "#16A34A", color: "white", alignment: "center" }
-  }
-};
+  };
 
-// ✅ تصدير PDF
-pdfMake.createPdf(docDefinition).download("المدارس.pdf");
-
+  pdfMake.createPdf(docDefinition).download("المدارس.pdf");
+}
 
   function exportExcel() {
     const title = document.getElementById("detailsTitle").textContent;
