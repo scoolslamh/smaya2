@@ -6,6 +6,9 @@
   <title>نتائج التقييم</title>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal&display=swap" rel="stylesheet">
 
+  <!-- ✅ مكتبة Excel -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
   <style>
     body {
       font-family: "Tajawal", sans-serif;
@@ -57,7 +60,8 @@
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      gap: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
       max-width: 1000px;
     }
 
@@ -124,7 +128,6 @@
       .filters {
         flex-direction: column;
         align-items: stretch;
-        gap: 10px;
       }
       .filters select, .filters button {
         width: 100%;
@@ -156,6 +159,8 @@
     </select>
 
     <button id="filterBtn">تحديث</button>
+    <!-- ✅ زر تصدير -->
+    <button id="exportBtn">📊 تصدير Excel</button>
   </section>
 
   <!-- ✅ الجدول داخل حاوية قابلة للتمرير -->
@@ -181,6 +186,7 @@
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbwo9lVlFtxxw1Ov-sXQ_l5BemTV-99LrtAxzYdIGOPVQ7JfoflIJWlaG3SU_ySs2cdL/exec";
     let allResults = [];
+    let currentResults = [];
 
     function formatDate(dateString) {
       if (!dateString) return "-";
@@ -218,10 +224,12 @@
 
       if (results.length === 0) {
         tbody.innerHTML = `<tr><td colspan="9">⚠️ لا توجد بيانات</td></tr>`;
+        currentResults = [];
         return;
       }
 
       results.sort((a, b) => Number(b.total) - Number(a.total));
+      currentResults = results;
 
       results.forEach((row, i) => {
         const tr = document.createElement("tr");
@@ -245,7 +253,6 @@
       const city = document.getElementById("city").value;
 
       let filtered = [...allResults];
-
       if (region !== "all") filtered = filtered.filter(r => r.region === region);
       if (city !== "all" && !document.getElementById("city").disabled) filtered = filtered.filter(r => r.city === city);
 
@@ -287,11 +294,38 @@
       citySelect.disabled = false;
     }
 
+    // ✅ تصدير إلى Excel
+    function exportToExcel() {
+      if (currentResults.length === 0) {
+        alert("⚠️ لا توجد بيانات لتصديرها");
+        return;
+      }
+
+      const headers = ["#", "المنطقة", "المدينة", "اسم المدرسة", "نسبة الصحة والسلامة", "نسبة العناصر المدنية", "النسبة الكلية %", "المشرف الزائر", "آخر زيارة"];
+      const data = currentResults.map((row, i) => [
+        i + 1,
+        row.region || "-",
+        row.city || "-",
+        row.school || "-",
+        formatPercent(row.healthPercent),
+        formatPercent(row.civilPercent),
+        formatPercent(row.total),
+        row.supervisor || "-",
+        formatDate(row.visitDate)
+      ]);
+
+      const ws = XLSX.utils.aoa_to_sheet([headers, ...data]);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "النتائج");
+      XLSX.writeFile(wb, "نتائج_التقييم.xlsx");
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
       loadData();
       document.getElementById("filterBtn").addEventListener("click", applyFilters);
       document.getElementById("region").addEventListener("change", applyFilters);
       document.getElementById("city").addEventListener("change", applyFilters);
+      document.getElementById("exportBtn").addEventListener("click", exportToExcel);
     });
   </script>
 </body>
