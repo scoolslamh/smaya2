@@ -152,6 +152,20 @@
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbzARw5WmP6UfB-THHv7nkk2wP2p-GDgUv6cI2_7d0stlf43IUzQmJBo06G9pAQfLpak/exec"; // 👈 ضع رابط Google Script هنا
 
+    // ✅ تنسيق التاريخ
+    function formatDate(dateString) {
+      if (!dateString) return "-";
+      const d = new Date(dateString);
+      if (isNaN(d)) return dateString; // لو ما قدر يفسر التاريخ
+      return d.toISOString().split("T")[0]; // yyyy-mm-dd
+    }
+
+    // ✅ تقريب النسبة
+    function formatPercent(value) {
+      if (value === undefined || value === null || value === "") return "-";
+      return `${Math.round(Number(value))}%`;
+    }
+
     async function loadResults() {
       const region = document.getElementById("region").value;
       const city = document.getElementById("city").value;
@@ -160,7 +174,7 @@
         const res = await fetch(`${API_URL}?action=results`);
         const data = await res.json();
 
-        if (!data.success) {
+        if (!data.success || !data.results) {
           alert("⚠️ لم يتم العثور على بيانات");
           return;
         }
@@ -178,7 +192,7 @@
         }
 
         // ✅ ترتيب تنازلي حسب النسبة الكلية
-        filtered.sort((a, b) => b.total - a.total);
+        filtered.sort((a, b) => Number(b.total) - Number(a.total));
 
         const tbody = document.getElementById("resultsTable");
         tbody.innerHTML = "";
@@ -187,14 +201,14 @@
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${i + 1}</td>
-            <td>${row.region}</td>
-            <td>${row.city}</td>
-            <td>${row.school}</td>
-            <td>${row.healthPercent}%</td>
-            <td>${row.civilPercent}%</td>
-            <td>${row.total}%</td>
+            <td>${row.region || "-"}</td>
+            <td>${row.city || "-"}</td>
+            <td>${row.school || "-"}</td>
+            <td>${formatPercent(row.healthPercent)}</td>
+            <td>${formatPercent(row.civilPercent)}</td>
+            <td>${formatPercent(row.total)}</td>
             <td>${row.supervisor || "-"}</td>
-            <td>${row.visitDate}</td>
+            <td>${formatDate(row.visitDate)}</td>
           `;
           tbody.appendChild(tr);
         });
@@ -232,4 +246,3 @@
   </script>
 </body>
 </html>
-  
