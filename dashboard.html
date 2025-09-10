@@ -36,19 +36,31 @@
   <!-- الهيدر -->
 <header class="bg-[#13344F] text-white shadow-md">
   <div class="container mx-auto flex items-center justify-between px-6 py-3">
+    <!-- الشعار -->
     <img src="logo.png" alt="شعار سمايا" class="h-10 filter invert brightness-0">
 
+    <!-- العنوان -->
     <h1 class="text-xl font-bold text-center flex-1">
       لوحة البيانات الرئيسية لتقييم المدارس
     </h1>
 
-    <!-- زر العودة -->
-    <a href="index.html" 
-       class="bg-white text-[#13344F] px-4 py-2 rounded-lg shadow hover:bg-gray-200 transition">
-       ⬅️ عودة
-    </a>
+    <!-- الأزرار -->
+    <div class="flex gap-2">
+      <!-- زر نتائج المدارس -->
+      <a href="results.html" 
+         class="bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600 transition">
+         📊 نتائج المدارس
+      </a>
+
+      <!-- زر العودة -->
+      <a href="index.html" 
+         class="bg-white text-[#13344F] px-4 py-2 rounded-lg shadow hover:bg-gray-200 transition">
+         ⬅️ عودة
+      </a>
+    </div>
   </div>
 </header>
+
 
   <!-- الفلاتر -->
   <section class="container mx-auto my-6 px-4">
@@ -71,7 +83,7 @@
   </main>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbx5c5Fyvsx5b9Daed8yvarIchZ4qtGwJcQCbvG9mdGB22aPrUMXNX60RFsCQ8nLlXqH/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbzARw5WmP6UfB-THHv7nkk2wP2p-GDgUv6cI2_7d0stlf43IUzQmJBo06G9pAQfLpak/exec";
 
     const monthsMap = {
       1: "يناير", 2: "فبراير", 3: "مارس", 4: "أبريل",
