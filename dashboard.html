@@ -10,9 +10,6 @@
   <!-- ✅ ApexCharts للرسوم البيانية -->
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-    
-  </script>
-
   <!-- ✅ مكتبة Excel للتصدير -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
@@ -81,7 +78,6 @@
                 class="bg-green-500 text-white px-2 md:px-3 py-1 rounded text-xs hover:bg-green-600">
           📊 Excel
         </button>
-    
       </div>
       
       <!-- العنوان -->
@@ -94,10 +90,246 @@
     </div>
   </div>
 
-  <!-- ✅ سكربتات الداشبورد (نفس كودك الحالي) -->
+  <!-- ✅ سكربت كامل -->
   <script>
-    /* 🔹 الكود تبعك موجود هنا بالكامل (fetchData, renderDashboard, createCard, initGauge, showDetails, exportExcel...) 
-       بدون أي حذف أو تعديل على المنطق، فقط أضفنا تحسينات في التصميم أعلاه */
+    const API_URL = "https://script.google.com/macros/s/AKfycbwo9lVlFtxxw1Ov-sXQ_l5BemTV-99LrtAxzYdIGOPVQ7JfoflIJWlaG3SU_ySs2cdL/exec";
+    const monthsMap = {
+      1: "يناير", 2: "فبراير", 3: "مارس", 4: "أبريل",
+      5: "مايو", 6: "يونيو", 7: "يوليو", 8: "أغسطس",
+      9: "سبتمبر", 10: "أكتوبر", 11: "نوفمبر", 12: "ديسمبر"
+    };
+
+    let grouped = {};
+
+    function initFilters() {
+      const yearSelect = document.getElementById("year");
+      const monthSelect = document.getElementById("month");
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      const currentMonth = now.getMonth() + 1;
+
+      for (let y = currentYear - 1; y <= currentYear + 1; y++) {
+        const opt = document.createElement("option");
+        opt.value = y;
+        opt.textContent = y;
+        if (y === currentYear) opt.selected = true;
+        yearSelect.appendChild(opt);
+      }
+
+      for (let m = 1; m <= 12; m++) {
+        const opt = document.createElement("option");
+        opt.value = m;
+        opt.textContent = monthsMap[m];
+        if (m === currentMonth) opt.selected = true;
+        monthSelect.appendChild(opt);
+      }
+    }
+
+    async function fetchData(year, month) {
+      try {
+        const res = await fetch(`${API_URL}?action=dashboard&year=${year}&month=${month}`);
+        const data = await res.json();
+        return data.regions || [];
+      } catch (err) {
+        console.error("❌ خطأ في جلب البيانات:", err);
+        return [];
+      }
+    }
+
+    function getColor(value) {
+      if (value >= 70) return "#16A34A";
+      if (value >= 40) return "#FACC15";
+      return "#DC2626";
+    }
+
+    function initGauge(id, percentId, statusId, targetValue) {
+      let currentValue = 0;
+      const options = {
+        chart: { type: 'radialBar', height: 250 },
+        series: [0],
+        plotOptions: {
+          radialBar: {
+            startAngle: -90,
+            endAngle: 90,
+            hollow: { margin: 0, size: '70%' },
+            track: { background: '#e0e0e0', strokeWidth: '100%' },
+            dataLabels: { show: false }
+          }
+        },
+        fill: { colors: [getColor(0)] },
+      };
+      const chart = new ApexCharts(document.querySelector(id), options);
+      chart.render();
+
+      const interval = setInterval(() => {
+        if (currentValue < targetValue) {
+          currentValue++;
+          chart.updateOptions({
+            series: [currentValue],
+            fill: { colors: [getColor(currentValue)] }
+          });
+          document.querySelector(percentId).textContent = currentValue + "%";
+          const statusText = document.querySelector(statusId);
+          if (currentValue >= 70) {
+            statusText.textContent = "ممتاز";
+            statusText.className = "text-green-600 text-2xl font-bold";
+          } else if (currentValue >= 40) {
+            statusText.textContent = "متوسط";
+            statusText.className = "text-yellow-600 text-2xl font-bold";
+          } else {
+            statusText.textContent = "ضعيف";
+            statusText.className = "text-red-600 text-2xl font-bold";
+          }
+        } else {
+          clearInterval(interval);
+        }
+      }, 20);
+    }
+
+    function createCard(regionKey, stats, title, isTotal = false) {
+      const { visits, green, yellow, red } = stats;
+      const totalPoints = (green * 5) + (yellow * 2.5);
+      const maxPoints = visits * 5;
+      const percent = maxPoints > 0 ? Math.round((totalPoints / maxPoints) * 100) : 0;
+
+      const cardId = "gauge-" + regionKey;
+      const percentId = "percent-" + regionKey;
+      const statusId = "status-" + regionKey;
+
+      const card = document.createElement("div");
+      card.className = "bg-white rounded-xl shadow-lg p-6 text-center relative transition hover:shadow-xl";
+
+      card.innerHTML = `
+        <h2 class="text-lg font-bold text-gray-800 mb-4">${title}</h2>
+        <div id="${cardId}"></div>
+        <div class="absolute top-28 left-1/2 transform -translate-x-1/2 text-center">
+          <p id="${percentId}" class="text-4xl font-extrabold text-gray-900">0%</p>
+          <p id="${statusId}" class="text-2xl font-bold">جاري التحديث...</p>
+        </div>
+        <div class="mt-12 text-right text-base font-semibold text-gray-700 space-y-2">
+          <p>📊 عدد الزيارات: ${visits}</p>
+          ${
+            isTotal
+              ? `
+                <p class="text-green-600">🟢 النطاق الأخضر: ${green}</p>
+                <p class="text-yellow-600">🟡 النطاق الأصفر: ${yellow}</p>
+                <p class="text-red-600">🔴 النطاق الأحمر: ${red}</p>
+              `
+              : `
+                <p class="text-green-600 cursor-pointer" onclick="showDetails('${regionKey}', 'green')">
+                  🟢 النطاق الأخضر: ${green}
+                </p>
+                <p class="text-yellow-600 cursor-pointer" onclick="showDetails('${regionKey}', 'yellow')">
+                  🟡 النطاق الأصفر: ${yellow}
+                </p>
+                <p class="text-red-600 cursor-pointer" onclick="showDetails('${regionKey}', 'red')">
+                  🔴 النطاق الأحمر: ${red}
+                </p>
+              `
+          }
+        </div>
+      `;
+      setTimeout(() => initGauge("#" + cardId, "#" + percentId, "#" + statusId, percent), 100);
+      return card;
+    }
+
+    async function renderDashboard() {
+      const year = parseInt(document.getElementById("year").value);
+      const month = parseInt(document.getElementById("month").value);
+
+      const rows = await fetchData(year, month);
+      const container = document.getElementById("cardsContainer");
+      const noDataMsg = document.getElementById("noDataMsg");
+      container.innerHTML = "";
+
+      if (!rows || rows.length === 0) {
+        noDataMsg.classList.remove("hidden");
+        return;
+      } else {
+        noDataMsg.classList.add("hidden");
+      }
+
+      grouped = {};
+      rows.forEach(r => {
+        const region = r.region;
+        if (!grouped[region]) {
+          grouped[region] = {
+            visits: 0, green: 0, yellow: 0, red: 0,
+            greenSchools: [], yellowSchools: [], redSchools: []
+          };
+        }
+        grouped[region].visits += r.visits;
+        grouped[region].green += r.green;
+        grouped[region].yellow += r.yellow;
+        grouped[region].red += r.red;
+        grouped[region].greenSchools.push(...(r.greenSchools || []));
+        grouped[region].yellowSchools.push(...(r.yellowSchools || []));
+        grouped[region].redSchools.push(...(r.redSchools || []));
+      });
+
+      const regions = Object.keys(grouped).sort((a, b) => a.localeCompare(b, "ar"));
+      regions.forEach(region => {
+        const card = createCard(region, grouped[region], "منطقة " + region);
+        container.appendChild(card);
+      });
+
+      const total = { visits: 0, green: 0, yellow: 0, red: 0 };
+      regions.forEach(r => {
+        total.visits += grouped[r].visits;
+        total.green += grouped[r].green;
+        total.yellow += grouped[r].yellow;
+        total.red += grouped[r].red;
+      });
+      const totalCard = createCard("total", total, "📊 التقييم الكلي لجميع المناطق", true);
+      container.appendChild(totalCard);
+    }
+
+    function showDetails(region, status) {
+      const schools = grouped[region][status + "Schools"];
+      const modal = document.getElementById("detailsModal");
+      const title = document.getElementById("detailsTitle");
+      const content = document.getElementById("detailsContent");
+
+      let statusLabel = "";
+      let statusColor = "";
+      if (status === "green") {
+        statusLabel = "🟢 النطاق الأخضر";
+        statusColor = "text-green-600";
+      } else if (status === "yellow") {
+        statusLabel = "🟡 النطاق الأصفر";
+        statusColor = "text-yellow-600";
+      } else {
+        statusLabel = "🔴 النطاق الأحمر";
+        statusColor = "text-red-600";
+      }
+      title.innerHTML = `<span class="${statusColor} font-bold">${statusLabel}</span> - منطقة ${region}`;
+      content.innerHTML = schools && schools.length > 0 
+        ? `<ul class="list-disc pr-6 space-y-1">${schools.map(s => `<li>${s}</li>`).join("")}</ul>`
+        : "<p class='text-gray-500'>لا توجد مدارس في هذا النطاق</p>";
+      modal.classList.remove("hidden");
+    }
+
+    function closeDetails() {
+      document.getElementById("detailsModal").classList.add("hidden");
+    }
+
+    function exportExcel() {
+      const title = document.getElementById("detailsTitle").textContent;
+      const items = Array.from(document.querySelectorAll("#detailsContent li"))
+                        .map((li, i) => [i + 1, li.textContent.trim()]);
+      const data = [[title], ["#", "المدرسة"], ...items];
+      const ws = XLSX.utils.aoa_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "التفاصيل");
+      XLSX.writeFile(wb, "التفاصيل.xlsx");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      initFilters();
+      renderDashboard();
+      document.getElementById("year").addEventListener("change", renderDashboard);
+      document.getElementById("month").addEventListener("change", renderDashboard);
+    });
   </script>
 </body>
 </html>
