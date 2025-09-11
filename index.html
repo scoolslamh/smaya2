@@ -5,36 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>تسجيل الدخول - نظام تقييم المباني التعليمية</title>
 
-  <!-- ✅ استدعاء الخط -->
+  <!-- ✅ استدعاء خط Tajawal -->
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 
-  <!-- ✅ Tailwind -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Tajawal', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
-
+  <!-- ✅ ملف CSS خارجي -->
   <link rel="stylesheet" href="style.css">
-  <style>
-    body {
-      margin: 0;
-      font-family: "Tajawal", sans-serif;
-      background: #f5f7fa;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-  </style>
-</head>
 
+  <style>
     body {
       margin: 0;
       font-family: "Tajawal", sans-serif;
@@ -67,12 +44,13 @@
       text-align: center;
       margin-bottom: 20px;
       color: #13344f;
+      font-weight: 700; /* العنوان بخط عريض */
     }
 
     .login-card label {
       display: block;
       margin-bottom: 8px;
-      font-weight: bold;
+      font-weight: 600;
     }
 
     .login-card input {
@@ -83,6 +61,7 @@
       border-radius: 6px;
       font-size: 14px;
       box-sizing: border-box;
+      font-family: "Tajawal", sans-serif;
     }
 
     .login-card button {
@@ -94,7 +73,9 @@
       border-radius: 6px;
       cursor: pointer;
       font-size: 16px;
+      font-weight: 600;
       transition: 0.3s;
+      font-family: "Tajawal", sans-serif;
     }
 
     .login-card button:hover {
@@ -129,6 +110,7 @@
       color: white;
       text-align: center;
       padding: 15px 0;
+      font-family: "Tajawal", sans-serif;
     }
 
     header img.logo {
@@ -143,6 +125,7 @@
   </style>
 </head>
 <body>
+
 
   <!-- ✅ تجاوز الدخول محليًا -->
   <script>
