@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📋 زيارات المشرفين</title>
+  <!-- ✅ Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- ✅ Excel Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+
+<body class="bg-gray-100 font-sans">
+
+  <!-- ✅ الهيدر -->
+  <header class="bg-[#13344F] text-white shadow-md">
+    <div class="container mx-auto flex flex-col md:flex-row items-center justify-between px-4 md:px-6 py-3 gap-3">
+      <!-- الشعار -->
+      <img src="logo.png" alt="شعار" class="h-10 filter invert brightness-0">
+      <!-- العنوان -->
+      <h1 class="text-lg md:text-xl font-bold text-center flex-1">📋 زيارات المشرفين</h1>
+      <!-- الأزرار -->
+      <div class="flex gap-2 flex-wrap justify-center">
+        <a href="dashboard.html"
+           class="bg-white text-[#13344F] px-3 md:px-4 py-2 rounded-lg shadow hover:bg-gray-200 transition text-sm md:text-base">
+           ⬅️ عودة
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ✅ الفلاتر -->
+  <section class="container mx-auto my-6 px-4">
+    <div class="bg-white rounded-lg shadow p-4 flex flex-col sm:flex-row gap-6 justify-center">
+      
+      <!-- فلتر السنة -->
+      <div>
+        <label for="year" class="block text-sm font-medium text-gray-700 mb-1">اختر السنة</label>
+        <select id="year" class="border rounded px-3 py-2 w-40 focus:ring-2 focus:ring-blue-500"></select>
+      </div>
+      
+      <!-- فلتر الشهر -->
+      <div>
+        <label for="month" class="block text-sm font-medium text-gray-700 mb-1">اختر الشهر</label>
+        <select id="month" class="border rounded px-3 py-2 w-40 focus:ring-2 focus:ring-blue-500">
+          <option value="all" selected>الكل</option>
+          <option value="1">يناير</option>
+          <option value="2">فبراير</option>
+          <option value="3">مارس</option>
+          <option value="4">أبريل</option>
+          <option value="5">مايو</option>
+          <option value="6">يونيو</option>
+          <option value="7">يوليو</option>
+          <option value="8">أغسطس</option>
+          <option value="9">سبتمبر</option>
+          <option value="10">أكتوبر</option>
+          <option value="11">نوفمبر</option>
+          <option value="12">ديسمبر</option>
+        </select>
+      </div>
+
+      <!-- الأزرار -->
+      <div class="flex items-end gap-2">
+        <button id="filterBtn" class="bg-[#13344F] text-white px-4 py-2 rounded-lg shadow hover:bg-[#0e2233] transition">
+          🔄 تحديث
+        </button>
+        <button id="exportBtn" class="bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600 transition">
+          📊 تصدير Excel
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ✅ الجدول -->
+  <main class="container mx-auto px-4">
+    <div class="overflow-x-auto bg-white rounded-lg shadow">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="bg-[#13344F] text-white">
+            <th class="px-4 py-2">#</th>
+            <th class="px-4 py-2">اسم المشرف</th>
+            <th class="px-4 py-2">عدد الزيارات</th>
+          </tr>
+        </thead>
+        <tbody id="supervisorsTable"></tbody>
+      </table>
+    </div>
+    <p id="noDataMsg" class="text-center text-red-600 font-bold mt-6 hidden">
+      ⚠️ لا توجد بيانات للفترة المختارة
+    </p>
+  </main>
+
+  <!-- ✅ الجافاسكربت -->
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbyOeYrC3_ua1beMj-lIh8Pm35_lHxx8Owx7p45s9Mt5qOEGtoqsCrQXpfa-6E50YHfv/exec";
+    let currentResults = [];
+
+    // تعبئة فلتر السنة تلقائيًا
+    function initYearFilter() {
+      const yearSelect = document.getElementById("year");
+      const now = new Date();
+      const currentYear = now.getFullYear();
+
+      for (let y = currentYear - 1; y <= currentYear + 1; y++) {
+        const opt = document.createElement("option");
+        opt.value = y;
+        opt.textContent = y;
+        if (y === currentYear) opt.selected = true;
+        yearSelect.appendChild(opt);
+      }
+    }
+
+    async function loadData(year, month) {
+      try {
+        const res = await fetch(`${API_URL}?action=supervisors&year=${year}&month=${month}`);
+        const data = await res.json();
+        if (!data.success || !data.supervisors) {
+          document.getElementById("noDataMsg").classList.remove("hidden");
+          renderTable([]);
+          return;
+        }
+        document.getElementById("noDataMsg").classList.add("hidden");
+        renderTable(data.supervisors);
+      } catch (err) {
+        console.error("❌ خطأ:", err);
+        document.getElementById("noDataMsg").classList.remove("hidden");
+      }
+    }
+
+    function renderTable(results) {
+      const tbody = document.getElementById("supervisorsTable");
+      tbody.innerHTML = "";
+      currentResults = results;
+
+      if (results.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" class="py-4 text-center">⚠️ لا توجد بيانات</td></tr>`;
+        return;
+      }
+
+      results.forEach((row, i) => {
+        const tr = document.createElement("tr");
+        tr.className = i % 2 === 0 ? "bg-gray-50" : "";
+        tr.innerHTML = `
+          <td class="px-4 py-2">${i + 1}</td>
+          <td class="px-4 py-2">${row.supervisor || "-"}</td>
+          <td class="px-4 py-2">${row.visits || 0}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function exportToExcel() {
+      if (currentResults.length === 0) {
+        alert("⚠️ لا توجد بيانات لتصديرها");
+        return;
+      }
+      const headers = ["#", "اسم المشرف", "عدد الزيارات"];
+      const data = currentResults.map((row, i) => [
+        i + 1,
+        row.supervisor || "-",
+        row.visits || 0
+      ]);
+      const ws = XLSX.utils.aoa_to_sheet([headers, ...data]);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "المشرفين");
+      XLSX.writeFile(wb, "زيارات_المشرفين.xlsx");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      initYearFilter();
+      const year = document.getElementById("year").value;
+      const month = document.getElementById("month").value;
+      loadData(year, month);
+
+      document.getElementById("filterBtn").addEventListener("click", () => {
+        const year = document.getElementById("year").value;
+        const month = document.getElementById("month").value;
+        loadData(year, month);
+      });
+
+      document.getElementById("exportBtn").addEventListener("click", exportToExcel);
+    });
+  </script>
+</body>
+</html>
